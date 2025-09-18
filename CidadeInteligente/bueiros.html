@@ -236,11 +236,11 @@
             font-size: 1rem;
         }
 
-        /* === CONTROLES E FILTROS === */
+        /* === CONTROLES E FILTROS MELHORADOS === */
         .controls-section {
             background: var(--gradiente-card);
             border-radius: var(--radius-lg);
-            padding: 1.5rem;
+            padding: 2rem;
             margin-bottom: 1.5rem;
             border: 1px solid rgba(52, 211, 153, 0.2);
             box-shadow: var(--sombra-mixed);
@@ -249,18 +249,42 @@
 
         .controls-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr auto auto;
-            gap: 1rem;
-            align-items: center;
+            grid-template-columns: 2fr 1.5fr auto auto;
+            gap: 1.5rem;
+            align-items: end;
         }
 
-        .search-input {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--verde-accent);
-            border-radius: var(--radius-sm);
-            padding: 0.8rem;
-            color: var(--branco);
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
             font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--verde-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .search-input, .filter-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--verde-accent);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            color: var(--branco);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transicao);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: var(--verde-neon);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+            transform: translateY(-1px);
         }
 
         .search-input::placeholder {
@@ -268,24 +292,28 @@
         }
 
         .filter-select {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--azul-accent);
-            border-radius: var(--radius-sm);
-            padding: 0.8rem;
+            border-color: var(--azul-accent);
+        }
+
+        .filter-select option {
+            background: var(--azul-primario);
             color: var(--branco);
-            font-size: 0.9rem;
         }
 
         .btn {
-            padding: 0.8rem 1.2rem;
-            border-radius: var(--radius-sm);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-md);
             border: none;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.9rem;
             cursor: pointer;
             transition: var(--transicao);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--sombra-mixed);
         }
 
         .btn-primary {
@@ -299,8 +327,12 @@
         }
 
         .btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: var(--sombra-forte);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
         }
 
         /* === LAYOUT PRINCIPAL === */
@@ -549,6 +581,183 @@
             border-radius: var(--radius-md);
             padding: 1rem;
             border: 1px solid var(--azul-accent);
+            height: 250px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 180px;
+            width: 100%;
+        }
+
+        /* === MODAIS === */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--gradiente-card);
+            border: 2px solid var(--verde-accent);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--sombra-forte);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--verde-accent);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--branco);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transicao);
+        }
+
+        .modal-close:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        .modal-content {
+            color: var(--branco);
+        }
+
+        .detail-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--verde-accent);
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--cinza-medio);
+        }
+
+        .detail-value {
+            font-weight: 700;
+            color: var(--verde-accent);
+        }
+
+        /* === PROCESSO DE MANUTENÇÃO === */
+        .maintenance-process {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            transition: var(--transicao);
+        }
+
+        .process-step.active {
+            background: rgba(16, 185, 129, 0.2);
+            border-left: 3px solid var(--verde-accent);
+        }
+
+        .process-step.completed {
+            background: rgba(16, 185, 129, 0.1);
+            opacity: 0.7;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--verde-accent);
+            color: var(--verde-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--branco);
+            margin-bottom: 0.3rem;
+        }
+
+        .step-description {
+            color: var(--cinza-medio);
+            font-size: 0.9rem;
+        }
+
+        .process-progress {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .process-progress-bar {
+            height: 100%;
+            background: var(--verde-accent);
+            transition: width 1s ease;
         }
 
         /* === TOOLTIP === */
@@ -675,18 +884,28 @@
             <p>Sistema avançado de monitoramento em tempo real para prevenção de enchentes</p>
         </div>
 
-        <!-- CONTROLES -->
+        <!-- CONTROLES MELHORADOS -->
         <div class="controls-section">
             <div class="controls-grid">
-                <input type="text" class="search-input" id="searchInput" placeholder="Buscar por ID ou localização...">
-                <select class="filter-select" id="statusFilter">
-                    <option value="">Todos os Status</option>
-                    <option value="normal">Normal</option>
-                    <option value="warning">Alerta</option>
-                    <option value="critical">Crítico</option>
-                </select>
-                <button class="btn btn-primary" onclick="generateReports()">📄 Relatório</button>
-                <button class="btn btn-secondary" onclick="exportData()">📊 Exportar</button>
+                <div class="form-group">
+                    <label class="form-label">🔍 Buscar Bueiro</label>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Digite ID ou localização...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">📊 Filtrar Status</label>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">🔄 Todos os Status</option>
+                        <option value="normal">✅ Normal</option>
+                        <option value="warning">⚠️ Alerta</option>
+                        <option value="critical">🚨 Crítico</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="generateReports()">
+                    📄 Relatório
+                </button>
+                <button class="btn btn-secondary" onclick="exportData()">
+                    📊 Exportar
+                </button>
             </div>
         </div>
 
@@ -741,7 +960,77 @@
                         <span>📊</span>
                         <span>Evolução Histórica</span>
                     </div>
-                    <canvas id="historicalChart" width="300" height="200"></canvas>
+                    <div class="chart-wrapper">
+                        <canvas id="historicalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAIS -->
+    <!-- Modal de Detalhes -->
+    <div id="detailsModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Detalhes do Bueiro</h3>
+                <button class="modal-close" onclick="closeModal('detailsModal')">✕</button>
+            </div>
+            <div class="modal-content">
+                <div id="detailsContent" class="detail-grid">
+                    <!-- Conteúdo será preenchido dinamicamente -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Processo de Manutenção -->
+    <div id="maintenanceModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Processo de Manutenção</h3>
+                <button class="modal-close" onclick="closeModal('maintenanceModal')">✕</button>
+            </div>
+            <div class="modal-content">
+                <div class="maintenance-process" id="maintenanceProcess">
+                    <div class="process-step" id="step1">
+                        <div class="step-icon">🚛</div>
+                        <div class="step-content">
+                            <div class="step-title">Caminhã se deslocando para o destino</div>
+                            <div class="step-description">Caminhão iniciando trajeto para o bueiro</div>
+                        </div>
+                    </div>
+                    <div class="process-step" id="step2">
+                        <div class="step-icon">📍</div>
+                        <div class="step-content">
+                            <div class="step-title">Chegada ao Local</div>
+                            <div class="step-description">Posicionamento sobre o bueiro</div>
+                        </div>
+                    </div>
+                    <div class="process-step" id="step3">
+                        <div class="step-icon">🧹</div>
+                        <div class="step-content">
+                            <div class="step-title">Coleta de Detritos</div>
+                            <div class="step-description">Aspiração e limpeza em progresso</div>
+                        </div>
+                    </div>
+                    <div class="process-step" id="step4">
+                        <div class="step-icon">🔍</div>
+                        <div class="step-content">
+                            <div class="step-title">Inspeção Final</div>
+                            <div class="step-description">Verificação da limpeza completa</div>
+                        </div>
+                    </div>
+                    <div class="process-step" id="step5">
+                        <div class="step-icon">🏠</div>
+                        <div class="step-content">
+                            <div class="step-title">Retorno à Estação</div>
+                            <div class="step-description">Caminhão retornando para base</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="process-progress">
+                    <div class="process-progress-bar" id="processProgressBar"></div>
                 </div>
             </div>
         </div>
@@ -758,16 +1047,16 @@
         // DADOS E ESTADO GLOBAL
         // ==========================================
         let bueiros = [
-            { id: 'B001', location: 'Av. Paulista, 1000', capacity: 15, odor: 'baixo', lastMaintenance: '2024-09-15', critical: false },
-            { id: 'B002', location: 'Rua Augusta, 500', capacity: 45, odor: 'médio', lastMaintenance: '2024-09-12', critical: false },
-            { id: 'B003', location: 'Largo do Arouche, 100', capacity: 75, odor: 'alto', lastMaintenance: '2024-09-10', critical: false },
-            { id: 'B004', location: 'Av. Faria Lima, 2000', capacity: 85, odor: 'crítico', lastMaintenance: '2024-09-08', critical: true },
-            { id: 'B005', location: 'Rua da Consolação, 800', capacity: 25, odor: 'baixo', lastMaintenance: '2024-09-14', critical: false },
-            { id: 'B006', location: 'Av. Ibirapuera, 1500', capacity: 90, odor: 'crítico', lastMaintenance: '2024-09-05', critical: true },
-            { id: 'B007', location: 'Rua Oscar Freire, 300', capacity: 35, odor: 'médio', lastMaintenance: '2024-09-13', critical: false },
-            { id: 'B008', location: 'Av. Rebouças, 1200', capacity: 60, odor: 'alto', lastMaintenance: '2024-09-11', critical: false },
-            { id: 'B009', location: 'Largo São Bento, 50', capacity: 95, odor: 'crítico', lastMaintenance: '2024-09-03', critical: true },
-            { id: 'B010', location: 'Av. Ipiranga, 900', capacity: 20, odor: 'baixo', lastMaintenance: '2024-09-16', critical: false }
+            { id: 'B001', location: 'Av. Paulista, 1000', capacity: 15.47, odor: 'baixo', lastMaintenance: '2024-09-15', critical: false },
+            { id: 'B002', location: 'Rua Augusta, 500', capacity: 45.23, odor: 'médio', lastMaintenance: '2024-09-12', critical: false },
+            { id: 'B003', location: 'Largo do Arouche, 100', capacity: 75.89, odor: 'alto', lastMaintenance: '2024-09-10', critical: false },
+            { id: 'B004', location: 'Av. Faria Lima, 2000', capacity: 85.12, odor: 'crítico', lastMaintenance: '2024-09-08', critical: true },
+            { id: 'B005', location: 'Rua da Consolação, 800', capacity: 25.67, odor: 'baixo', lastMaintenance: '2024-09-14', critical: false },
+            { id: 'B006', location: 'Av. Ibirapuera, 1500', capacity: 90.34, odor: 'crítico', lastMaintenance: '2024-09-05', critical: true },
+            { id: 'B007', location: 'Rua Oscar Freire, 300', capacity: 35.78, odor: 'médio', lastMaintenance: '2024-09-13', critical: false },
+            { id: 'B008', location: 'Av. Rebouças, 1200', capacity: 60.45, odor: 'alto', lastMaintenance: '2024-09-11', critical: false },
+            { id: 'B009', location: 'Largo São Bento, 50', capacity: 95.21, odor: 'crítico', lastMaintenance: '2024-09-03', critical: true },
+            { id: 'B010', location: 'Av. Ipiranga, 900', capacity: 20.89, odor: 'baixo', lastMaintenance: '2024-09-16', critical: false }
         ];
 
         let alerts = [];
@@ -795,6 +1084,13 @@
         function setupEventListeners() {
             document.getElementById('searchInput').addEventListener('input', handleSearch);
             document.getElementById('statusFilter').addEventListener('change', handleFilter);
+        }
+
+        // ==========================================
+        // FORMATAÇÃO DE NÚMEROS
+        // ==========================================
+        function formatNumber(value, decimals = 2) {
+            return Number(value).toFixed(decimals);
         }
 
         // ==========================================
@@ -831,7 +1127,7 @@
                 <div class="capacity-section">
                     <div class="capacity-label">
                         <span>Capacidade</span>
-                        <span>${bueiro.capacity}%</span>
+                        <span>${formatNumber(bueiro.capacity)}%</span>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill ${progressClass}" style="width: ${bueiro.capacity}%"></div>
@@ -925,9 +1221,125 @@
         }
 
         // ==========================================
-        // MANUTENÇÃO E AÇÕES
+        // MODAIS
+        // ==========================================
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ==========================================
+        // DETALHES DO BUEIRO
+        // ==========================================
+        function showDetails(bueiroId) {
+            const bueiro = bueiros.find(b => b.id === bueiroId);
+            if (!bueiro) return;
+
+            const detailsContent = document.getElementById('detailsContent');
+            const estimatedTime = calculateFillTime(bueiro.capacity);
+            const status = getStatus(bueiro.capacity);
+            
+            detailsContent.innerHTML = `
+                <div class="detail-item">
+                    <span class="detail-label">🆔 ID do Bueiro</span>
+                    <span class="detail-value">${bueiro.id}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">📍 Localização</span>
+                    <span class="detail-value">${bueiro.location}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">📊 Capacidade Atual</span>
+                    <span class="detail-value">${formatNumber(bueiro.capacity)}%</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">🚨 Status</span>
+                    <span class="detail-value">${status.toUpperCase()}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">👃 Nível de Odor</span>
+                    <span class="detail-value">${bueiro.odor.toUpperCase()}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">🔧 Última Manutenção</span>
+                    <span class="detail-value">${formatDate(bueiro.lastMaintenance)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">⏱️ Tempo para Encher</span>
+                    <span class="detail-value">${estimatedTime}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">⚠️ Situação Crítica</span>
+                    <span class="detail-value">${bueiro.critical ? 'SIM' : 'NÃO'}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">📈 Capacidade Restante</span>
+                    <span class="detail-value">${formatNumber(100 - bueiro.capacity)}%</span>
+                </div>
+            `;
+
+            showModal('detailsModal');
+            addLog(`Detalhes visualizados: ${bueiroId}`);
+        }
+
+        // ==========================================
+        // MANUTENÇÃO E PROCESSO
         // ==========================================
         function markMaintenance(bueiroId) {
+            const bueiro = bueiros.find(b => b.id === bueiroId);
+            if (!bueiro) return;
+
+            // Mostrar modal do processo
+            showModal('maintenanceModal');
+            
+            // Iniciar animação do processo
+            startMaintenanceProcess(bueiroId);
+            
+            addLog(`Processo de manutenção iniciado: ${bueiroId}`);
+        }
+
+        function startMaintenanceProcess(bueiroId) {
+            const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
+            const progressBar = document.getElementById('processProgressBar');
+            let currentStep = 0;
+
+            // Reset estados
+            steps.forEach(stepId => {
+                const step = document.getElementById(stepId);
+                step.classList.remove('active', 'completed');
+            });
+            progressBar.style.width = '0%';
+
+            const processInterval = setInterval(() => {
+                if (currentStep > 0) {
+                    document.getElementById(steps[currentStep - 1]).classList.remove('active');
+                    document.getElementById(steps[currentStep - 1]).classList.add('completed');
+                }
+
+                if (currentStep < steps.length) {
+                    document.getElementById(steps[currentStep]).classList.add('active');
+                    progressBar.style.width = `${((currentStep + 1) / steps.length) * 100}%`;
+                    currentStep++;
+                } else {
+                    clearInterval(processInterval);
+                    
+                    // Finalizar processo
+                    setTimeout(() => {
+                        finalizeMaintenance(bueiroId);
+                        closeModal('maintenanceModal');
+                    }, 1500);
+                }
+            }, 2000);
+        }
+
+        function finalizeMaintenance(bueiroId) {
             const bueiro = bueiros.find(b => b.id === bueiroId);
             if (!bueiro) return;
 
@@ -939,30 +1351,13 @@
             renderBueirosGrid();
             updateStatistics();
             
-            addLog(`Manutenção realizada em ${bueiroId}: ${oldCapacity}% → ${bueiro.capacity}%`);
-            showNotification(`Manutenção concluída no bueiro ${bueiroId}`);
+            addLog(`Manutenção concluída em ${bueiroId}: ${formatNumber(oldCapacity)}% → ${formatNumber(bueiro.capacity)}%`);
+            showNotification(`✅ Manutenção concluída no bueiro ${bueiroId}`);
 
-            // Notificar sistema de drones se necessário
+            // Notificar sistema dos caminhões se necessário
             if (oldCapacity >= 80) {
                 notifyCriticalBueiros(bueiroId, 'maintenance_completed');
             }
-        }
-
-        function showDetails(bueiroId) {
-            const bueiro = bueiros.find(b => b.id === bueiroId);
-            if (!bueiro) return;
-
-            const details = `
-                Bueiro: ${bueiro.id}
-                Localização: ${bueiro.location}
-                Capacidade: ${bueiro.capacity}%
-                Status de Odor: ${bueiro.odor}
-                Última Manutenção: ${formatDate(bueiro.lastMaintenance)}
-                Status: ${getStatus(bueiro.capacity)}
-            `;
-
-            alert(details);
-            addLog(`Detalhes visualizados: ${bueiroId}`);
         }
 
         // ==========================================
@@ -975,7 +1370,7 @@
             tooltip.innerHTML = `
                 <strong>${bueiro.id}</strong><br>
                 📍 ${bueiro.location}<br>
-                📊 Capacidade: ${bueiro.capacity}%<br>
+                📊 Capacidade: ${formatNumber(bueiro.capacity)}%<br>
                 👃 Odor: ${bueiro.odor}<br>
                 🔧 Última manutenção: ${formatDate(bueiro.lastMaintenance)}<br>
                 ⏱️ Tempo estimado para encher: ${estimatedTime}
@@ -1004,11 +1399,11 @@
         // ESTATÍSTICAS
         // ==========================================
         function updateStatistics() {
-            const avgLevel = Math.round(bueiros.reduce((sum, b) => sum + b.capacity, 0) / bueiros.length);
+            const avgLevel = bueiros.reduce((sum, b) => sum + b.capacity, 0) / bueiros.length;
             const criticalCount = bueiros.filter(b => b.critical).length;
             const lastMaintenance = getLastMaintenanceDate();
 
-            document.getElementById('avgLevel').textContent = avgLevel + '%';
+            document.getElementById('avgLevel').textContent = formatNumber(avgLevel) + '%';
             document.getElementById('criticalCount').textContent = criticalCount;
             document.getElementById('lastMaintenance').textContent = lastMaintenance;
         }
@@ -1028,7 +1423,7 @@
             bueiros.forEach(bueiro => {
                 if (bueiro.capacity >= 80 && !bueiro.critical) {
                     bueiro.critical = true;
-                    addAlert(`Bueiro ${bueiro.id} atingiu nível crítico (${bueiro.capacity}%)`);
+                    addAlert(`Bueiro ${bueiro.id} atingiu nível crítico (${formatNumber(bueiro.capacity)}%)`);
                     notifyCriticalBueiros(bueiro.id, 'critical_level');
                 }
             });
@@ -1117,7 +1512,7 @@
         }
 
         // ==========================================
-        // GRÁFICO HISTÓRICO
+        // GRÁFICO HISTÓRICO CORRIGIDO
         // ==========================================
         function initializeChart() {
             const ctx = document.getElementById('historicalChart').getContext('2d');
@@ -1133,7 +1528,9 @@
                         borderColor: '#34d399',
                         backgroundColor: 'rgba(52, 211, 153, 0.1)',
                         tension: 0.4,
-                        fill: true
+                        fill: true,
+                        pointRadius: 3,
+                        pointHoverRadius: 5
                     }]
                 },
                 options: {
@@ -1141,19 +1538,38 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            labels: { color: '#f8fafc' }
+                            labels: { 
+                                color: '#f8fafc',
+                                font: { size: 12 }
+                            }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
                             max: 100,
-                            ticks: { color: '#94a3b8' },
-                            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                            ticks: { 
+                                color: '#94a3b8',
+                                font: { size: 10 }
+                            },
+                            grid: { 
+                                color: 'rgba(148, 163, 184, 0.1)'
+                            }
                         },
                         x: {
-                            ticks: { color: '#94a3b8' },
-                            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                            ticks: { 
+                                color: '#94a3b8',
+                                font: { size: 10 },
+                                maxTicksLimit: 8
+                            },
+                            grid: { 
+                                color: 'rgba(148, 163, 184, 0.1)'
+                            }
+                        }
+                    },
+                    elements: {
+                        point: {
+                            backgroundColor: '#34d399'
                         }
                     }
                 }
@@ -1186,12 +1602,7 @@
                 priority: 'high'
             };
             
-            // Salvar no localStorage para integração com dashboard e drones
-            let droneQueue = JSON.parse(localStorage.getItem('droneQueue') || '[]');
-            droneQueue.push(notification);
-            localStorage.setItem('droneQueue', JSON.stringify(droneQueue));
-            
-            addLog(`Notificação enviada para sistema de drones: ${bueiroId} - ${action}`);
+            addLog(`Notificação enviada para sistema de caminhões: ${bueiroId} - ${action}`);
         }
 
         // ==========================================
@@ -1210,28 +1621,30 @@
 
         function generateReports() {
             const criticalBueiros = bueiros.filter(b => b.critical);
+            const averageCapacity = bueiros.reduce((sum, b) => sum + b.capacity, 0) / bueiros.length;
+            
             const report = {
                 timestamp: new Date(),
                 totalBueiros: bueiros.length,
                 criticalBueiros: criticalBueiros.length,
-                averageCapacity: Math.round(bueiros.reduce((sum, b) => sum + b.capacity, 0) / bueiros.length),
+                averageCapacity: formatNumber(averageCapacity),
                 details: criticalBueiros.map(b => ({
                     id: b.id,
                     location: b.location,
-                    capacity: b.capacity,
+                    capacity: formatNumber(b.capacity),
                     lastMaintenance: b.lastMaintenance
                 }))
             };
             
             console.log('Relatório gerado:', report);
-            alert(`Relatório gerado!\n\nTotal de bueiros: ${report.totalBueiros}\nBueiros críticos: ${report.criticalBueiros}\nCapacidade média: ${report.averageCapacity}%`);
+            alert(`📊 Relatório Gerado!\n\n📋 Total de bueiros: ${report.totalBueiros}\n🚨 Bueiros críticos: ${report.criticalBueiros}\n📈 Capacidade média: ${report.averageCapacity}%`);
             
             addLog('Relatório de bueiros críticos gerado');
         }
 
         function exportData() {
             const csvData = bueiros.map(b => 
-                `${b.id},${b.location},${b.capacity},${b.odor},${b.lastMaintenance},${getStatus(b.capacity)}`
+                `${b.id},${b.location},${formatNumber(b.capacity)},${b.odor},${b.lastMaintenance},${getStatus(b.capacity)}`
             ).join('\n');
             
             const header = 'ID,Localização,Capacidade,Odor,Última Manutenção,Status\n';
@@ -1253,28 +1666,17 @@
         // ==========================================
         function logout() {
             if (confirm('Tem certeza que deseja sair do sistema?')) {
-                // Limpar dados da sessão
-                localStorage.removeItem('userSession');
-                
-                // Redirecionar para login
                 window.location.href = 'login.html';
             }
         }
 
-        // ==========================================
-        // VISUALIZAÇÃO DE ODOR
-        // ==========================================
-        function visualizeSmell() {
-            const smellData = {
-                baixo: bueiros.filter(b => b.odor === 'baixo').length,
-                médio: bueiros.filter(b => b.odor === 'médio').length,
-                alto: bueiros.filter(b => b.odor === 'alto').length,
-                crítico: bueiros.filter(b => b.odor === 'crítico').length
-            };
-            
-            console.log('Distribuição de odores:', smellData);
-            return smellData;
-        }
+        // Fechar modais ao clicar fora
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                const modalId = event.target.id;
+                closeModal(modalId);
+            }
+        });
     </script>
 </body>
 </html>
