@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento de Bueiros - SmartCity</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        /* ==========================================
+           BUEIROS SMARTCITY - DESIGN UNIFICADO
+           Cores: Verde predominante com Azul
+           ========================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Verde predominante */
+            --verde-primario: #059669;
+            --verde-secundario: #10b981;
+            --verde-accent: #34d399;
+            --verde-light: #6ee7b7;
+            --verde-dark: #064e3b;
+            --verde-neon: #00ff88;
+
+            /* Azul complementar */
+            --azul-primario: #0f172a;
+            --azul-secundario: #1e293b;
+            --azul-accent: #3b82f6;
+            --azul-light: #60a5fa;
+            --azul-dark: #0c1220;
+
+            /* Neutros */
+            --branco: #f8fafc;
+            --cinza-light: #e2e8f0;
+            --cinza-medio: #94a3b8;
+            --cinza-dark: #64748b;
+
+            /* Gradientes */
+            --gradiente-verde: linear-gradient(135deg, var(--verde-dark) 0%, var(--verde-secundario) 100%);
+            --gradiente-azul: linear-gradient(135deg, var(--azul-primario) 0%, var(--azul-accent) 100%);
+            --gradiente-mixed: linear-gradient(135deg, var(--verde-secundario) 0%, var(--azul-accent) 100%);
+            --gradiente-hero: linear-gradient(135deg, var(--verde-dark) 0%, var(--verde-primario) 50%, var(--azul-dark) 100%);
+            --gradiente-card: linear-gradient(135deg, rgba(6, 78, 59, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
+
+            /* Sombras */
+            --sombra-verde: 0 8px 25px rgba(16, 185, 129, 0.15);
+            --sombra-azul: 0 8px 25px rgba(59, 130, 246, 0.15);
+            --sombra-mixed: 0 10px 30px rgba(16, 185, 129, 0.1), 0 4px 15px rgba(59, 130, 246, 0.1);
+            --sombra-forte: 0 15px 35px rgba(6, 78, 59, 0.2);
+
+            /* Transições */
+            --transicao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transicao-lenta: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Bordas */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--gradiente-hero);
+            color: var(--branco);
+            line-height: 1.6;
+            min-height: 100vh;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* === TOPBAR === */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--gradiente-verde);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            box-shadow: var(--sombra-verde);
+            border-bottom: 2px solid var(--verde-accent);
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--branco);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--verde-neon);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .logout-topbar {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+            padding: 0.6rem 1rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: var(--transicao);
+        }
+
+        .logout-topbar:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 60px;
+            width: 250px;
+            height: calc(100vh - 60px);
+            background: var(--gradiente-azul);
+            z-index: 1000;
+            transition: var(--transicao);
+            box-shadow: var(--sombra-azul);
+            border-right: 2px solid var(--verde-accent);
+        }
+
+        .sidebar-nav {
+            padding: 1.5rem 0.8rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            color: var(--branco);
+            text-decoration: none;
+            transition: var(--transicao);
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradiente-verde);
+            transition: var(--transicao);
+            z-index: -1;
+        }
+
+        .nav-item:hover::before,
+        .nav-item.active::before {
+            left: 0;
+        }
+
+        .nav-item:hover {
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: rgba(16, 185, 129, 0.2);
+            border-left: 3px solid var(--verde-accent);
+            color: var(--verde-accent);
+        }
+
+        .nav-item i {
+            margin-right: 0.8rem;
+            font-size: 1rem;
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 1.5rem;
+            min-height: calc(100vh - 60px);
+        }
+
+        .header {
+            background: var(--gradiente-card);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            box-shadow: var(--sombra-mixed);
+            backdrop-filter: blur(20px);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradiente-mixed);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--branco);
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        /* === CONTROLES E FILTROS === */
+        .controls-section {
+            background: var(--gradiente-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            box-shadow: var(--sombra-mixed);
+            backdrop-filter: blur(20px);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto auto;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--verde-accent);
+            border-radius: var(--radius-sm);
+            padding: 0.8rem;
+            color: var(--branco);
+            font-size: 0.9rem;
+        }
+
+        .search-input::placeholder {
+            color: var(--cinza-medio);
+        }
+
+        .filter-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--azul-accent);
+            border-radius: var(--radius-sm);
+            padding: 0.8rem;
+            color: var(--branco);
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.2rem;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transicao);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: var(--gradiente-verde);
+            color: var(--branco);
+        }
+
+        .btn-secondary {
+            background: var(--gradiente-azul);
+            color: var(--branco);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--sombra-forte);
+        }
+
+        /* === LAYOUT PRINCIPAL === */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 1.5rem;
+        }
+
+        /* === GRID DE BUEIROS === */
+        .bueiros-section {
+            background: var(--gradiente-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            box-shadow: var(--sombra-mixed);
+            backdrop-filter: blur(20px);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--verde-accent);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bueiros-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .bueiro-card {
+            background: rgba(6, 78, 59, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            border: 1px solid var(--verde-accent);
+            transition: var(--transicao);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .bueiro-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--sombra-verde);
+        }
+
+        .bueiro-card.critical {
+            border-color: #ef4444;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+            animation: pulseRed 2s infinite;
+        }
+
+        .bueiro-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .bueiro-id {
+            font-weight: 700;
+            color: var(--verde-accent);
+            font-size: 1.1rem;
+        }
+
+        .bueiro-status {
+            padding: 0.3rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-normal {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--verde-accent);
+        }
+
+        .status-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+
+        .status-critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+        }
+
+        .bueiro-location {
+            color: var(--branco);
+            opacity: 0.8;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .capacity-section {
+            margin-bottom: 1rem;
+        }
+
+        .capacity-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: var(--transicao);
+            border-radius: 4px;
+        }
+
+        .progress-normal {
+            background: var(--verde-accent);
+        }
+
+        .progress-warning {
+            background: #f59e0b;
+        }
+
+        .progress-critical {
+            background: #ef4444;
+        }
+
+        .bueiro-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info-label {
+            color: var(--cinza-medio);
+        }
+
+        .info-value {
+            color: var(--branco);
+            font-weight: 600;
+        }
+
+        .bueiro-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 0.8rem;
+            font-size: 0.8rem;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            transition: var(--transicao);
+            font-weight: 600;
+        }
+
+        .btn-maintenance {
+            background: var(--verde-accent);
+            color: var(--verde-dark);
+        }
+
+        .btn-details {
+            background: var(--azul-accent);
+            color: var(--branco);
+        }
+
+        /* === PAINEL LATERAL === */
+        .stats-panel {
+            background: var(--gradiente-card);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: var(--sombra-mixed);
+            backdrop-filter: blur(20px);
+            height: fit-content;
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            border: 1px solid var(--azul-accent);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--verde-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--branco);
+            opacity: 0.9;
+            font-size: 0.8rem;
+        }
+
+        .alerts-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-item {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: var(--radius-sm);
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .alert-time {
+            color: var(--cinza-medio);
+            font-size: 0.7rem;
+        }
+
+        .chart-container {
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            border: 1px solid var(--azul-accent);
+        }
+
+        /* === TOOLTIP === */
+        .tooltip {
+            position: absolute;
+            background: var(--gradiente-card);
+            border: 1px solid var(--verde-accent);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            font-size: 0.8rem;
+            z-index: 2000;
+            box-shadow: var(--sombra-forte);
+            backdrop-filter: blur(20px);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        /* === NOTIFICAÇÕES === */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--gradiente-card);
+            border: 1px solid #ef4444;
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            z-index: 2000;
+            box-shadow: var(--sombra-forte);
+            backdrop-filter: blur(20px);
+            transform: translateX(400px);
+            transition: var(--transicao);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* === ANIMAÇÕES === */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes pulseRed {
+            0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.6); }
+        }
+
+        /* === RESPONSIVO === */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bueiros-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* === SCROLLBAR === */
+        .bueiros-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .bueiros-grid::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .bueiros-grid::-webkit-scrollbar-thumb {
+            background: var(--verde-accent);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div class="logo">🏙️ SmartCity</div>
+        <div class="system-status">
+            <div class="status-dot"></div>
+            <span>Sistema Online</span>
+        </div>
+        <button class="logout-topbar" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <span>📊</span> Dashboard
+            </a>
+            <a href="bueiros.html" class="nav-item active">
+                <span>🚰</span> Bueiros
+            </a>
+            <a href="energia.html" class="nav-item">
+                <span>⚡</span> Energia
+            </a>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>Monitoramento de Bueiros Inteligentes</h1>
+            <p>Sistema avançado de monitoramento em tempo real para prevenção de enchentes</p>
+        </div>
+
+        <!-- CONTROLES -->
+        <div class="controls-section">
+            <div class="controls-grid">
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar por ID ou localização...">
+                <select class="filter-select" id="statusFilter">
+                    <option value="">Todos os Status</option>
+                    <option value="normal">Normal</option>
+                    <option value="warning">Alerta</option>
+                    <option value="critical">Crítico</option>
+                </select>
+                <button class="btn btn-primary" onclick="generateReports()">📄 Relatório</button>
+                <button class="btn btn-secondary" onclick="exportData()">📊 Exportar</button>
+            </div>
+        </div>
+
+        <!-- LAYOUT PRINCIPAL -->
+        <div class="main-grid">
+            <!-- GRID DE BUEIROS -->
+            <div class="bueiros-section">
+                <div class="section-title">
+                    <span>🚰</span>
+                    <span>Bueiros Monitorados</span>
+                    <span id="bueirosCount" style="margin-left: auto; font-size: 0.9rem; opacity: 0.8;"></span>
+                </div>
+                <div class="bueiros-grid" id="bueirosGrid">
+                    <!-- Cards de bueiros serão gerados dinamicamente -->
+                </div>
+            </div>
+
+            <!-- PAINEL LATERAL -->
+            <div class="stats-panel">
+                <div class="section-title">
+                    <span>📈</span>
+                    <span>Estatísticas Gerais</span>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgLevel">0%</div>
+                        <div class="stat-label">Nível Médio</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="criticalCount">0</div>
+                        <div class="stat-label">Bueiros Críticos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="lastMaintenance">--</div>
+                        <div class="stat-label">Última Manutenção</div>
+                    </div>
+                </div>
+
+                <div class="alerts-section">
+                    <div class="section-title">
+                        <span>🚨</span>
+                        <span>Alertas Recentes</span>
+                    </div>
+                    <div id="alertsList">
+                        <!-- Alertas serão gerados dinamicamente -->
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="section-title">
+                        <span>📊</span>
+                        <span>Evolução Histórica</span>
+                    </div>
+                    <canvas id="historicalChart" width="300" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOOLTIP -->
+    <div id="tooltip" class="tooltip"></div>
+
+    <!-- NOTIFICAÇÃO -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // ==========================================
+        // DADOS E ESTADO GLOBAL
+        // ==========================================
+        let bueiros = [
+            { id: 'B001', location: 'Av. Paulista, 1000', capacity: 15, odor: 'baixo', lastMaintenance: '2024-09-15', critical: false },
+            { id: 'B002', location: 'Rua Augusta, 500', capacity: 45, odor: 'médio', lastMaintenance: '2024-09-12', critical: false },
+            { id: 'B003', location: 'Largo do Arouche, 100', capacity: 75, odor: 'alto', lastMaintenance: '2024-09-10', critical: false },
+            { id: 'B004', location: 'Av. Faria Lima, 2000', capacity: 85, odor: 'crítico', lastMaintenance: '2024-09-08', critical: true },
+            { id: 'B005', location: 'Rua da Consolação, 800', capacity: 25, odor: 'baixo', lastMaintenance: '2024-09-14', critical: false },
+            { id: 'B006', location: 'Av. Ibirapuera, 1500', capacity: 90, odor: 'crítico', lastMaintenance: '2024-09-05', critical: true },
+            { id: 'B007', location: 'Rua Oscar Freire, 300', capacity: 35, odor: 'médio', lastMaintenance: '2024-09-13', critical: false },
+            { id: 'B008', location: 'Av. Rebouças, 1200', capacity: 60, odor: 'alto', lastMaintenance: '2024-09-11', critical: false },
+            { id: 'B009', location: 'Largo São Bento, 50', capacity: 95, odor: 'crítico', lastMaintenance: '2024-09-03', critical: true },
+            { id: 'B010', location: 'Av. Ipiranga, 900', capacity: 20, odor: 'baixo', lastMaintenance: '2024-09-16', critical: false }
+        ];
+
+        let alerts = [];
+        let logs = [];
+        let chart;
+        let currentFilter = '';
+        let currentSearch = '';
+
+        // ==========================================
+        // INICIALIZAÇÃO
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSystem();
+            setupEventListeners();
+            startSimulation();
+        });
+
+        function initializeSystem() {
+            renderBueirosGrid();
+            updateStatistics();
+            initializeChart();
+            checkAlerts();
+        }
+
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('input', handleSearch);
+            document.getElementById('statusFilter').addEventListener('change', handleFilter);
+        }
+
+        // ==========================================
+        // RENDERIZAÇÃO DE BUEIROS
+        // ==========================================
+        function renderBueirosGrid() {
+            const grid = document.getElementById('bueirosGrid');
+            const filteredBueiros = filterBueiros();
+            
+            grid.innerHTML = '';
+            
+            filteredBueiros.forEach(bueiro => {
+                const card = createBueiroCard(bueiro);
+                grid.appendChild(card);
+            });
+
+            document.getElementById('bueirosCount').textContent = `${filteredBueiros.length} bueiros`;
+        }
+
+        function createBueiroCard(bueiro) {
+            const card = document.createElement('div');
+            card.className = `bueiro-card ${bueiro.critical ? 'critical' : ''}`;
+            
+            const status = getStatus(bueiro.capacity);
+            const progressClass = getProgressClass(bueiro.capacity);
+            const statusClass = getStatusClass(status);
+            
+            card.innerHTML = `
+                <div class="bueiro-header">
+                    <div class="bueiro-id">${bueiro.id}</div>
+                    <div class="bueiro-status ${statusClass}">${status}</div>
+                </div>
+                <div class="bueiro-location">📍 ${bueiro.location}</div>
+                <div class="capacity-section">
+                    <div class="capacity-label">
+                        <span>Capacidade</span>
+                        <span>${bueiro.capacity}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill ${progressClass}" style="width: ${bueiro.capacity}%"></div>
+                    </div>
+                </div>
+                <div class="bueiro-info">
+                    <div class="info-item">
+                        <span class="info-label">Odor:</span>
+                        <span class="info-value">${bueiro.odor}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Última Manutenção:</span>
+                        <span class="info-value">${formatDate(bueiro.lastMaintenance)}</span>
+                    </div>
+                </div>
+                <div class="bueiro-actions">
+                    <button class="btn-small btn-maintenance" onclick="markMaintenance('${bueiro.id}')">
+                        🔧 Manutenção
+                    </button>
+                    <button class="btn-small btn-details" onclick="showDetails('${bueiro.id}')">
+                        👁️ Detalhes
+                    </button>
+                </div>
+            `;
+
+            // Adicionar tooltip
+            card.addEventListener('mouseenter', (e) => showTooltip(e, bueiro));
+            card.addEventListener('mouseleave', hideTooltip);
+
+            return card;
+        }
+
+        // ==========================================
+        // FUNÇÕES DE UTILIDADE
+        // ==========================================
+        function getStatus(capacity) {
+            if (capacity >= 80) return 'crítico';
+            if (capacity >= 50) return 'alerta';
+            return 'normal';
+        }
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'crítico': return 'status-critical';
+                case 'alerta': return 'status-warning';
+                default: return 'status-normal';
+            }
+        }
+
+        function getProgressClass(capacity) {
+            if (capacity >= 80) return 'progress-critical';
+            if (capacity >= 50) return 'progress-warning';
+            return 'progress-normal';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        }
+
+        // ==========================================
+        // FILTROS E BUSCA
+        // ==========================================
+        function filterBueiros() {
+            let filtered = bueiros;
+
+            if (currentSearch) {
+                filtered = filtered.filter(b => 
+                    b.id.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                    b.location.toLowerCase().includes(currentSearch.toLowerCase())
+                );
+            }
+
+            if (currentFilter) {
+                filtered = filtered.filter(b => getStatus(b.capacity) === currentFilter);
+            }
+
+            return filtered;
+        }
+
+        function handleSearch(event) {
+            currentSearch = event.target.value;
+            renderBueirosGrid();
+            addLog(`Busca aplicada: "${currentSearch}"`);
+        }
+
+        function handleFilter(event) {
+            currentFilter = event.target.value;
+            renderBueirosGrid();
+            addLog(`Filtro aplicado: ${currentFilter || 'Todos'}`);
+        }
+
+        // ==========================================
+        // MANUTENÇÃO E AÇÕES
+        // ==========================================
+        function markMaintenance(bueiroId) {
+            const bueiro = bueiros.find(b => b.id === bueiroId);
+            if (!bueiro) return;
+
+            const oldCapacity = bueiro.capacity;
+            bueiro.capacity = Math.max(0, bueiro.capacity - 80);
+            bueiro.lastMaintenance = new Date().toISOString().split('T')[0];
+            bueiro.critical = bueiro.capacity >= 80;
+
+            renderBueirosGrid();
+            updateStatistics();
+            
+            addLog(`Manutenção realizada em ${bueiroId}: ${oldCapacity}% → ${bueiro.capacity}%`);
+            showNotification(`Manutenção concluída no bueiro ${bueiroId}`);
+
+            // Notificar sistema de drones se necessário
+            if (oldCapacity >= 80) {
+                notifyCriticalBueiros(bueiroId, 'maintenance_completed');
+            }
+        }
+
+        function showDetails(bueiroId) {
+            const bueiro = bueiros.find(b => b.id === bueiroId);
+            if (!bueiro) return;
+
+            const details = `
+                Bueiro: ${bueiro.id}
+                Localização: ${bueiro.location}
+                Capacidade: ${bueiro.capacity}%
+                Status de Odor: ${bueiro.odor}
+                Última Manutenção: ${formatDate(bueiro.lastMaintenance)}
+                Status: ${getStatus(bueiro.capacity)}
+            `;
+
+            alert(details);
+            addLog(`Detalhes visualizados: ${bueiroId}`);
+        }
+
+        // ==========================================
+        // TOOLTIP
+        // ==========================================
+        function showTooltip(event, bueiro) {
+            const tooltip = document.getElementById('tooltip');
+            const estimatedTime = calculateFillTime(bueiro.capacity);
+            
+            tooltip.innerHTML = `
+                <strong>${bueiro.id}</strong><br>
+                📍 ${bueiro.location}<br>
+                📊 Capacidade: ${bueiro.capacity}%<br>
+                👃 Odor: ${bueiro.odor}<br>
+                🔧 Última manutenção: ${formatDate(bueiro.lastMaintenance)}<br>
+                ⏱️ Tempo estimado para encher: ${estimatedTime}
+            `;
+            
+            tooltip.style.left = event.pageX + 10 + 'px';
+            tooltip.style.top = event.pageY + 10 + 'px';
+            tooltip.classList.add('show');
+        }
+
+        function hideTooltip() {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.classList.remove('show');
+        }
+
+        function calculateFillTime(capacity) {
+            const remaining = 100 - capacity;
+            const hoursToFill = remaining * 0.5; // Simulação: 0.5h por 1%
+            
+            if (hoursToFill < 1) return `${Math.round(hoursToFill * 60)} min`;
+            if (hoursToFill < 24) return `${Math.round(hoursToFill)}h`;
+            return `${Math.round(hoursToFill / 24)} dias`;
+        }
+
+        // ==========================================
+        // ESTATÍSTICAS
+        // ==========================================
+        function updateStatistics() {
+            const avgLevel = Math.round(bueiros.reduce((sum, b) => sum + b.capacity, 0) / bueiros.length);
+            const criticalCount = bueiros.filter(b => b.critical).length;
+            const lastMaintenance = getLastMaintenanceDate();
+
+            document.getElementById('avgLevel').textContent = avgLevel + '%';
+            document.getElementById('criticalCount').textContent = criticalCount;
+            document.getElementById('lastMaintenance').textContent = lastMaintenance;
+        }
+
+        function getLastMaintenanceDate() {
+            const dates = bueiros.map(b => new Date(b.lastMaintenance));
+            const latest = new Date(Math.max.apply(null, dates));
+            return formatDate(latest.toISOString());
+        }
+
+        // ==========================================
+        // ALERTAS E NOTIFICAÇÕES
+        // ==========================================
+        function checkAlerts() {
+            const currentTime = new Date();
+            
+            bueiros.forEach(bueiro => {
+                if (bueiro.capacity >= 80 && !bueiro.critical) {
+                    bueiro.critical = true;
+                    addAlert(`Bueiro ${bueiro.id} atingiu nível crítico (${bueiro.capacity}%)`);
+                    notifyCriticalBueiros(bueiro.id, 'critical_level');
+                }
+            });
+
+            renderAlerts();
+        }
+
+        function addAlert(message) {
+            const alert = {
+                id: Date.now(),
+                message,
+                timestamp: new Date(),
+                read: false
+            };
+            
+            alerts.unshift(alert);
+            if (alerts.length > 10) alerts = alerts.slice(0, 10);
+            
+            showNotification(message);
+        }
+
+        function renderAlerts() {
+            const alertsList = document.getElementById('alertsList');
+            
+            if (alerts.length === 0) {
+                alertsList.innerHTML = '<p style="color: var(--cinza-medio); font-size: 0.8rem;">Nenhum alerta recente</p>';
+                return;
+            }
+
+            alertsList.innerHTML = alerts.slice(0, 5).map(alert => `
+                <div class="alert-item">
+                    <div>${alert.message}</div>
+                    <div class="alert-time">${alert.timestamp.toLocaleTimeString('pt-BR')}</div>
+                </div>
+            `).join('');
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span>🚨</span>
+                    <span>${message}</span>
+                    <button onclick="hideNotification()" style="margin-left: auto; background: none; border: none; color: var(--branco); cursor: pointer;">✕</button>
+                </div>
+            `;
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                hideNotification();
+            }, 5000);
+        }
+
+        function hideNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('show');
+        }
+
+        // ==========================================
+        // SIMULAÇÃO EM TEMPO REAL
+        // ==========================================
+        function startSimulation() {
+            setInterval(() => {
+                simulateFillIncrease();
+                checkAlerts();
+                updateStatistics();
+                updateChart();
+            }, 3000); // Atualização a cada 3 segundos
+        }
+
+        function simulateFillIncrease() {
+            bueiros.forEach(bueiro => {
+                // Incremento aleatório entre 0.5% e 2%
+                const increment = Math.random() * 1.5 + 0.5;
+                bueiro.capacity = Math.min(100, bueiro.capacity + increment);
+                
+                // Simular mudanças no odor baseado na capacidade
+                if (bueiro.capacity >= 90) bueiro.odor = 'crítico';
+                else if (bueiro.capacity >= 70) bueiro.odor = 'alto';
+                else if (bueiro.capacity >= 40) bueiro.odor = 'médio';
+                else bueiro.odor = 'baixo';
+            });
+            
+            renderBueirosGrid();
+        }
+
+        // ==========================================
+        // GRÁFICO HISTÓRICO
+        // ==========================================
+        function initializeChart() {
+            const ctx = document.getElementById('historicalChart').getContext('2d');
+            const hours = Array.from({length: 24}, (_, i) => `${i}:00`);
+            
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: hours,
+                    datasets: [{
+                        label: 'Nível Médio (%)',
+                        data: generateHistoricalData(),
+                        borderColor: '#34d399',
+                        backgroundColor: 'rgba(52, 211, 153, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#f8fafc' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateHistoricalData() {
+            return Array.from({length: 24}, () => Math.random() * 60 + 20);
+        }
+
+        function updateChart() {
+            if (!chart) return;
+            
+            const avgLevel = bueiros.reduce((sum, b) => sum + b.capacity, 0) / bueiros.length;
+            chart.data.datasets[0].data.push(avgLevel);
+            chart.data.datasets[0].data.shift();
+            chart.update('none');
+        }
+
+        // ==========================================
+        // INTEGRAÇÃO COM OUTROS SISTEMAS
+        // ==========================================
+        function notifyCriticalBueiros(bueiroId, action) {
+            // Simular notificação para sistema de drones
+            const notification = {
+                type: 'bueiro_critical',
+                bueiroId: bueiroId,
+                action: action,
+                timestamp: new Date(),
+                priority: 'high'
+            };
+            
+            // Salvar no localStorage para integração com dashboard e drones
+            let droneQueue = JSON.parse(localStorage.getItem('droneQueue') || '[]');
+            droneQueue.push(notification);
+            localStorage.setItem('droneQueue', JSON.stringify(droneQueue));
+            
+            addLog(`Notificação enviada para sistema de drones: ${bueiroId} - ${action}`);
+        }
+
+        // ==========================================
+        // LOGS E RELATÓRIOS
+        // ==========================================
+        function addLog(message) {
+            const log = {
+                timestamp: new Date(),
+                message: message,
+                user: 'Sistema'
+            };
+            
+            logs.unshift(log);
+            if (logs.length > 100) logs = logs.slice(0, 100);
+        }
+
+        function generateReports() {
+            const criticalBueiros = bueiros.filter(b => b.critical);
+            const report = {
+                timestamp: new Date(),
+                totalBueiros: bueiros.length,
+                criticalBueiros: criticalBueiros.length,
+                averageCapacity: Math.round(bueiros.reduce((sum, b) => sum + b.capacity, 0) / bueiros.length),
+                details: criticalBueiros.map(b => ({
+                    id: b.id,
+                    location: b.location,
+                    capacity: b.capacity,
+                    lastMaintenance: b.lastMaintenance
+                }))
+            };
+            
+            console.log('Relatório gerado:', report);
+            alert(`Relatório gerado!\n\nTotal de bueiros: ${report.totalBueiros}\nBueiros críticos: ${report.criticalBueiros}\nCapacidade média: ${report.averageCapacity}%`);
+            
+            addLog('Relatório de bueiros críticos gerado');
+        }
+
+        function exportData() {
+            const csvData = bueiros.map(b => 
+                `${b.id},${b.location},${b.capacity},${b.odor},${b.lastMaintenance},${getStatus(b.capacity)}`
+            ).join('\n');
+            
+            const header = 'ID,Localização,Capacidade,Odor,Última Manutenção,Status\n';
+            const csv = header + csvData;
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bueiros_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            addLog('Dados exportados em CSV');
+        }
+
+        // ==========================================
+        // LOGOUT E NAVEGAÇÃO
+        // ==========================================
+        function logout() {
+            if (confirm('Tem certeza que deseja sair do sistema?')) {
+                // Limpar dados da sessão
+                localStorage.removeItem('userSession');
+                
+                // Redirecionar para login
+                window.location.href = 'login.html';
+            }
+        }
+
+        // ==========================================
+        // VISUALIZAÇÃO DE ODOR
+        // ==========================================
+        function visualizeSmell() {
+            const smellData = {
+                baixo: bueiros.filter(b => b.odor === 'baixo').length,
+                médio: bueiros.filter(b => b.odor === 'médio').length,
+                alto: bueiros.filter(b => b.odor === 'alto').length,
+                crítico: bueiros.filter(b => b.odor === 'crítico').length
+            };
+            
+            console.log('Distribuição de odores:', smellData);
+            return smellData;
+        }
+    </script>
+</body>
+</html>
