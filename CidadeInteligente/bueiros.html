@@ -81,24 +81,41 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 60px;
+            height: 60px; /* altura da barra */
             background: var(--gradiente-verde);
-            z-index: 1001;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 1.5rem;
             box-shadow: var(--sombra-verde);
             border-bottom: 2px solid var(--verde-accent);
+            z-index: 1001;
         }
 
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--branco);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        /* Áreas esquerda e direita */
+        .topbar-left, .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
+        /* Botão menu */
+        .menu-toggle {
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Logo proporcional */
+        .logo img {
+            height: 45px;  /* proporcional à barra */
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* System status */
         .system-status {
             display: flex;
             align-items: center;
@@ -106,17 +123,19 @@
             padding: 0.4rem 0.8rem;
             background: rgba(255, 255, 255, 0.1);
             border-radius: var(--radius-sm);
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            color: var(--branco);
         }
 
         .status-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: var(--verde-neon);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
 
+        /* Botão logout */
         .logout-topbar {
             background: rgba(239, 68, 68, 0.2);
             color: #fca5a5;
@@ -832,6 +851,24 @@
             .bueiros-grid {
                 grid-template-columns: 1fr;
             }
+            
+            /* Responsividade para a nova topbar */
+            .topbar {
+                padding: 0 1rem;
+            }
+
+            .logo img {
+                height: 35px; /* reduz em telas menores */
+            }
+
+            .system-status span {
+                display: none; /* mostra só o ponto */
+            }
+
+            .logout-topbar {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
+            }
         }
 
         /* === SCROLLBAR === */
@@ -851,30 +888,205 @@
     </style>
 </head>
 <body>
-    <!-- TOPBAR -->
-    <div class="topbar">
-        <div class="logo">🏙️ SmartCity</div>
-        <div class="system-status">
-            <div class="status-dot"></div>
-            <span>Sistema Online</span>
+   <!-- TOPBAR -->
+<header class="topbar">
+    <!-- Esquerda: Menu + Logo -->
+    <div class="topbar-left">
+        <div class="logo">
+            KAPWBS
         </div>
-        <button class="logout-topbar" onclick="logout()">Logout</button>
     </div>
 
+    <!-- Direita: Status + Logout -->
+    <div class="topbar-right">
+        <div class="system-status">
+            <span class="status-dot"></span>
+            <span>Online</span>
+        </div>
+        <button class="logout-topbar" onclick="showLogoutPopup()">Logout</button>
+    </div>
+</header>
+
+<!-- POPUP DE LOGOUT -->
+<div id="logoutPopup" class="popup-overlay">
+    <div class="popup">
+        <h3>Confirmar Logout</h3>
+        <p>Deseja realmente sair do sistema?</p>
+        <div class="popup-buttons">
+            <button class="btn btn-cancel" onclick="closeLogoutPopup()">Cancelar</button>
+            <button class="btn btn-logout" onclick="logout()">Sair</button>
+        </div>
+    </div>
+</div>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    background: #111827;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Logo futurista */
+.logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #10b981;
+    background: linear-gradient(135deg, #34d399, #059669);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 5px rgba(16, 185, 129, 0.7), 0 0 10px rgba(52, 211, 153, 0.5);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    0% { text-shadow: 0 0 5px rgba(16, 185, 129, 0.7), 0 0 10px rgba(52, 211, 153, 0.5); }
+    50% { text-shadow: 0 0 10px rgba(16, 185, 129, 1), 0 0 20px rgba(52, 211, 153, 0.8); }
+    100% { text-shadow: 0 0 5px rgba(16, 185, 129, 0.7), 0 0 10px rgba(52, 211, 153, 0.5); }
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 5px #10b981;
+}
+
+.logout-topbar {
+    margin-left: 1rem;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #f8fafc;
+    background: linear-gradient(135deg, #34d399, #059669);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    text-shadow: 0 0 3px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
+
+.logout-topbar:hover {
+    background: linear-gradient(135deg, #059669, #10b981);
+    box-shadow: 0 0 8px #10b981, 0 0 15px #34d399;
+}
+
+/* POPUP */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(17, 24, 39, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+}
+
+.popup-overlay.active {
+    display: flex;
+}
+
+.popup {
+    background: #1f2937;
+    border: 1px solid #10b981;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    width: 300px;
+    color: #f8fafc;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+    animation: popupIn 0.3s ease;
+}
+
+@keyframes popupIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-cancel {
+    background: #374151;
+    color: #f8fafc;
+}
+
+.btn-cancel:hover {
+    background: #4b5563;
+}
+
+.btn-logout {
+    background: linear-gradient(135deg, #34d399, #059669);
+    color: #f8fafc;
+    text-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
+.btn-logout:hover {
+    background: linear-gradient(135deg, #059669, #10b981);
+    box-shadow: 0 0 8px #10b981, 0 0 15px #34d399;
+}
+</style>
+
+<script>
+function showLogoutPopup() {
+    document.getElementById('logoutPopup').classList.add('active');
+}
+
+function closeLogoutPopup() {
+    document.getElementById('logoutPopup').classList.remove('active');
+}
+
+function logout() {
+    closeLogoutPopup();
+    // Aqui pode manter a navegação real
+    window.location.href = 'login.html';
+}
+</script>
+
     <!-- SIDEBAR -->
-    <div class="sidebar">
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item">
-                <span>📊</span> Dashboard
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item active">
+                <i>📊</i> Dashboard
             </a>
-            <a href="bueiros.html" class="nav-item active">
-                <span>🚰</span> Bueiros
+            <a href="bueiros.html" class="nav-item">
+                <i>🕳️</i> Bueiros
             </a>
             <a href="energia.html" class="nav-item">
-                <span>⚡</span> Energia
+                <i>⚡</i> Energia
             </a>
-        </nav>
-    </div>
+        </div>
+    </nav>
 
     <!-- MAIN CONTENT -->
     <div class="main-content">
@@ -900,12 +1112,205 @@
                         <option value="critical">🚨 Crítico</option>
                     </select>
                 </div>
-                <button class="btn btn-primary" onclick="generateReports()">
-                    📄 Relatório
-                </button>
-                <button class="btn btn-secondary" onclick="exportData()">
-                    📊 Exportar
-                </button>
+                <!-- BOTÃO RELATÓRIO -->
+<button class="btn btn-primary" onclick="showReportPopup()">
+    📄 Relatório
+</button>
+
+<!-- POPUP RELATÓRIO MODERNO ANIMADO -->
+<div id="reportPopup" class="popup-overlay">
+    <div class="popup">
+        <button class="popup-close" onclick="closeReportPopup()">✕</button>
+        <h3>📋 Relatório de Bueiros</h3>
+        <div id="reportContent" class="report-content"></div>
+        <div class="popup-buttons">
+            <button class="btn btn-cancel" onclick="closeReportPopup()">Fechar</button>
+            <button class="btn btn-export" onclick="generateTXTReport()">Gerar TXT</button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Overlay do popup */
+.popup-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(17,24,39,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000; /* Altíssimo para garantir que fique acima de tudo */
+}
+
+/* Ativo */
+.popup-overlay.active { display: flex; }
+
+/* Popup central */
+.popup {
+    background: #1f2937;
+    border: 2px solid #10b981;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    width: 500px;
+    max-width: 90%;
+    color: #f8fafc;
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.7);
+    position: relative;
+    animation: popupIn 0.3s ease forwards;
+}
+
+/* Botão de fechar */
+.popup-close {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: none; border: none;
+    font-size: 1.2rem;
+    color: #f8fafc;
+    cursor: pointer;
+}
+.popup-close:hover { color: #34d399; }
+
+/* Animação de entrada */
+@keyframes popupIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Animação de saída */
+@keyframes popupOut {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0; }
+}
+
+/* Conteúdo do relatório */
+.report-content {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 1rem;
+    text-align: left;
+}
+
+/* Botões */
+.popup-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-cancel { background: #374151; color: #f8fafc; }
+.btn-cancel:hover { background: #4b5563; }
+
+.btn-export {
+    background: linear-gradient(135deg, #34d399, #059669);
+    color: #f8fafc;
+    text-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+.btn-export:hover {
+    background: linear-gradient(135deg, #059669, #10b981);
+    box-shadow: 0 0 8px #10b981, 0 0 15px #34d399;
+}
+
+/* Barras de progresso */
+.bueiro-item {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 0.5rem;
+}
+.bueiro-label { font-weight: bold; margin-bottom: 0.3rem; display: block; }
+
+.progress-bar {
+    height: 14px;
+    border-radius: 7px;
+    background: #374151;
+    overflow: hidden;
+    margin-top: 3px;
+}
+.progress-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 7px;
+    transition: width 0.8s ease, background 0.5s ease;
+}
+
+/* Cores segundo status */
+.progress-normal { background: #10b981; }
+.progress-warning { background: #facc15; }
+.progress-critical { background: #ef4444; }
+</style>
+
+<script>
+function showReportPopup() {
+    const popup = document.getElementById('reportPopup');
+    const reportContent = document.getElementById('reportContent');
+    
+    if (!bueiros || bueiros.length === 0) {
+        reportContent.innerHTML = "<p style='color:#9ca3af;'>Nenhum bueiro cadastrado</p>";
+    } else {
+        reportContent.innerHTML = bueiros.map(b => `
+            <div class="bueiro-item" id="bueiro-${b.id}">
+                <span class="bueiro-label">ID: ${b.id} | Local: ${b.location} | Odor: ${b.odor} | Última manutenção: ${b.lastMaintenance}</span>
+                <div class="progress-bar">
+                    <div class="progress-fill ${getProgressClass(b.capacity)}" style="width: ${b.capacity}%;"></div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    popup.classList.add('active');
+    popup.querySelector('.popup').style.animation = 'popupIn 0.3s ease forwards';
+}
+
+function closeReportPopup() {
+    const popup = document.getElementById('reportPopup');
+    const inner = popup.querySelector('.popup');
+    
+    inner.style.animation = 'popupOut 0.3s ease forwards';
+    setTimeout(() => popup.classList.remove('active'), 300);
+}
+
+function updateReportPopup() {
+    bueiros.forEach(b => {
+        const fill = document.querySelector(`#bueiro-${b.id} .progress-fill`);
+        if (fill) {
+            fill.style.width = b.capacity + "%";
+            fill.className = `progress-fill ${getProgressClass(b.capacity)}`;
+        }
+    });
+}
+
+function generateTXTReport() {
+    const txt = bueiros.map(b => 
+        `ID: ${b.id}\nLocal: ${b.location}\nCapacidade: ${b.capacity.toFixed(2)}%\nOdor: ${b.odor}\nÚltima Manutenção: ${b.lastMaintenance}\nStatus: ${getStatus(b.capacity)}\n\n`
+    ).join('');
+    const blob = new Blob([txt], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `relatorio_bueiros_${new Date().toISOString().split('T')[0]}.txt`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    alert("✅ Relatório TXT gerado!");
+}
+
+/* Atualiza barras em tempo real enquanto o popup estiver aberto */
+setInterval(() => {
+    if (document.getElementById('reportPopup').classList.contains('active')) {
+        updateReportPopup();
+    }
+}, 2000);
+</script>
+
             </div>
         </div>
 
@@ -1497,7 +1902,7 @@
 
         function simulateFillIncrease() {
             bueiros.forEach(bueiro => {
-                // Incremento aleatório entre 0.5% e 2%
+                // Incremento aleatório entre 0.5% и 2%
                 const increment = Math.random() * 1.5 + 0.5;
                 bueiro.capacity = Math.min(100, bueiro.capacity + increment);
                 
@@ -1667,6 +2072,20 @@
         function logout() {
             if (confirm('Tem certeza que deseja sair do sistema?')) {
                 window.location.href = 'login.html';
+            }
+        }
+
+        // ==========================================
+        // TOGGLE SIDEBAR
+        // ==========================================
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
+            
+            if (sidebar.classList.contains('active')) {
+                sidebar.style.transform = 'translateX(0)';
+            } else {
+                sidebar.style.transform = 'translateX(-100%)';
             }
         }
 

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SmartCity Manager</title>
+    <title>Dashboard - Bueiros Inteligente</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         /* ==========================================
-           DASHBOARD SMARTCITY - DESIGN UNIFICADO
+           DASHBOARD BUEIROS INTELIGENTE - DESIGN UNIFICADO
            Cores: Verde predominante com Azul
            ========================================== */
 
@@ -83,22 +83,39 @@
             right: 0;
             height: 60px;
             background: var(--gradiente-verde);
-            z-index: 1001;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 1.5rem;
             box-shadow: var(--sombra-verde);
             border-bottom: 2px solid var(--verde-accent);
+            z-index: 1001;
         }
 
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--branco);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        /* Áreas esquerda e direita */
+        .topbar-left, .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
+        /* Botão menu */
+        .menu-toggle {
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Logo com tamanho aumentado */
+        .logo img {
+            height: 60px;  /* aumentado de 45px para 60px */
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* System status */
         .system-status {
             display: flex;
             align-items: center;
@@ -106,17 +123,19 @@
             padding: 0.4rem 0.8rem;
             background: rgba(255, 255, 255, 0.1);
             border-radius: var(--radius-sm);
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            color: var(--branco);
         }
 
         .status-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: var(--verde-neon);
             border-radius: 50%;
             animation: pulse 2s infinite;
         }
 
+        /* Botão logout */
         .logout-topbar {
             background: rgba(239, 68, 68, 0.2);
             color: #fca5a5;
@@ -134,6 +153,26 @@
         .logout-topbar:hover {
             background: rgba(239, 68, 68, 0.3);
             transform: translateY(-1px);
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 768px) {
+            .topbar {
+                padding: 0 1rem;
+            }
+
+            .logo img {
+                height: 50px; /* ajusta para mobile */
+            }
+
+            .system-status span {
+                display: none; /* mostra só o ponto */
+            }
+
+            .logout-topbar {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
+            }
         }
 
         /* === SIDEBAR === */
@@ -477,6 +516,119 @@
             box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
         }
 
+        /* === MODAL/POPUP STYLES === */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: var(--gradiente-card);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            width: 80%;
+            max-width: 600px;
+            border: 2px solid var(--verde-accent);
+            box-shadow: var(--sombra-forte);
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideInFromTop 0.3s ease-out;
+        }
+
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--verde-accent);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradiente-mixed);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .close {
+            color: var(--cinza-medio);
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transicao);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .close:hover {
+            color: var(--verde-accent);
+            background: rgba(52, 211, 153, 0.1);
+        }
+
+        .modal-body {
+            color: var(--branco);
+            line-height: 1.6;
+        }
+
+        .modal-body pre {
+            background: var(--azul-primario);
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            border: 1px solid var(--azul-accent);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .info-item {
+            background: rgba(6, 78, 59, 0.3);
+            padding: 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--verde-accent);
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--verde-accent);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            color: var(--branco);
+        }
+
         /* === RESPONSIVIDADE === */
         @media (max-width: 1024px) {
             .dashboard-grid {
@@ -499,6 +651,11 @@
             
             .system-status {
                 display: none;
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: 10% auto;
             }
         }
 
@@ -526,6 +683,11 @@
 
             .action-buttons {
                 flex-direction: column;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
             }
         }
 
@@ -590,21 +752,191 @@
     </style>
 </head>
 <body>
-    <!-- Topbar -->
-    <header class="topbar">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-            <div class="logo">🌟 SmartCity Manager</div>
-            <div class="system-status">
-                <span class="status-dot"></span>
-                <span>Online</span>
-            </div>
+    <!-- TOPBAR -->
+<header class="topbar">
+    <!-- Esquerda: Menu + Logo -->
+    <div class="topbar-left">
+        <div class="logo">
+            KAPWBS
         </div>
-        <div style="display: flex; align-items: center; gap: 1rem;">
-            <span style="color: var(--branco); opacity: 0.9; font-size: 0.8rem;">Admin</span>
-            <button class="logout-topbar" onclick="logout()">Sair</button>
+    </div>
+
+    <!-- Direita: Status + Logout -->
+    <div class="topbar-right">
+        <div class="system-status">
+            <span class="status-dot"></span>
+            <span>Online</span>
         </div>
-    </header>
+        <button class="logout-topbar" onclick="showLogoutPopup()">Logout</button>
+    </div>
+</header>
+
+<!-- POPUP DE LOGOUT -->
+<div id="logoutPopup" class="popup-overlay">
+    <div class="popup">
+        <h3>Confirmar Logout</h3>
+        <p>Deseja realmente sair do sistema?</p>
+        <div class="popup-buttons">
+            <button class="btn btn-cancel" onclick="closeLogoutPopup()">Cancelar</button>
+            <button class="btn btn-logout" onclick="logout()">Sair</button>
+        </div>
+    </div>
+</div>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    background: #111827;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Logo futurista */
+.logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #10b981;
+    background: linear-gradient(135deg, #34d399, #059669);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 5px rgba(16, 185, 129, 0.7), 0 0 10px rgba(52, 211, 153, 0.5);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    0% { text-shadow: 0 0 5px rgba(16, 185, 129, 0.7), 0 0 10px rgba(52, 211, 153, 0.5); }
+    50% { text-shadow: 0 0 10px rgba(16, 185, 129, 1), 0 0 20px rgba(52, 211, 153, 0.8); }
+    100% { text-shadow: 0 0 5px rgba(16, 185, 129, 0.7), 0 0 10px rgba(52, 211, 153, 0.5); }
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 5px #10b981;
+}
+
+.logout-topbar {
+    margin-left: 1rem;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #f8fafc;
+    background: linear-gradient(135deg, #34d399, #059669);
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    text-shadow: 0 0 3px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
+
+.logout-topbar:hover {
+    background: linear-gradient(135deg, #059669, #10b981);
+    box-shadow: 0 0 8px #10b981, 0 0 15px #34d399;
+}
+
+/* POPUP */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(17, 24, 39, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+}
+
+.popup-overlay.active {
+    display: flex;
+}
+
+.popup {
+    background: #1f2937;
+    border: 1px solid #10b981;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    width: 300px;
+    color: #f8fafc;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+    animation: popupIn 0.3s ease;
+}
+
+@keyframes popupIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1.5rem;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-cancel {
+    background: #374151;
+    color: #f8fafc;
+}
+
+.btn-cancel:hover {
+    background: #4b5563;
+}
+
+.btn-logout {
+    background: linear-gradient(135deg, #34d399, #059669);
+    color: #f8fafc;
+    text-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+
+.btn-logout:hover {
+    background: linear-gradient(135deg, #059669, #10b981);
+    box-shadow: 0 0 8px #10b981, 0 0 15px #34d399;
+}
+</style>
+
+<script>
+function showLogoutPopup() {
+    document.getElementById('logoutPopup').classList.add('active');
+}
+
+function closeLogoutPopup() {
+    document.getElementById('logoutPopup').classList.remove('active');
+}
+
+function logout() {
+    closeLogoutPopup();
+    // Aqui pode manter a navegação real
+    window.location.href = 'login.html';
+}
+</script>
+
 
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
@@ -625,7 +957,7 @@
     <main class="main-content">
         <!-- Header -->
         <header class="header">
-            <h1>🌟 Centro de Comando SmartCity</h1>
+            <h1>🌟 Centro de Comando Bueiros Inteligente</h1>
             <p>Monitore e controle todos os sistemas da cidade inteligente em um painel centralizado</p>
         </header>
 
@@ -635,7 +967,7 @@
                 <span class="card-trend trend-warning">Atenção</span>
                 <span class="card-icon">🕳️</span>
                 <div class="card-title">Bueiros Críticos</div>
-                <div class="card-value" id="criticalDrains">8%</div>
+                <div class="card-value" id="criticalDrains">8.00%</div>
                 <div class="card-subtitle">1,240 monitorados | 47 necessitam atenção</div>
             </div>
 
@@ -659,7 +991,7 @@
         <!-- System Metrics -->
         <section class="system-metrics">
             <div class="metric-item">
-                <div class="metric-value" id="systemUptime">99.8%</div>
+                <div class="metric-value" id="systemUptime">99.80%</div>
                 <div class="metric-label">Uptime do Sistema</div>
             </div>
             <div class="metric-item">
@@ -709,14 +1041,40 @@
         </div>
     </main>
 
+    <!-- Modal para Fila de Solicitações -->
+    <div id="queueModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📋 Fila de Solicitações</h2>
+                <span class="close" onclick="closeModal('queueModal')">&times;</span>
+            </div>
+            <div class="modal-body" id="queueModalBody">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Relatório -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">📊 Relatório Detalhado</h2>
+                <span class="close" onclick="closeModal('reportModal')">&times;</span>
+            </div>
+            <div class="modal-body" id="reportModalBody">
+                <!-- Conteúdo será inserido via JavaScript -->
+            </div>
+        </div>
+    </div>
+
     <script>
         // === VARIÁVEIS GLOBAIS ===
         let systemChart;
         let systemMetrics = {
-            criticalDrains: 8,
+            criticalDrains: 8.00,
             energyGenerated: 2840,
             activeSensors: 1847,
-            uptime: 99.8,
+            uptime: 99.80,
             dataProcessed: 847,
             responseTime: 142,
             alerts: 3
@@ -726,11 +1084,11 @@
          * FUNÇÃO DE AUTENTICAÇÃO
          */
         function checkAuthentication() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
             if (!isLoggedIn) {
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userRole', 'admin');
-                localStorage.setItem('userName', 'Admin');
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('userRole', 'admin');
+                sessionStorage.setItem('userName', 'Admin');
             }
         }
 
@@ -746,7 +1104,7 @@
                 startRealTimeUpdates();
             }, 100);
             
-            addLog('🚀 Dashboard SmartCity inicializado', 'success');
+            addLog('🚀 Dashboard Bueiros Inteligente inicializado', 'success');
             addLog('📊 Conectando com sistemas da cidade...', 'info');
             addLog('🌐 Todos os sistemas online', 'success');
             
@@ -771,7 +1129,7 @@
          * ATUALIZAR CARDS PRINCIPAIS
          */
         function updateOverviewCards() {
-            document.getElementById('criticalDrains').textContent = systemMetrics.criticalDrains + '%';
+            document.getElementById('criticalDrains').textContent = systemMetrics.criticalDrains.toFixed(2) + '%';
             document.getElementById('energyGenerated').textContent = systemMetrics.energyGenerated.toLocaleString();
             document.getElementById('activeSensors').textContent = systemMetrics.activeSensors.toLocaleString();
         }
@@ -780,7 +1138,7 @@
          * ATUALIZAR MÉTRICAS DO SISTEMA
          */
         function updateSystemMetrics() {
-            document.getElementById('systemUptime').textContent = systemMetrics.uptime + '%';
+            document.getElementById('systemUptime').textContent = systemMetrics.uptime.toFixed(2) + '%';
             document.getElementById('dataProcessed').textContent = systemMetrics.dataProcessed;
             document.getElementById('responseTime').textContent = systemMetrics.responseTime;
             document.getElementById('alerts').textContent = systemMetrics.alerts;
@@ -981,96 +1339,168 @@
         }
 
         /**
-         * ABRIR FILA DE SOLICITAÇÕES
+         * ABRIR FILA DE SOLICITAÇÕES - COM POPUP
          */
         function openQueue() {
             addLog('📋 Abrindo central solicitações...', 'info');
             
-            setTimeout(() => {
-                const requestCount = {
-                    bueiros: Math.floor(Math.random() * 15) + 8,
-                    energia: Math.floor(Math.random() * 12) + 5,
-                    sensores: Math.floor(Math.random() * 8) + 3
-                };
-                
-                alert(`📋 Central de Solicitações\n\n` +
-                      `• ${requestCount.bueiros} manutenções de bueiros\n` +
-                      `• ${requestCount.energia} ajustes no sistema energético\n` +
-                      `• ${requestCount.sensores} calibrações de sensores\n\n` +
-                      `Total: ${requestCount.bueiros + requestCount.energia + requestCount.sensores} solicitações pendentes`);
-                
-                addLog(`📊 ${requestCount.bueiros + requestCount.energia + requestCount.sensores} solicitações na fila`, 'info');
-            }, 1000);
+            const requestCount = {
+                bueiros: Math.floor(Math.random() * 15) + 8,
+                energia: Math.floor(Math.random() * 12) + 5,
+                sensores: Math.floor(Math.random() * 8) + 3,
+                manutencao: Math.floor(Math.random() * 6) + 2,
+                calibracao: Math.floor(Math.random() * 4) + 1
+            };
+
+            const total = Object.values(requestCount).reduce((sum, count) => sum + count, 0);
+
+            const queueContent = `
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">🕳️ Manutenção Bueiros</div>
+                        <div class="info-value">${requestCount.bueiros} pendentes</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">⚡ Ajustes Energia</div>
+                        <div class="info-value">${requestCount.energia} pendentes</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">🌡️ Calibração Sensores</div>
+                        <div class="info-value">${requestCount.sensores} pendentes</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">🔧 Manutenção Geral</div>
+                        <div class="info-value">${requestCount.manutencao} pendentes</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">⚙️ Calibrações</div>
+                        <div class="info-value">${requestCount.calibracao} pendentes</div>
+                    </div>
+                    <div class="info-item" style="grid-column: 1 / -1; background: rgba(16, 185, 129, 0.1); border-color: var(--verde-accent);">
+                        <div class="info-label">📊 Total de Solicitações</div>
+                        <div class="info-value" style="font-size: 1.5rem; color: var(--verde-accent);">${total} itens na fila</div>
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(6, 78, 59, 0.3); border-radius: 8px; border: 1px solid var(--verde-accent);">
+                    <h4 style="color: var(--verde-accent); margin-bottom: 0.5rem;">📈 Estatísticas da Fila:</h4>
+                    <p>• Tempo médio de resolução: 2.4 horas</p>
+                    <p>• Prioridade alta: ${Math.floor(total * 0.2)} itens</p>
+                    <p>• Técnicos disponíveis: 12</p>
+                    <p>• Próxima atualização: ${new Date(Date.now() + 15*60*1000).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</p>
+                </div>
+            `;
+
+            document.getElementById('queueModalBody').innerHTML = queueContent;
+            document.getElementById('queueModal').style.display = 'block';
+            
+            addLog(`📊 ${total} solicitações na fila`, 'info');
         }
 
         /**
-         * GERAR RELATÓRIO
+         * GERAR RELATÓRIO - COM POPUP
          */
         function generateReport() {
             addLog('📊 Gerando relatório detalhado...', 'info');
             
-            setTimeout(() => {
-                const timestamp = new Date().toLocaleString('pt-BR');
-                const report = `
-🌟 RELATÓRIO SMARTCITY - ${timestamp}
-══════════════════════════════════════════════════
+            const timestamp = new Date().toLocaleString('pt-BR');
+            const efficiency = ((systemMetrics.energyGenerated/3000)*100).toFixed(2);
+            const savings = (systemMetrics.energyGenerated * 0.65).toFixed(2);
+            const criticalCount = Math.floor(systemMetrics.criticalDrains * 12.4);
+            const avgTemp = (22 + Math.random() * 4).toFixed(1);
+            const humidity = (65 + Math.random() * 10).toFixed(1);
+            
+            const reportContent = `
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">🕳️ Bueiros Críticos</div>
+                        <div class="info-value">${systemMetrics.criticalDrains.toFixed(2)}%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">⚡ Energia Gerada</div>
+                        <div class="info-value">${systemMetrics.energyGenerated.toLocaleString()} kWh</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">🌡️ Sensores Ativos</div>
+                        <div class="info-value">${systemMetrics.activeSensors.toLocaleString()}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">⏱️ Uptime Sistema</div>
+                        <div class="info-value">${systemMetrics.uptime.toFixed(2)}%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">📊 Dados Processados</div>
+                        <div class="info-value">${systemMetrics.dataProcessed} GB</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">🚨 Alertas Ativos</div>
+                        <div class="info-value">${systemMetrics.alerts}</div>
+                    </div>
+                </div>
 
-📈 MÉTRICAS GERAIS:
-• Bueiros em estado crítico: ${systemMetrics.criticalDrains.toFixed(1)}%
-• Energia gerada hoje: ${systemMetrics.energyGenerated.toLocaleString()} kWh
-• Sensores ativos: ${systemMetrics.activeSensors.toLocaleString()}
-• Uptime do sistema: ${systemMetrics.uptime.toFixed(1)}%
-• Tempo resposta médio: ${systemMetrics.responseTime}ms
-• Alertas ativos: ${systemMetrics.alerts}
+                <div style="margin: 1.5rem 0;">
+                    <h4 style="color: var(--verde-accent); margin-bottom: 1rem;">🕳️ Sistema de Bueiros:</h4>
+                    <div style="background: rgba(6, 78, 59, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid var(--verde-accent);">
+                        <p>• <strong>1,240</strong> bueiros monitorados</p>
+                        <p>• <strong>${criticalCount}</strong> necessitam atenção imediata</p>
+                        <p>• <strong>0</strong> obstruções críticas detectadas</p>
+                        <p>• <strong>98.2%</strong> do sistema funcionando normalmente</p>
+                        <p>• Sistema de limpeza automática: <span style="color: var(--verde-accent);">ATIVO</span></p>
+                    </div>
+                </div>
 
-🕳️ SISTEMA DE BUEIROS:
-• 1.240 bueiros monitorados
-• ${Math.floor(systemMetrics.criticalDrains * 12.4)} necessitam atenção
-• 0 obstruções críticas
-• 98.2% sistema funcionando
-• Limpeza automática: Ativa
+                <div style="margin: 1.5rem 0;">
+                    <h4 style="color: var(--verde-accent); margin-bottom: 1rem;">⚡ Geração de Energia:</h4>
+                    <div style="background: rgba(6, 78, 59, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid var(--verde-accent);">
+                        <p>• Capacidade utilizada: <strong>${efficiency}%</strong></p>
+                        <p>• Excedente gerado: <strong>${Math.max(0, systemMetrics.energyGenerated-2400).toLocaleString()} kWh</strong></p>
+                        <p>• Economia estimada: <strong>R$ ${savings}</strong></p>
+                        <p>• Eficiência dos painéis: <strong>94.30%</strong></p>
+                        <p>• Capacidade das baterias: <strong>87.00%</strong></p>
+                    </div>
+                </div>
 
-⚡ GERAÇÃO ENERGIA:
-• ${(systemMetrics.energyGenerated/3000*100).toFixed(1)}% capacidade utilizada
-• Excedente: ${Math.max(0, systemMetrics.energyGenerated-2400)} kWh
-• Economia estimada: R$ ${(systemMetrics.energyGenerated * 0.65).toFixed(2)}
-• Eficiência painéis: 94.3%
-• Baterias: 87% capacidade
+                <div style="margin: 1.5rem 0;">
+                    <h4 style="color: var(--verde-accent); margin-bottom: 1rem;">🌡️ Rede de Sensores:</h4>
+                    <div style="background: rgba(6, 78, 59, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid var(--verde-accent);">
+                        <p>• Sensores operacionais: <strong>${systemMetrics.activeSensors.toLocaleString()}</strong></p>
+                        <p>• Temperatura média: <strong>${avgTemp}°C</strong></p>
+                        <p>• Umidade relativa: <strong>${humidity}%</strong></p>
+                        <p>• Qualidade do ar: <strong>Boa</strong></p>
+                        <p>• Cobertura da rede: <strong>95.70%</strong></p>
+                    </div>
+                </div>
 
-🌡️ REDE DE SENSORES:
-• ${systemMetrics.activeSensors} sensores operacionais
-• Temperatura média: 24.2°C
-• Umidade relativa: 68%
-• Qualidade do ar: Boa
-• Cobertura da rede: 95.7%
+                <div style="margin: 1.5rem 0;">
+                    <h4 style="color: var(--verde-accent); margin-bottom: 1rem;">🔧 Status de Manutenção:</h4>
+                    <div style="background: rgba(6, 78, 59, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid var(--verde-accent);">
+                        <p>• Bueiros bloqueados: <strong>0</strong></p>
+                        <p>• Painéis solares em inspeção: <strong>2</strong></p>
+                        <p>• Sensores em calibração: <strong>1</strong></p>
+                        <p>• Próxima manutenção programada: <strong>${new Date(Date.now() + 7*24*60*60*1000).toLocaleDateString('pt-BR')}</strong></p>
+                        <p>• Última sincronização: <strong>${new Date().toLocaleTimeString('pt-BR')}</strong></p>
+                    </div>
+                </div>
 
-🔧 MANUTENÇÕES:
-• 0 bueiros bloqueados
-• 2 painéis solares em inspeção
-• 1 sensor temperatura calibração
-• Próxima manutenção: ${new Date(Date.now() + 7*24*60*60*1000).toLocaleDateString('pt-BR')}
+                <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(59, 130, 246, 0.1); border-radius: 8px; border: 1px solid var(--azul-accent); text-align: center;">
+                    <small style="color: var(--azul-light); font-size: 0.8rem;">
+                        📅 Relatório gerado em: ${timestamp}<br>
+                        🤖 Sistema: Bueiros Inteligente Manager v2.1<br>
+                        👤 Usuário: ${sessionStorage.getItem('userName') || 'Admin'}
+                    </small>
+                </div>
+            `;
 
-══════════════════════════════════════════════════
-Relatório gerado automaticamente pelo SmartCity Manager
-                `;
-                
-                console.log(report);
-                
-                // Criar e baixar arquivo
-                const blob = new Blob([report], { type: 'text/plain' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = `relatorio-smartcity-${new Date().toISOString().split('T')[0]}.txt`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-                
-                alert('📊 Relatório gerado!\nArquivo baixado automaticamente.\nVerifique também o console para visualização.');
-                addLog('✅ Relatório gerado e baixado', 'success');
-            }, 2000);
+            document.getElementById('reportModalBody').innerHTML = reportContent;
+            document.getElementById('reportModal').style.display = 'block';
+            
+            addLog('✅ Relatório detalhado gerado', 'success');
+        }
+
+        /**
+         * FECHAR MODAL
+         */
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
 
         /**
@@ -1128,10 +1558,10 @@ Relatório gerado automaticamente pelo SmartCity Manager
          * LOGOUT
          */
         function logout() {
-            if (confirm('🚪 Confirmar logout?')) {
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('userRole');
-                localStorage.removeItem('userName');
+            if (confirm('🚪 Tem certeza que deseja sair do sistema?')) {
+                sessionStorage.removeItem('isLoggedIn');
+                sessionStorage.removeItem('userRole');
+                sessionStorage.removeItem('userName');
                 addLog('👋 Encerrando sessão...', 'info');
                 setTimeout(() => {
                     window.location.href = 'login.html';
@@ -1163,7 +1593,24 @@ Relatório gerado automaticamente pelo SmartCity Manager
                 e.preventDefault();
                 generateReport();
             }
+            if (e.key === 'Escape') {
+                closeModal('queueModal');
+                closeModal('reportModal');
+            }
         });
+
+        // Fechar modal clicando fora dele
+        window.onclick = function(event) {
+            const queueModal = document.getElementById('queueModal');
+            const reportModal = document.getElementById('reportModal');
+            
+            if (event.target === queueModal) {
+                queueModal.style.display = 'none';
+            }
+            if (event.target === reportModal) {
+                reportModal.style.display = 'none';
+            }
+        };
 
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
