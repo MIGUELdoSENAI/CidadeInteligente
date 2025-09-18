@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Painel Empresa - Cidade Inteligente</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+    /* ==== RESET E VARIÁVEIS ==== */
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+        --azul-marinho:#1a237e;
+        --azul-escuro:#0d1854;
+        --verde-esmeralda:#00c853;
+        --verde-hover:#00a844;
+        --branco:#fff;
+        --cinza-claro:#f5f5f5;
+        --cinza:#9e9e9e;
+        --vermelho:#f44336;
+        --sombra:rgba(0,0,0,0.1);
+        --radius-sm:8px;
+        --radius-md:16px;
+        --radius-lg:24px;
+        --transition-fast:0.3s ease;
+        --fonte-principal:'Nunito',sans-serif;
+    }
+    body{font-family:var(--fonte-principal);min-height:100vh;display:flex;justify-content:center;align-items:center;background:linear-gradient(135deg,var(--azul-escuro) 0%,var(--azul-marinho) 50%,#283593 100%);position:relative;overflow:hidden;}
+    body::before{content:'';position:absolute;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.03) 2px,transparent 2px);background-size:50px 50px;animation:backgroundMove 60s linear infinite;z-index:0;}
+    body::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 50%, rgba(0,200,83,0.1) 0%, transparent 50%),radial-gradient(circle at 70% 80%, rgba(255,255,255,0.05) 0%, transparent 50%);animation:lightFloat 20s ease-in-out infinite;z-index:0;}
+    #login-root{width:100%;max-width:450px;padding:1rem;z-index:10;position:relative;}
+    header{text-align:center;margin-bottom:2rem;animation:fadeInDown 0.8s ease;}
+    .logo-container{display:inline-flex;align-items:center;justify-content:center;width:80px;height:80px;background:linear-gradient(135deg,var(--verde-esmeralda),var(--verde-hover));border-radius:50%;margin-bottom:1rem;box-shadow:0 10px 30px rgba(0,200,83,0.3);animation:pulse 2s ease-in-out infinite;}
+    .logo-icon{width:50px;height:50px;fill:var(--branco);}
+    h1{color:var(--branco);font-size:2rem;font-weight:700;margin-bottom:0.5rem;text-shadow:2px 2px 4px rgba(0,0,0,0.3);}
+    .subtitle{color:rgba(255,255,255,0.9);font-size:1rem;font-weight:300;}
+    .login-card{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);border-radius:var(--radius-lg);padding:3rem 2rem;box-shadow:0 20px 40px rgba(0,0,0,0.2), inset 0 0 20px rgba(255,255,255,0.05);animation:fadeInUp 0.8s ease 0.2s both;position:relative;overflow:hidden;}
+    .login-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,0.1),transparent);transform:rotate(45deg);transition:all 0.5s;opacity:0;}
+    .login-card:hover::before{animation:shimmer 0.5s ease;}
+    #loginForm{position:relative;z-index:1;}
+    .form-group{margin-bottom:1.5rem;position:relative;}
+    label{display:block;color:var(--branco);font-weight:600;margin-bottom:0.5rem;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px;}
+    .input-container{position:relative;}
+    .input-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:20px;height:20px;fill:rgba(255,255,255,0.5);transition:var(--transition-fast);}
+    input[type="text"],input[type="password"]{width:100%;padding:15px 15px 15px 45px;background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);border-radius:var(--radius-md);color:var(--branco);font-size:1rem;font-family:var(--fonte-principal);transition:all var(--transition-fast);outline:none;}
+    input::placeholder{color:rgba(255,255,255,0.5);}
+    input:focus{background:rgba(255,255,255,0.15);border-color:var(--verde-esmeralda);box-shadow:0 0 0 3px rgba(0,200,83,0.2),0 0 20px rgba(0,200,83,0.1);transform:translateY(-2px);}
+    input:focus + .input-icon{fill:var(--verde-esmeralda);}
+    input.error{border-color:var(--vermelho)!important;animation:shake 0.5s;}
+    .btn-login{width:100%;padding:15px;background:linear-gradient(135deg,var(--verde-esmeralda),var(--verde-hover));color:var(--branco);font-size:1.1rem;font-weight:700;border:none;border-radius:var(--radius-md);cursor:pointer;transition:all var(--transition-fast);text-transform:uppercase;letter-spacing:1px;margin-top:1rem;position:relative;overflow:hidden;box-shadow:0 4px 15px rgba(0,200,83,0.3);}
+    .btn-login::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;border-radius:50%;background:rgba(255,255,255,0.5);transform:translate(-50%,-50%);transition:width 0.6s,height 0.6s;}
+    .btn-login:active::after{width:300px;height:300px;}
+    .btn-login:hover:not(:disabled){transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,200,83,0.4);background:linear-gradient(135deg,var(--verde-hover),var(--verde-esmeralda));}
+    .btn-login.loading{color:transparent;pointer-events:none;}
+    .btn-login.loading::before{content:'';position:absolute;width:20px;height:20px;top:50%;left:50%;margin-left:-10px;margin-top:-10px;border:2px solid var(--branco);border-radius:50%;border-top-color:transparent;animation:spin 0.8s linear infinite;}
+    .btn-login:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+    #errorMessage{margin-top:1rem;padding:12px;border-radius:var(--radius-sm);font-size:0.9rem;font-weight:600;display:none;position:relative;overflow:hidden;animation:fadeIn 0.5s;}
+    #errorMessage.error{background:rgba(244,67,54,0.1);border:1px solid rgba(244,67,54,0.3);color:#ff6b6b;animation:shake 0.5s,fadeIn 0.5s;}
+    #errorMessage.success{background:rgba(0,200,83,0.1);border:1px solid rgba(0,200,83,0.3);color:var(--verde-esmeralda);animation:fadeIn 0.5s;}
+    .close-message{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;opacity:0.7;transition:opacity var(--transition-fast);}
+    .close-message:hover{opacity:1;}
+    footer{text-align:center;margin-top:3rem;color:rgba(255,255,255,0.7);font-size:0.9rem;animation:fadeIn 0.8s ease 0.4s both;}
+    footer p{margin-bottom:0.5rem;}
+    .footer-icon{width:20px;height:20px;fill:var(--verde-esmeralda);vertical-align:middle;margin:0 5px;animation:heartbeat 2s ease-in-out infinite;}
+    @keyframes fadeInDown{from{opacity:0;transform:translateY(-30px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+    @keyframes shake{0%,100%{transform:translateX(0);}10%,30%,50%,70%,90%{transform:translateX(-5px);}20%,40%,60%,80%{transform:translateX(5px);}}
+    @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+    @keyframes pulse{0%{box-shadow:0 10px 30px rgba(0,200,83,0.3);}50%{box-shadow:0 10px 40px rgba(0,200,83,0.5);}100%{box-shadow:0 10px 30px rgba(0,200,83,0.3);}}
+    @keyframes shimmer{0%{opacity:0;}50%{opacity:1;}100%{opacity:0;}}
+    @keyframes backgroundMove{0%{transform:translate(0,0);}100%{transform:translate(50px,50px);}}
+    @keyframes lightFloat{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(30px,-30px) scale(1.1);}66%{transform:translate(-20px,20px) scale(0.9);}}
+    @keyframes heartbeat{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
+    @media(max-width:768px){#login-root{padding:0.5rem;}h1{font-size:1.75rem;}.login-card{padding:2rem 1.5rem;}}
+    @media(max-width:480px){h1{font-size:1.5rem;}.subtitle{font-size:0.9rem;}.login-card{padding:1.5rem;border-radius:var(--radius-md);}input{font-size:0.95rem;padding:12px 12px 12px 40px;}.btn-login{font-size:1rem;padding:12px;}}
+</style>
+</head>
+<body>
+<main id="login-root">
+<header>
+<div class="logo-container">
+<svg class="logo-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15,11L15,5L12,2L9,5L9,7L3,7L3,21L21,21L21,11L15,11M7,19L5,19L5,17L7,17L7,19M7,15L5,15L5,13L7,13L7,15M7,11L5,11L5,9L7,9L7,11M13,19L11,19L11,17L13,17L13,19M13,15L11,15L11,13L13,13L13,15M13,11L11,11L11,9L13,9L13,11M13,7L11,7L11,5L13,5L13,7M19,19L17,19L17,17L19,17L19,19M19,15L17,15L17,13L19,13L19,15M19,11L17,11L17,9L19,9L19,11Z"/></svg>
+</div>
+<h1>Painel Cidade Inteligente</h1>
+<p class="subtitle">Login de acesso autorizado</p>
+</header>
+<div class="login-card">
+<form id="loginForm">
+<div class="form-group">
+<label for="username">Usuário</label>
+<div class="input-container">
+<svg class="input-icon" viewBox="0 0 24 24"><path d="M12,12A5,5 0 1,0 12,2A5,5 0 0,0 12,12M12,14C9.33,14 4,15.34 4,18V20H20V18C20,15.34 14.67,14 12,14Z"/></svg>
+<input type="text" id="username" placeholder="Digite seu usuário" required>
+</div>
+</div>
+<div class="form-group">
+<label for="password">Senha</label>
+<div class="input-container">
+<svg class="input-icon" viewBox="0 0 24 24"><path d="M12,17A2,2 0 0,0 14,15V11A2,2 0 0,0 12,9A2,2 0 0,0 10,11V15A2,2 0 0,0 12,17M17,8V7A5,5 0 0,0 7,7V8H5V20H19V8H17M9,7A3,3 0 0,1 15,7V8H9V7Z"/></svg>
+<input type="password" id="password" placeholder="Digite sua senha" required>
+</div>
+</div>
+<button type="submit" class="btn-login">Entrar</button>
+<div id="errorMessage"></div>
+</form>
+</div>
+<footer>
+<p>© 2025 Cidade Inteligente</p>
+<svg class="footer-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+</footer>
+<script>
+/* ===== AUTENTICAÇÃO ===== */
+const usersDB = [
+    {username:'admin',password:'1234'},
+    {username:'usuario',password:'abcd'}
+];
+
+function showMessage(msg,type='error'){
+    const msgBox=document.getElementById('errorMessage');
+    msgBox.textContent=msg;
+    msgBox.className=type;
+    msgBox.style.display='block';
+    setTimeout(()=>msgBox.style.display='none',4000);
+}
+
+function checkAuth(){
+    return !!localStorage.getItem('loginData');
+}
+
+function requireAuth(){
+    if(!checkAuth()){
+        sessionStorage.setItem('redirectAfterLogin',window.location.href);
+        window.location.replace('login.html');
+        return false;
+    }
+    return true;
+}
+
+function logout(){
+    localStorage.removeItem('loginData');
+    sessionStorage.removeItem('redirectAfterLogin');
+    window.location.replace('login.html');
+}
+
+/* ===== LOGIN ===== */
+const form=document.getElementById('loginForm');
+let attempts=0;
+const maxAttempts=3;
+
+form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const username=document.getElementById('username').value.trim();
+    const password=document.getElementById('password').value.trim();
+    const btn=form.querySelector('.btn-login');
+    btn.classList.add('loading');
+    setTimeout(()=>{
+        btn.classList.remove('loading');
+        const user=usersDB.find(u=>u.username===username && u.password===password);
+        if(user){
+            localStorage.setItem('loginData',JSON.stringify({username}));
+            showMessage('Login realizado com sucesso!','success');
+            const redirect=sessionStorage.getItem('redirectAfterLogin')||'dashboard.html';
+            sessionStorage.removeItem('redirectAfterLogin');
+            setTimeout(()=>window.location.replace(redirect),1000);
+        } else {
+            attempts++;
+            showMessage(`Usuário ou senha incorretos! Tentativa ${attempts}/${maxAttempts}`,'error');
+            if(attempts>=maxAttempts){
+                showMessage('Número máximo de tentativas atingido! Bloqueando por 10s','error');
+                btn.disabled=true;
+                setTimeout(()=>btn.disabled=false,10000);
+            }
+        }
+    },600);
+});
+
+/* ===== KONAMI CODE EASTER EGG ===== */
+const konamiCode=[38,38,40,40,37,39,37,39,66,65];
+let konamiIndex=0;
+document.addEventListener('keydown',e=>{
+    if(e.keyCode===konamiCode[konamiIndex]){
+        konamiIndex++;
+        if(konamiIndex===konamiCode.length){
+            alert('🎉 Easter Egg ativado! 🎉');
+            konamiIndex=0;
+        }
+    } else konamiIndex=0;
+});
+</script>
+</body>
+</html>

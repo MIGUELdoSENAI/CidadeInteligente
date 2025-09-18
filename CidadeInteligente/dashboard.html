@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SmartCity Manager</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        /* ==========================================
+           DASHBOARD SMARTCITY - DESIGN PROFISSIONAL
+           Cores: Verde predominante com Azul
+           ========================================== */
+
+        /* === RESET E CONFIGURAÇÕES GLOBAIS === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* === PALETA DE CORES - VERDE PREDOMINANTE === */
+        :root {
+            /* Tons de Verde Predominantes */
+            --verde-primario: #059669;       /* Verde escuro profissional */
+            --verde-secundario: #10b981;     /* Verde médio */
+            --verde-accent: #34d399;         /* Verde vibrante */
+            --verde-light: #6ee7b7;          /* Verde claro */
+            --verde-ultra-light: #d1fae5;    /* Verde muito claro */
+            --verde-neon: #00ff88;           /* Verde neon para destaques */
+            --verde-dark: #064e3b;           /* Verde muito escuro */
+
+            /* Tons de Azul Complementares */
+            --azul-primario: #0f172a;        /* Azul escuro profundo */
+            --azul-secundario: #1e293b;      /* Azul médio escuro */
+            --azul-medio: #334155;           /* Azul médio */
+            --azul-claro: #475569;           /* Azul claro */
+            --azul-accent: #3b82f6;          /* Azul vibrante */
+            --azul-light: #60a5fa;           /* Azul suave */
+            --azul-ultra-light: #dbeafe;     /* Azul muito claro */
+            --azul-dark: #0c1220;            /* Azul muito escuro */
+
+            /* Tons Neutros */
+            --branco: #f8fafc;               /* Branco mais suave */
+            --branco-off: #f1f5f9;           /* Off-white */
+            --cinza-light: #e2e8f0;          /* Cinza claro */
+            --cinza-medio: #94a3b8;          /* Cinza médio */
+            --cinza-dark: #64748b;           /* Cinza escuro */
+
+            /* Gradientes Modernos */
+            --gradiente-verde: linear-gradient(135deg, var(--verde-dark) 0%, var(--verde-secundario) 100%);
+            --gradiente-azul: linear-gradient(135deg, var(--azul-primario) 0%, var(--azul-accent) 100%);
+            --gradiente-mixed: linear-gradient(135deg, var(--verde-secundario) 0%, var(--azul-accent) 100%);
+            --gradiente-hero: linear-gradient(135deg, var(--verde-dark) 0%, var(--verde-primario) 50%, var(--azul-dark) 100%);
+            --gradiente-card: linear-gradient(135deg, rgba(6, 78, 59, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
+
+            /* Sombras Coloridas */
+            --sombra-verde: 0 10px 25px rgba(16, 185, 129, 0.2);
+            --sombra-azul: 0 10px 25px rgba(59, 130, 246, 0.2);
+            --sombra-mixed: 0 15px 35px rgba(16, 185, 129, 0.15), 0 5px 15px rgba(59, 130, 246, 0.15);
+            --sombra-forte: 0 20px 40px rgba(6, 78, 59, 0.3);
+
+            /* Transições Suaves */
+            --transicao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transicao-lenta: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Bordas */
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+        }
+
+        /* === TIPOGRAFIA MODERNA === */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gradiente-hero);
+            color: var(--branco);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* === TOPBAR MODERNO === */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--gradiente-verde);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            box-shadow: var(--sombra-verde);
+            border-bottom: 2px solid var(--verde-accent);
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--branco);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--verde-neon);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            color: var(--branco);
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .logout-topbar {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: var(--transicao);
+        }
+
+        .logout-topbar:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* === SIDEBAR MODERNA === */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 280px;
+            height: calc(100vh - 70px);
+            background: var(--gradiente-azul);
+            z-index: 1000;
+            transition: var(--transicao);
+            box-shadow: var(--sombra-azul);
+            border-right: 2px solid var(--verde-accent);
+        }
+
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--gradiente-verde);
+        }
+
+        .sidebar-nav {
+            padding: 2rem 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: var(--branco);
+            text-decoration: none;
+            transition: var(--transicao);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradiente-verde);
+            transition: var(--transicao);
+            z-index: -1;
+        }
+
+        .nav-item:hover::before,
+        .nav-item.active::before {
+            left: 0;
+        }
+
+        .nav-item:hover {
+            transform: translateX(8px);
+            box-shadow: var(--sombra-verde);
+        }
+
+        .nav-item.active {
+            background: rgba(16, 185, 129, 0.2);
+            border-left: 4px solid var(--verde-accent);
+            color: var(--verde-accent);
+            box-shadow: var(--sombra-verde);
+        }
+
+        .nav-item i {
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            margin-left: 280px;
+            margin-top: 70px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+        }
+
+        .header {
+            background: var(--gradiente-card);
+            padding: 2rem;
+            border-radius: var(--radius-xl);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            box-shadow: var(--sombra-mixed);
+            backdrop-filter: blur(20px);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradiente-mixed);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            color: var(--branco);
+            opacity: 0.9;
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* === OVERVIEW CARDS === */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .overview-card {
+            background: var(--gradiente-card);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            box-shadow: var(--sombra-mixed);
+            transition: var(--transicao);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .overview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradiente-mixed);
+        }
+
+        .overview-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--sombra-forte);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--verde-accent);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--branco);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            color: var(--branco);
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .card-trend {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: var(--radius-md);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .trend-up {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--verde-accent);
+            border: 1px solid var(--verde-accent);
+        }
+
+        .trend-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid #f59e0b;
+        }
+
+        /* === DASHBOARD GRID === */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--gradiente-card);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: var(--sombra-mixed);
+            transition: var(--transicao);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradiente-mixed);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--sombra-forte);
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: var(--gradiente-mixed);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* === CHART CONTAINER === */
+        .chart-container {
+            height: 350px;
+            position: relative;
+        }
+
+        /* === LOG CONTAINER === */
+        .log-container {
+            max-height: 400px;
+            overflow-y: auto;
+            background: var(--azul-primario);
+            border: 1px solid var(--azul-accent);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .log-entry {
+            margin-bottom: 0.8rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .log-timestamp {
+            color: var(--azul-light);
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* === ACTION BUTTONS === */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transicao);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .btn-primary {
+            background: var(--gradiente-verde);
+            color: var(--branco);
+            box-shadow: var(--sombra-verde);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--gradiente-azul);
+            color: var(--branco);
+            box-shadow: var(--sombra-azul);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
+        }
+
+        /* === SYSTEM METRICS === */
+        .system-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-item {
+            background: rgba(6, 78, 59, 0.3);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--verde-accent);
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--verde-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--branco);
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* === RESPONSIVIDADE === */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                width: 100%;
+                transform: translateX(-100%);
+                transition: var(--transicao);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+
+            .topbar-left .system-status {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .topbar {
+                padding: 0 1rem;
+            }
+
+            .user-info {
+                display: none;
+            }
+        }
+
+        /* === ANIMAÇÕES === */
+        @keyframes pulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 0 10px rgba(0, 255, 136, 0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        /* === SCROLL CUSTOMIZADO === */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--azul-primario);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradiente-verde);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--verde-accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- Topbar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="logo">🌟 SmartCity Manager</div>
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span>Sistema Online</span>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <span class="user-info">Administrador Geral</span>
+            <button class="logout-topbar" onclick="logout()">
+                🚪 Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item active">
+                <i>📊</i> Visão Geral
+            </a>
+            <a href="drones.html" class="nav-item">
+                <i>🚁</i> Drones
+            </a>
+            <a href="bueiros.html" class="nav-item">
+                <i>🕳️</i> Bueiros
+            </a>
+            <a href="energia.html" class="nav-item">
+                <i>⚡</i> Energia
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <h1>🌟 Centro de Comando SmartCity</h1>
+            <p>Monitore e controle todos os sistemas da cidade inteligente em um painel centralizado e intuitivo</p>
+        </header>
+
+        <!-- Overview Cards -->
+        <section class="overview-grid">
+            <div class="overview-card" onclick="navigateTo('drones.html')">
+                <span class="card-trend trend-up">+12%</span>
+                <span class="card-icon">🚁</span>
+                <div class="card-title">Entregas Hoje</div>
+                <div class="card-value" id="deliveriesCount">127</div>
+                <div class="card-subtitle">6 drones ativos | 98% eficiência</div>
+            </div>
+
+            <div class="overview-card" onclick="navigateTo('bueiros.html')">
+                <span class="card-trend trend-warning">Atenção</span>
+                <span class="card-icon">🕳️</span>
+                <div class="card-title">Bueiros Críticos</div>
+                <div class="card-value" id="criticalDrains">8%</div>
+                <div class="card-subtitle">1,240 monitorados | 47 necessitam atenção</div>
+            </div>
+
+            <div class="overview-card" onclick="navigateTo('energia.html')">
+                <span class="card-trend trend-up">+8%</span>
+                <span class="card-icon">⚡</span>
+                <div class="card-title">Energia Gerada</div>
+                <div class="card-value" id="energyGenerated">2,840</div>
+                <div class="card-subtitle">kWh hoje | 94% capacidade utilizada</div>
+            </div>
+        </section>
+
+        <!-- System Metrics -->
+        <section class="system-metrics">
+            <div class="metric-item">
+                <div class="metric-value" id="activeDevices">1,847</div>
+                <div class="metric-label">Dispositivos Ativos</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value" id="dataProcessed">847</div>
+                <div class="metric-label">GB Processados</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value" id="systemUptime">99.8%</div>
+                <div class="metric-label">Uptime do Sistema</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value" id="responseTime">142</div>
+                <div class="metric-label">ms Tempo Resposta</div>
+            </div>
+        </section>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- System Performance Chart -->
+            <div class="card">
+                <h3>📈 Performance do Sistema (Últimas 24h)</h3>
+                <div class="chart-container">
+                    <canvas id="systemChart"></canvas>
+                </div>
+            </div>
+
+            <!-- System Logs -->
+            <div class="card">
+                <h3>📝 Log de Eventos do Sistema</h3>
+                <div class="log-container" id="logContainer">
+                    <!-- Logs inseridos via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-btn btn-primary" onclick="handleSync()">
+                <span>🔄</span> Sincronizar Todos os Sistemas
+            </button>
+            <button class="action-btn btn-secondary" onclick="openQueue()">
+                <span>📋</span> Abrir Fila de Solicitações
+            </button>
+            <button class="action-btn btn-secondary" onclick="generateReport()">
+                <span>📊</span> Gerar Relatório
+            </button>
+        </div>
+    </main>
+
+    <script>
+        /**
+         * DASHBOARD SMARTCITY MANAGER
+         * Sistema centralizado para monitoramento da cidade inteligente
+         */
+
+        // === VARIÁVEIS GLOBAIS ===
+        let systemChart;
+        let realTimeInterval;
+        let systemMetrics = {
+            deliveries: 127,
+            criticalDrains: 8,
+            energyGenerated: 2840,
+            activeDevices: 1847,
+            dataProcessed: 847,
+            uptime: 99.8,
+            responseTime: 142
+        };
+
+        /**
+         * INICIALIZAÇÃO DO DASHBOARD
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar autenticação
+            checkAuthentication();
+            
+            // Inicializar dashboard
+            initDashboard();
+            
+            // Inicializar gráfico
+            initializeChart();
+            
+            // Iniciar atualizações em tempo real
+            startRealTimeUpdates();
+            
+            // Log de inicialização
+            addLog('🚀 Dashboard SmartCity inicializado com sucesso', 'success');
+            addLog('📊 Conectando com sistemas da cidade...', 'info');
+            addLog('🌐 Todos os sistemas online e operacionais', 'success');
+            
+            // Animações de entrada
+            document.querySelectorAll('.overview-card, .card').forEach((element, index) => {
+                setTimeout(() => {
+                    element.classList.add('animate-slide-in');
+                }, index * 100);
+            });
+        });
+
+        /**
+         * VERIFICAR AUTENTICAÇÃO
+         */
+        /**
+         * INICIALIZAR DASHBOARD
+         */
+        function initDashboard() {
+            // Atualizar cards principais
+            updateOverviewCards();
+            
+            // Atualizar métricas do sistema
+            updateSystemMetrics();
+            
+            // Carregar logs iniciais
+            loadInitialLogs();
+            
+            addLog('✅ Interface do dashboard carregada', 'success');
+        }
+
+        /**
+         * ATUALIZAR CARDS PRINCIPAIS
+         */
+        function updateOverviewCards() {
+            document.getElementById('deliveriesCount').textContent = systemMetrics.deliveries;
+            document.getElementById('criticalDrains').textContent = systemMetrics.criticalDrains + '%';
+            document.getElementById('energyGenerated').textContent = systemMetrics.energyGenerated.toLocaleString();
+        }
+
+        /**
+         * ATUALIZAR MÉTRICAS DO SISTEMA
+         */
+        function updateSystemMetrics() {
+            document.getElementById('activeDevices').textContent = systemMetrics.activeDevices.toLocaleString();
+            document.getElementById('dataProcessed').textContent = systemMetrics.dataProcessed;
+            document.getElementById('systemUptime').textContent = systemMetrics.uptime + '%';
+            document.getElementById('responseTime').textContent = systemMetrics.responseTime;
+        }
+
+        /**
+         * INICIALIZAR GRÁFICO DO SISTEMA
+         */
+        function initializeChart() {
+            const ctx = document.getElementById('systemChart').getContext('2d');
+            
+            systemChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                    datasets: [
+                        {
+                            label: 'Performance Drones',
+                            data: [85, 87, 92, 95, 97, 94, 96],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Status Bueiros',
+                            data: [78, 82, 85, 88, 91, 89, 92],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Geração Energia',
+                            data: [65, 70, 85, 95, 92, 88, 91],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#f8fafc',
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                },
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(6, 78, 59, 0.9)',
+                            titleColor: '#34d399',
+                            bodyColor: '#f8fafc',
+                            borderColor: '#10b981',
+                            borderWidth: 2
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(52, 211, 153, 0.1)'
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(52, 211, 153, 0.1)'
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        }
+                    },
+                    elements: {
+                        point: {
+                            radius: 5,
+                            hoverRadius: 8
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * CARREGAR LOGS INICIAIS
+         */
+        function loadInitialLogs() {
+            const initialLogs = [
+                { message: '🔋 Sistema de energia solar operando em 94% da capacidade', type: 'success' },
+                { message: '🚁 6 drones ativos realizando entregas programadas', type: 'info' },
+                { message: '🕳️ Verificação automática de 1.240 bueiros concluída', type: 'info' },
+                { message: '⚡ Pico de consumo energético registrado às 18:30', type: 'warning' },
+                { message: '📊 Backup dos dados do sistema realizado com sucesso', type: 'success' },
+                { message: '🌡️ Sensores de temperatura reportam condições normais', type: 'info' },
+                { message: '🔄 Sincronização com servidores centrais ativa', type: 'success' }
+            ];
+
+            initialLogs.forEach(log => {
+                addLog(log.message, log.type);
+            });
+        }
+
+        /**
+         * INICIAR ATUALIZAÇÕES EM TEMPO REAL
+         */
+        function startRealTimeUpdates() {
+            // Atualizar métricas a cada 10 segundos
+            setInterval(simulateOverviewData, 10000);
+            
+            // Adicionar logs aleatórios a cada 15 segundos
+            setInterval(addRandomLog, 15000);
+            
+            // Atualizar gráfico a cada 30 segundos
+            setInterval(updateChartData, 30000);
+            
+            addLog('🔄 Monitoramento em tempo real ativo', 'success');
+        }
+
+        /**
+         * SIMULAR DADOS DO OVERVIEW
+         */
+        function simulateOverviewData() {
+            // Entregas
+            const deliveryChange = Math.floor(Math.random() * 3) - 1;
+            systemMetrics.deliveries = Math.max(0, systemMetrics.deliveries + deliveryChange);
+            
+            // Bueiros críticos
+            const drainChange = (Math.random() - 0.5) * 2;
+            systemMetrics.criticalDrains = Math.max(0, Math.min(15, systemMetrics.criticalDrains + drainChange));
+            
+            // Energia gerada
+            const energyChange = Math.floor(Math.random() * 100) - 50;
+            systemMetrics.energyGenerated = Math.max(2000, systemMetrics.energyGenerated + energyChange);
+            
+            // Dispositivos ativos
+            const deviceChange = Math.floor(Math.random() * 10) - 5;
+            systemMetrics.activeDevices = Math.max(1800, systemMetrics.activeDevices + deviceChange);
+            
+            // Dados processados
+            const dataChange = Math.floor(Math.random() * 20) - 10;
+            systemMetrics.dataProcessed = Math.max(800, systemMetrics.dataProcessed + dataChange);
+            
+            // Tempo de resposta
+            const responseChange = Math.floor(Math.random() * 20) - 10;
+            systemMetrics.responseTime = Math.max(100, Math.min(200, systemMetrics.responseTime + responseChange));
+            
+            // Uptime (pequenas flutuações)
+            const uptimeChange = (Math.random() - 0.5) * 0.2;
+            systemMetrics.uptime = Math.max(98.0, Math.min(100.0, systemMetrics.uptime + uptimeChange));
+            
+            // Atualizar interface
+            updateOverviewCards();
+            updateSystemMetrics();
+        }
+
+        /**
+         * ADICIONAR LOG ALEATÓRIO
+         */
+        function addRandomLog() {
+            const randomLogs = [
+                { message: '📡 Conectividade de rede otimizada automaticamente', type: 'info' },
+                { message: '🔧 Manutenção preventiva agendada para drone DRN-003', type: 'warning' },
+                { message: '⚡ Transferência de energia excedente para rede urbana', type: 'success' },
+                { message: '🚨 Alerta de bueiro obstruído no setor 7 - drone despachado', type: 'warning' },
+                { message: '📦 Entrega prioritária concluída em 4.2km - tempo recorde', type: 'success' },
+                { message: '🌐 Atualização de firmware aplicada em 47 dispositivos', type: 'info' },
+                { message: '💾 Backup incremental dos dados críticos concluído', type: 'success' },
+                { message: '🔋 Bateria do drone DRN-005 carregada a 100%', type: 'success' },
+                { message: '📊 Relatório de performance gerado automaticamente', type: 'info' },
+                { message: '🌡️ Variação térmica detectada no painel solar setor B', type: 'warning' }
+            ];
+            
+            const randomLog = randomLogs[Math.floor(Math.random() * randomLogs.length)];
+            addLog(randomLog.message, randomLog.type);
+        }
+
+        /**
+         * ATUALIZAR DADOS DO GRÁFICO
+         */
+        function updateChartData() {
+            if (systemChart) {
+                const datasets = systemChart.data.datasets;
+                
+                // Remover primeiro ponto e adicionar novo
+                datasets.forEach(dataset => {
+                    dataset.data.shift();
+                    dataset.data.push(Math.floor(Math.random() * 20) + 80);
+                });
+                
+                systemChart.update('none');
+                addLog('📈 Dados de performance atualizados', 'info');
+            }
+        }
+
+        /**
+         * SINCRONIZAR SISTEMAS
+         */
+        function handleSync() {
+            addLog('🔄 Iniciando sincronização geral dos sistemas...', 'info');
+            
+            // Simular processo de sincronização
+            setTimeout(() => {
+                addLog('🚁 Sincronização com sistema de drones - OK', 'success');
+            }, 1000);
+            
+            setTimeout(() => {
+                addLog('🕳️ Sincronização com sensores de bueiros - OK', 'success');
+            }, 2000);
+            
+            setTimeout(() => {
+                addLog('⚡ Sincronização com rede de energia - OK', 'success');
+            }, 3000);
+            
+            setTimeout(() => {
+                addLog('✅ Sincronização geral concluída com sucesso', 'success');
+                
+                // Atualizar métricas após sincronização
+                systemMetrics.uptime = 99.9;
+                systemMetrics.responseTime = Math.max(100, systemMetrics.responseTime - 20);
+                updateSystemMetrics();
+            }, 4000);
+        }
+
+        /**
+         * ABRIR FILA DE SOLICITAÇÕES
+         */
+        function openQueue() {
+            addLog('📋 Abrindo central de solicitações...', 'info');
+            
+            // Simular abertura da fila
+            setTimeout(() => {
+                alert('📋 Central de Solicitações\n\n' +
+                      '• 5 solicitações de alta prioridade\n' +
+                      '• 12 solicitações de média prioridade\n' +
+                      '• 8 solicitações de baixa prioridade\n\n' +
+                      'Redirecionando para o sistema de drones...');
+                
+                addLog('➡️ Usuário redirecionado para sistema de drones', 'info');
+            }, 1000);
+        }
+
+        /**
+         * GERAR RELATÓRIO
+         */
+        function generateReport() {
+            addLog('📊 Gerando relatório detalhado do sistema...', 'info');
+            
+            setTimeout(() => {
+                const report = `
+🌟 RELATÓRIO SMARTCITY - ${new Date().toLocaleDateString()}
+══════════════════════════════════════════════════
+
+📈 MÉTRICAS GERAIS:
+• Entregas realizadas hoje: ${systemMetrics.deliveries}
+• Bueiros em estado crítico: ${systemMetrics.criticalDrains.toFixed(1)}%
+• Energia gerada hoje: ${systemMetrics.energyGenerated.toLocaleString()} kWh
+• Dispositivos ativos: ${systemMetrics.activeDevices.toLocaleString()}
+• Uptime do sistema: ${systemMetrics.uptime.toFixed(1)}%
+
+🚁 SISTEMA DE DRONES:
+• 6 drones operacionais
+• 98% de eficiência nas entregas
+• Tempo médio de entrega: 12.4 minutos
+
+🕳️ MONITORAMENTO DE BUEIROS:
+• 1.240 bueiros monitorados
+• 47 necessitam atenção
+• 0 obstruções críticas
+
+⚡ GERAÇÃO DE ENERGIA:
+• 94% da capacidade utilizada
+• Excedente transferido para rede urbana
+• Economia estimada: R$ 4.730,00
+
+══════════════════════════════════════════════════
+                `;
+                
+                console.log(report);
+                alert('📊 Relatório gerado com sucesso!\nVerifique o console do navegador para visualizar.');
+                addLog('✅ Relatório detalhado gerado e exibido', 'success');
+            }, 2000);
+        }
+
+        /**
+         * NAVEGAÇÃO ENTRE PÁGINAS
+         */
+        function navigateTo(page) {
+            addLog(`🔗 Navegando para ${page}...`, 'info');
+            setTimeout(() => {
+                window.location.href = page;
+            }, 500);
+        }
+
+        /**
+         * SISTEMA DE LOGS AVANÇADO
+         */
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            const typeIcons = {
+                'success': '✅',
+                'error': '❌',
+                'warning': '⚠️',
+                'info': 'ℹ️'
+            };
+            
+            const typeColors = {
+                'success': '#10b981',
+                'error': '#ef4444',
+                'warning': '#f59e0b',
+                'info': '#3b82f6'
+            };
+            
+            logEntry.innerHTML = `
+                <span class="log-timestamp">[${timestamp}]</span>
+                <span style="color: ${typeColors[type]}; margin: 0 0.5rem;">${typeIcons[type]}</span>
+                <span style="color: ${type === 'error' ? '#fca5a5' : 'var(--branco)'};">${message}</span>
+            `;
+            
+            logContainer.insertBefore(logEntry, logContainer.firstChild);
+            
+            // Limitar a 50 logs
+            const entries = logContainer.querySelectorAll('.log-entry');
+            if (entries.length > 50) {
+                logContainer.removeChild(entries[entries.length - 1]);
+            }
+            
+            logContainer.scrollTop = 0;
+        }
+
+        /**
+         * FUNÇÃO DE LOGOUT
+         */
+        function logout() {
+            if (confirm('🚪 Confirmar logout do sistema SmartCity?')) {
+                addLog('👋 Encerrando sessão do usuário...', 'info');
+                
+                // Limpar dados de autenticação
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('userName');
+                
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
+            }
+        }
+
+        /**
+         * EVENT LISTENERS GLOBAIS
+         */
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + S para sincronizar
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                handleSync();
+            }
+            
+            // Ctrl + Q para fila
+            if (e.ctrlKey && e.key === 'q') {
+                e.preventDefault();
+                openQueue();
+            }
+            
+            // Ctrl + R para relatório
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                generateReport();
+            }
+        });
+
+        // Monitorar visibilidade da página
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                addLog('⏸️ Dashboard pausado - Página inativa', 'info');
+            } else {
+                addLog('▶️ Dashboard reativado - Atualizando dados...', 'info');
+                simulateOverviewData();
+            }
+        });
+
+        // Tratamento de erros
+        window.addEventListener('error', function(e) {
+            addLog(`💥 Erro no sistema: ${e.message}`, 'error');
+        });
+
+        // Conectividade
+        window.addEventListener('online', function() {
+            addLog('🌐 Conexão restaurada - Todos os sistemas online', 'success');
+        });
+
+        window.addEventListener('offline', function() {
+            addLog('📡 Conexão perdida - Modo offline ativado', 'warning');
+        });
+
+        // Responsividade do sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

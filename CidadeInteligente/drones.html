@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drones - SmartCity Manager</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        /* ==========================================
+           SISTEMA DE DRONES OTIMIZADO - VISUAL APRIMORADO
+           Cores: Verde predominante com Azul
+           ========================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Verde predominante */
+            --verde-primario: #059669;
+            --verde-secundario: #10b981;
+            --verde-accent: #34d399;
+            --verde-light: #6ee7b7;
+            --verde-dark: #064e3b;
+            --verde-neon: #00ff88;
+
+            /* Azul complementar */
+            --azul-primario: #0f172a;
+            --azul-secundario: #1e293b;
+            --azul-accent: #3b82f6;
+            --azul-light: #60a5fa;
+            --azul-dark: #0c1220;
+
+            /* Neutros */
+            --branco: #f8fafc;
+            --cinza-light: #e2e8f0;
+            --cinza-medio: #94a3b8;
+            --cinza-dark: #64748b;
+
+            /* Gradientes */
+            --gradiente-verde: linear-gradient(135deg, var(--verde-dark) 0%, var(--verde-secundario) 100%);
+            --gradiente-azul: linear-gradient(135deg, var(--azul-primario) 0%, var(--azul-accent) 100%);
+            --gradiente-mixed: linear-gradient(135deg, var(--verde-secundario) 0%, var(--azul-accent) 100%);
+            --gradiente-hero: linear-gradient(135deg, var(--verde-dark) 0%, var(--verde-primario) 50%, var(--azul-dark) 100%);
+            --gradiente-card: linear-gradient(135deg, rgba(6, 78, 59, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
+
+            /* Sombras */
+            --sombra-verde: 0 8px 25px rgba(16, 185, 129, 0.15);
+            --sombra-azul: 0 8px 25px rgba(59, 130, 246, 0.15);
+            --sombra-mixed: 0 10px 30px rgba(16, 185, 129, 0.1), 0 4px 15px rgba(59, 130, 246, 0.1);
+            --sombra-forte: 0 15px 35px rgba(6, 78, 59, 0.2);
+
+            /* Transições */
+            --transicao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transicao-lenta: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Bordas */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--gradiente-hero);
+            color: var(--branco);
+            line-height: 1.6;
+            min-height: 100vh;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* === TOPBAR COMPACTO === */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--gradiente-verde);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            box-shadow: var(--sombra-verde);
+            border-bottom: 2px solid var(--verde-accent);
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--branco);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--verde-neon);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .logout-topbar {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+            padding: 0.6rem 1rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: var(--transicao);
+        }
+
+        .logout-topbar:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* === SIDEBAR COMPACTO === */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 60px;
+            width: 250px;
+            height: calc(100vh - 60px);
+            background: var(--gradiente-azul);
+            z-index: 1000;
+            transition: var(--transicao);
+            box-shadow: var(--sombra-azul);
+            border-right: 2px solid var(--verde-accent);
+        }
+
+        .sidebar-nav {
+            padding: 1.5rem 0.8rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            color: var(--branco);
+            text-decoration: none;
+            transition: var(--transicao);
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradiente-verde);
+            transition: var(--transicao);
+            z-index: -1;
+        }
+
+        .nav-item:hover::before,
+        .nav-item.active::before {
+            left: 0;
+        }
+
+        .nav-item:hover {
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: rgba(16, 185, 129, 0.2);
+            border-left: 3px solid var(--verde-accent);
+            color: var(--verde-accent);
+        }
+
+        .nav-item i {
+            margin-right: 0.8rem;
+            font-size: 1rem;
+        }
+
+        /* === MAIN CONTENT OTIMIZADO === */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 1rem;
+            min-height: calc(100vh - 60px);
+        }
+
+        .header {
+            background: var(--gradiente-card);
+            padding: 1.2rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1rem;
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            box-shadow: var(--sombra-mixed);
+            backdrop-filter: blur(20px);
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: var(--gradiente-mixed);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.3rem;
+        }
+
+        .header p {
+            color: var(--branco);
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* === STATUS DE ENERGIA COMPACTO === */
+        .energy-status {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+            padding: 0.8rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--verde-accent);
+            font-size: 0.85rem;
+        }
+
+        .energy-status .icon {
+            font-size: 1.2rem;
+            color: var(--verde-accent);
+        }
+
+        /* === DASHBOARD GRID OTIMIZADO === */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card {
+            background: var(--gradiente-card);
+            border-radius: var(--radius-lg);
+            padding: 1.2rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: var(--sombra-mixed);
+            transition: var(--transicao);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradiente-mixed);
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--sombra-forte);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: var(--gradiente-mixed);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* === TABELA OTIMIZADA === */
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+        }
+
+        .drones-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .drones-table th {
+            background: var(--gradiente-azul);
+            color: var(--branco);
+            padding: 0.8rem 0.6rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .drones-table td {
+            padding: 0.8rem 0.6rem;
+            border-bottom: 1px solid rgba(52, 211, 153, 0.1);
+            color: var(--branco);
+            font-size: 0.8rem;
+        }
+
+        .drones-table tr:hover {
+            background: rgba(16, 185, 129, 0.1);
+            transition: var(--transicao);
+        }
+
+        /* === STATUS BADGES COMPACTOS === */
+        .status {
+            padding: 0.3rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .status.disponivel { 
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--verde-accent);
+            border: 1px solid var(--verde-accent);
+        }
+        .status.voando { 
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--azul-light);
+            border: 1px solid var(--azul-accent);
+        }
+        .status.manutencao { 
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+        }
+        .status.carregando { 
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid #f59e0b;
+        }
+
+        /* === INDICADOR DE BATERIA COMPACTO === */
+        .battery {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .battery-bar {
+            width: 60px;
+            height: 8px;
+            background: var(--azul-primario);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--azul-accent);
+        }
+
+        .battery-fill {
+            height: 100%;
+            transition: var(--transicao);
+            border-radius: 4px;
+        }
+
+        .battery-fill.high { 
+            background: var(--gradiente-verde);
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+        }
+        .battery-fill.medium { 
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+        }
+        .battery-fill.low { 
+            background: linear-gradient(135deg, #ef4444 0%, #fca5a5 100%);
+            box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+        }
+
+        /* === BOTÕES DE AÇÃO COMPACTOS === */
+        .action-btn {
+            padding: 0.5rem 0.8rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: var(--transicao);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-send {
+            background: var(--gradiente-verde);
+            color: var(--branco);
+            box-shadow: var(--sombra-verde);
+        }
+
+        .btn-send:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-send:disabled {
+            background: var(--cinza-dark);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        /* === FILA DE SOLICITAÇÕES COMPACTA === */
+        .queue-item {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            transition: var(--transicao);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+        }
+
+        .queue-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--gradiente-verde);
+            transform: scaleY(0);
+            transition: var(--transicao);
+        }
+
+        .queue-item:hover::before,
+        .queue-item.selected::before {
+            transform: scaleY(1);
+        }
+
+        .queue-item:hover {
+            transform: translateX(5px);
+            border-color: var(--verde-accent);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .queue-item.selected {
+            border-color: var(--verde-accent);
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .queue-priority {
+            padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .priority-alta { 
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+        }
+        .priority-media { 
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid #f59e0b;
+        }
+        .priority-baixa { 
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--verde-accent);
+            border: 1px solid var(--verde-accent);
+        }
+
+        /* === BOTÃO GLOBAL OTIMIZADO === */
+        .global-send-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--gradiente-verde);
+            color: var(--branco);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            box-shadow: var(--sombra-verde);
+            transition: var(--transicao);
+            z-index: 999;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border: 2px solid var(--verde-accent);
+        }
+
+        .global-send-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        /* === PROGRESSO COMPACTO === */
+        .progress-container {
+            background: var(--gradiente-card);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            border: 1px solid var(--azul-accent);
+            box-shadow: var(--sombra-azul);
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--azul-primario);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 0.8rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradiente-verde);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 5px;
+            box-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
+        }
+
+        /* === GRÁFICO E LOG OTIMIZADOS === */
+        .chart-container {
+            height: 280px;
+            position: relative;
+        }
+
+        .log-container {
+            max-height: 280px;
+            overflow-y: auto;
+            background: var(--azul-primario);
+            border: 1px solid var(--azul-accent);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .log-timestamp {
+            color: var(--azul-light);
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        /* === RESPONSIVIDADE OTIMIZADA === */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                width: 100%;
+                transform: translateX(-100%);
+                transition: var(--transicao);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .system-status {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 0.8rem;
+                margin-top: 60px;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .card {
+                padding: 1rem;
+            }
+            
+            .drones-table {
+                font-size: 0.75rem;
+            }
+            
+            .drones-table th,
+            .drones-table td {
+                padding: 0.5rem 0.3rem;
+            }
+            
+            .global-send-btn {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                padding: 0.7rem 1.2rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* === ANIMAÇÕES OTIMIZADAS === */
+        @keyframes pulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 0 8px rgba(0, 255, 136, 0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* === SCROLL CUSTOMIZADO === */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--azul-primario);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradiente-verde);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--verde-accent);
+        }
+
+        /* === MENU MOBILE === */
+        .menu-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--branco);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* === MELHORIAS VISUAIS === */
+        .drone-card {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            transition: var(--transicao);
+        }
+
+        .drone-card:hover {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--verde-accent);
+        }
+
+        .drone-status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .drone-status-indicator.disponivel {
+            background: var(--verde-accent);
+            box-shadow: 0 0 6px rgba(52, 211, 153, 0.5);
+        }
+
+        .drone-status-indicator.voando {
+            background: var(--azul-accent);
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
+        }
+
+        .drone-status-indicator.carregando {
+            background: #f59e0b;
+            box-shadow: 0 0 6px rgba(245, 158, 11, 0.5);
+        }
+
+        .drone-status-indicator.manutencao {
+            background: #ef4444;
+            box-shadow: 0 0 6px rgba(239, 68, 68, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Topbar -->
+    <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+            <div class="logo">🚁 SmartCity Drones</div>
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span>Online</span>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <span style="color: var(--branco); opacity: 0.9; font-size: 0.8rem;">Admin</span>
+            <button class="logout-topbar" onclick="logout()">Sair</button>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i>📊</i> Dashboard
+            </a>
+            <a href="drones.html" class="nav-item active">
+                <i>🚁</i> Drones
+            </a>
+            <a href="bueiros.html" class="nav-item">
+                <i>🕳️</i> Bueiros
+            </a>
+            <a href="energia.html" class="nav-item">
+                <i>⚡</i> Energia
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <h1>🚁 Centro de Controle de Drones</h1>
+            <p>Monitore e gerencie sua frota de drones em tempo real</p>
+            
+            <div class="energy-status">
+                <span class="icon">⚡</span>
+                <strong>Energia:</strong>
+                <span id="energyLevel">87%</span>
+                <span>|</span>
+                <span id="dronesCharging">3 carregando</span>
+            </div>
+        </header>
+
+        <!-- Progress -->
+        <div class="progress-container" id="progressContainer">
+            <h4 id="progressTitle">Enviando Drone...</h4>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">Preparando para decolagem...</p>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Drones Table -->
+            <div class="card">
+                <h3>🚁 Frota Ativa</h3>
+                <div class="table-container">
+                    <table class="drones-table" id="dronesTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Status</th>
+                                <th>Local</th>
+                                <th>Bateria</th>
+                                <th>Última Ação</th>
+                                <th>Controle</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dronesTableBody">
+                            <!-- Dados via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Analytics -->
+            <div class="card">
+                <h3>📈 Entregas</h3>
+                <div class="chart-container">
+                    <canvas id="deliveryChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Row -->
+        <div class="dashboard-grid">
+            <!-- Queue -->
+            <div class="card">
+                <h3>📋 Fila de Solicitações</h3>
+                <div id="queueContainer">
+                    <!-- Queue items via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Logs -->
+            <div class="card">
+                <h3>📝 Logs do Sistema</h3>
+                <div class="log-container" id="logContainer">
+                    <!-- Logs via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Global Button -->
+    <button class="global-send-btn animate-pulse" onclick="handleSendDroneGlobal()">
+        🚁 Enviar Drone
+    </button>
+
+    <script>
+        /**
+         * SISTEMA DE DRONES OTIMIZADO
+         * Versão compacta e visual aprimorada
+         */
+
+        // Dados dos drones
+        let drones = [
+            {
+                id: 'DRN-001',
+                nome: 'Falcon Prime',
+                status: 'disponivel',
+                localizacao: 'Base Alpha',
+                bateria: 98,
+                ultimaMissao: '14:25 - Entrega OK',
+                disponivel: true
+            },
+            {
+                id: 'DRN-002',
+                nome: 'Eagle Storm',
+                status: 'voando',
+                localizacao: 'Setor 7',
+                bateria: 72,
+                ultimaMissao: '13:40 - Em rota',
+                disponivel: false
+            },
+            {
+                id: 'DRN-003',
+                nome: 'Hawk Thunder',
+                status: 'carregando',
+                localizacao: 'Estação Beta',
+                bateria: 28,
+                ultimaMissao: '12:15 - Carregando',
+                disponivel: false
+            },
+            {
+                id: 'DRN-004',
+                nome: 'Swift Lightning',
+                status: 'manutencao',
+                localizacao: 'Centro Técnico',
+                bateria: 0,
+                ultimaMissao: '11:00 - Manutenção',
+                disponivel: false
+            },
+            {
+                id: 'DRN-005',
+                nome: 'Phoenix Fire',
+                status: 'disponivel',
+                localizacao: 'Base Gamma',
+                bateria: 91,
+                ultimaMissao: '14:50 - Entrega OK',
+                disponivel: true
+            },
+            {
+                id: 'DRN-006',
+                nome: 'Raven Shadow',
+                status: 'voando',
+                localizacao: 'Distrito Norte',
+                bateria: 55,
+                ultimaMissao: '14:10 - Em entrega',
+                disponivel: false
+            }
+        ];
+
+        // Fila de solicitações
+        let requestQueue = [
+            {
+                id: 'REQ-001',
+                cliente: 'TechCorp',
+                destino: 'Av. Tech, 1500',
+                peso: '3.2kg',
+                prioridade: 'alta',
+                distancia: 4.8,
+                selected: false
+            },
+            {
+                id: 'REQ-002',
+                cliente: 'MedCenter',
+                destino: 'R. Saúde, 875',
+                peso: '1.5kg',
+                prioridade: 'alta',
+                distancia: 2.7,
+                selected: false
+            },
+            {
+                id: 'REQ-003',
+                cliente: 'Green Industries',
+                destino: 'Setor Industrial',
+                peso: '2.8kg',
+                prioridade: 'media',
+                distancia: 6.3,
+                selected: false
+            },
+            {
+                id: 'REQ-004',
+                cliente: 'Urban Market',
+                destino: 'Centro Comercial',
+                peso: '1.9kg',
+                prioridade: 'baixa',
+                distancia: 3.5,
+                selected: false
+            }
+        ];
+
+        // Variáveis globais
+        let deliveryChart;
+        let missionInProgress = false;
+
+        /**
+         * INICIALIZAÇÃO
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            renderDronesTable();
+            renderQueue();
+            initializeChart();
+            startRealTimeUpdates();
+            
+            addLog('🚀 Sistema de drones iniciado', 'success');
+            addLog('📡 Monitoramento ativo', 'info');
+            
+            // Animações
+            document.querySelectorAll('.card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('animate-slide-in');
+                }, index * 100);
+            });
+        });
+
+        /**
+         * RENDERIZAR TABELA
+         */
+        function renderDronesTable() {
+            const tbody = document.getElementById('dronesTableBody');
+            tbody.innerHTML = '';
+
+            drones.forEach((drone, index) => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>
+                        <strong style="color: var(--verde-accent);">${drone.id}</strong>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                            <span class="drone-status-indicator ${drone.status}"></span>
+                            <span style="font-weight: 600;">${drone.nome}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status ${drone.status}">${getStatusText(drone.status)}</span>
+                    </td>
+                    <td style="opacity: 0.9;">${drone.localizacao}</td>
+                    <td>
+                        <div class="battery">
+                            <span style="font-weight: 600; color: var(--verde-accent); font-size: 0.75rem;">${drone.bateria}%</span>
+                            <div class="battery-bar">
+                                <div class="battery-fill ${getBatteryClass(drone.bateria)}" 
+                                     style="width: ${drone.bateria}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="opacity: 0.8;">${drone.ultimaMissao}</td>
+                    <td>
+                        <button class="action-btn btn-send" 
+                                onclick="showDroneOptions('${drone.id}')"
+                                ${!drone.disponivel ? 'disabled' : ''}>
+                            ${drone.disponivel ? '🚁 Enviar' : '⏳ Ocupado'}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        /**
+         * RENDERIZAR FILA
+         */
+        function renderQueue() {
+            const container = document.getElementById('queueContainer');
+            container.innerHTML = '';
+
+            if (requestQueue.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 1.5rem; opacity: 0.7;">
+                        <h4 style="color: var(--azul-light); margin-bottom: 0.3rem;">🎯 Fila Vazia</h4>
+                        <p style="color: var(--branco); opacity: 0.8; font-size: 0.8rem;">Nenhuma solicitação pendente</p>
+                    </div>
+                `;
+                return;
+            }
+
+            requestQueue.forEach((request, index) => {
+                const queueItem = document.createElement('div');
+                queueItem.className = `queue-item ${request.selected ? 'selected' : ''}`;
+                queueItem.onclick = () => selectRequest(index);
+                
+                queueItem.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem;">
+                        <div style="display: flex; align-items: center; gap: 0.8rem;">
+                            <strong style="color: var(--verde-accent); font-size: 0.9rem;">${request.id}</strong>
+                            <span class="queue-priority priority-${request.prioridade}">${request.prioridade.toUpperCase()}</span>
+                        </div>
+                        <button class="action-btn btn-send" onclick="sendDroneToRequest('${request.id}', event)"
+                                style="padding: 0.4rem 0.6rem; font-size: 0.7rem;">
+                            🚁 Enviar
+                        </button>
+                    </div>
+                    <div style="margin-bottom: 0.5rem;">
+                        <strong style="color: var(--branco); font-size: 0.85rem;">${request.cliente}</strong>
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--azul-light); margin-bottom: 0.3rem;">
+                        📍 ${request.destino}
+                    </div>
+                    <div style="display: flex; gap: 1rem; font-size: 0.7rem; color: var(--branco); opacity: 0.8;">
+                        <span>📦 ${request.peso}</span>
+                        <span>🗺️ ${request.distancia}km</span>
+                    </div>
+                `;
+                
+                container.appendChild(queueItem);
+            });
+        }
+
+        /**
+         * INICIALIZAR GRÁFICO
+         */
+        function initializeChart() {
+            const ctx = document.getElementById('deliveryChart').getContext('2d');
+            
+            deliveryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Concluídas', 'Em Andamento', 'Pendentes', 'Canceladas'],
+                    datasets: [{
+                        data: [142, 8, 23, 3],
+                        backgroundColor: [
+                            '#10b981', // Verde - Concluídas
+                            '#3b82f6', // Azul - Em Andamento
+                            '#f59e0b', // Amarelo - Pendentes
+                            '#ef4444'  // Vermelho - Canceladas
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#0f172a',
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#f8fafc',
+                                font: { 
+                                    size: 10,
+                                    weight: '600'
+                                },
+                                padding: 15,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(6, 78, 59, 0.9)',
+                            titleColor: '#34d399',
+                            bodyColor: '#f8fafc',
+                            borderColor: '#10b981',
+                            borderWidth: 2,
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((context.parsed * 100) / total);
+                                    return `${context.label}: ${context.parsed} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    elements: {
+                        arc: {
+                            borderWidth: 2
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
+                    }
+                }
+            });
+        }
+
+        /**
+         * ATUALIZAÇÕES EM TEMPO REAL
+         */
+        function startRealTimeUpdates() {
+            // Carrega dados iniciais imediatamente
+            loadInitialData();
+            
+            // Define intervalos para atualizações automáticas
+            setInterval(simulateDroneStatus, 8000);
+            setInterval(updateEnergyStatus, 12000);
+            setInterval(addRandomRequest, 25000);
+            setInterval(updateChartData, 30000);
+            
+            addLog('🔄 Sistema de monitoramento ativo', 'info');
+        }
+
+        /**
+         * CARREGAR DADOS INICIAIS
+         */
+        function loadInitialData() {
+            // Garantir que a tabela seja renderizada
+            renderDronesTable();
+            renderQueue();
+            
+            // Adicionar logs iniciais
+            addLog('🚀 Sistema de drones inicializado', 'success');
+            addLog('📡 6 drones na frota ativa', 'info');
+            addLog('⚡ Sistema de energia conectado', 'success');
+            addLog('📋 Monitorando fila de solicitações', 'info');
+            
+            // Simular algumas entregas já realizadas hoje
+            if (deliveryChart) {
+                const currentHour = new Date().getHours();
+                const deliveriesCompleted = Math.floor(currentHour * 8 + Math.random() * 20); // Baseado na hora do dia
+                
+                deliveryChart.data.datasets[0].data[0] = deliveriesCompleted;
+                deliveryChart.update('none');
+                
+                addLog(`📊 ${deliveriesCompleted} entregas realizadas hoje`, 'success');
+            }
+        }
+
+        /**
+         * SIMULAR STATUS DOS DRONES
+         */
+        function simulateDroneStatus() {
+            drones.forEach(drone => {
+                if (drone.status === 'carregando' && drone.bateria < 100) {
+                    drone.bateria = Math.min(100, drone.bateria + Math.random() * 15 + 5);
+                    
+                    if (drone.bateria >= 95) {
+                        drone.status = 'disponivel';
+                        drone.disponivel = true;
+                        drone.localizacao = 'Base Alpha';
+                        drone.ultimaMissao = `${new Date().toLocaleTimeString()} - Carregado`;
+                        addLog(`⚡ ${drone.nome} carregamento concluído`, 'success');
+                    }
+                }
+                
+                if (drone.status === 'voando' && drone.bateria > 0) {
+                    drone.bateria = Math.max(0, drone.bateria - Math.random() * 8 + 2);
+                    
+                    if (drone.bateria < 25 && !missionInProgress) {
+                        drone.status = 'carregando';
+                        drone.disponivel = false;
+                        drone.localizacao = 'Retornando';
+                        addLog(`🔋 ${drone.nome} bateria baixa - retornando`, 'warning');
+                    }
+                }
+                
+                if (drone.status === 'manutencao' && Math.random() < 0.1) {
+                    drone.status = 'carregando';
+                    drone.disponivel = false;
+                    drone.bateria = 15;
+                    drone.localizacao = 'Estação Beta';
+                    addLog(`🔧 ${drone.nome} manutenção concluída`, 'info');
+                }
+            });
+            
+            renderDronesTable();
+        }
+
+        /**
+         * ATUALIZAR ENERGIA
+         */
+        function updateEnergyStatus() {
+            const energyLevel = document.getElementById('energyLevel');
+            const dronesCharging = document.getElementById('dronesCharging');
+            
+            const currentEnergy = parseInt(energyLevel.textContent);
+            const energyChange = (Math.random() - 0.5) * 8;
+            const newEnergy = Math.max(75, Math.min(100, currentEnergy + energyChange));
+            energyLevel.textContent = Math.round(newEnergy) + '%';
+            
+            const chargingCount = drones.filter(d => d.status === 'carregando').length;
+            dronesCharging.textContent = `${chargingCount} carregando`;
+            
+            if (newEnergy < 80 && currentEnergy >= 80) {
+                addLog(`⚠️ Energia baixa: ${Math.round(newEnergy)}%`, 'warning');
+            }
+        }
+
+        /**
+         * ADICIONAR SOLICITAÇÃO ALEATÓRIA
+         */
+        function addRandomRequest() {
+            const clientes = [
+                'TechFlow Solutions', 'GreenWave Corp', 'UrbanCore Industries', 
+                'NextGen Dynamics', 'SmartHub Technologies', 'EcoVision Ltd',
+                'DataStream Networks', 'Quantum Labs', 'BioTech Center'
+            ];
+            
+            const destinos = [
+                'Tech District Alpha', 'Centro Empresarial Beta', 'Torre Comercial Gamma', 
+                'Hub Logístico Delta', 'Campus Corporativo Epsilon', 'Distrito Industrial Zeta',
+                'Setor Residencial Norte', 'Zona Comercial Sul', 'Complexo Médico Leste'
+            ];
+            
+            const prioridades = ['alta', 'media', 'baixa'];
+            
+            // Gerar distâncias mais variadas e realistas
+            const distanceRanges = {
+                'alta': { min: 1.2, max: 8.5 },     // Prioridade alta: mais próximas
+                'media': { min: 2.8, max: 15.3 },   // Prioridade média: variadas
+                'baixa': { min: 8.1, max: 25.7 }    // Prioridade baixa: mais distantes
+            };
+            
+            if (requestQueue.length < 12) {
+                const prioridade = prioridades[Math.floor(Math.random() * prioridades.length)];
+                const range = distanceRanges[prioridade];
+                const distancia = (Math.random() * (range.max - range.min) + range.min).toFixed(1);
+                
+                const newRequest = {
+                    id: `REQ-${String(Date.now()).slice(-3)}`,
+                    cliente: clientes[Math.floor(Math.random() * clientes.length)],
+                    destino: destinos[Math.floor(Math.random() * destinos.length)],
+                    peso: (Math.random() * 4.5 + 0.5).toFixed(1) + 'kg',
+                    prioridade: prioridade,
+                    distancia: distancia,
+                    selected: false
+                };
+                
+                requestQueue.unshift(newRequest);
+                renderQueue();
+                
+                // Log com mais detalhes
+                addLog(`📋 Nova solicitação: ${newRequest.cliente} (${newRequest.distancia}km)`, 'info');
+                
+                // Log especial para prioridades altas
+                if (prioridade === 'alta') {
+                    addLog(`🚨 Solicitação PRIORITÁRIA recebida - ${newRequest.id}`, 'warning');
+                }
+            }
+        }
+
+        /**
+         * ATUALIZAR GRÁFICO
+         */
+        function updateChartData() {
+            if (deliveryChart) {
+                const data = deliveryChart.data.datasets[0].data;
+                data[0] += Math.floor(Math.random() * 3);
+                data[2] = Math.max(0, data[2] + Math.floor(Math.random() * 3) - 1);
+                deliveryChart.update('none');
+            }
+        }
+
+        /**
+         * SELECIONAR SOLICITAÇÃO
+         */
+        function selectRequest(index) {
+            requestQueue.forEach(req => req.selected = false);
+            requestQueue[index].selected = true;
+            renderQueue();
+            addLog(`✅ Selecionado: ${requestQueue[index].id}`, 'info');
+        }
+
+        /**
+         * ENVIAR DRONE PARA SOLICITAÇÃO
+         */
+        function sendDroneToRequest(requestId, event) {
+            event.stopPropagation();
+            
+            const request = requestQueue.find(r => r.id === requestId);
+            const availableDrone = drones.find(d => d.disponivel);
+            
+            if (!availableDrone) {
+                addLog('❌ Nenhum drone disponível', 'error');
+                alert('⚠️ Nenhum drone disponível!');
+                return;
+            }
+            
+            if (!request) {
+                addLog('❌ Solicitação não encontrada', 'error');
+                return;
+            }
+            
+            sendDrone(availableDrone.id, request);
+        }
+
+        /**
+         * ENVIAR DRONE
+         */
+        function sendDrone(droneId, request) {
+            if (missionInProgress) {
+                addLog('⏳ Missão em andamento', 'warning');
+                return;
+            }
+            
+            const drone = drones.find(d => d.id === droneId);
+            
+            if (!drone || !drone.disponivel) {
+                addLog(`❌ Drone ${droneId} indisponível`, 'error');
+                return;
+            }
+            
+            missionInProgress = true;
+            
+            drone.status = 'voando';
+            drone.disponivel = false;
+            drone.localizacao = `→ ${request.destino}`;
+            drone.ultimaMissao = `${new Date().toLocaleTimeString()} - ${request.id}`;
+            
+            showProgress(drone, request);
+            
+            const requestIndex = requestQueue.findIndex(r => r.id === request.id);
+            if (requestIndex > -1) {
+                requestQueue.splice(requestIndex, 1);
+            }
+            
+            renderDronesTable();
+            renderQueue();
+            
+            addLog(`🚁 ${drone.nome} despachado`, 'success');
+        }
+
+        /**
+         * MOSTRAR PROGRESSO
+         */
+        function showProgress(drone, request) {
+            const progressContainer = document.getElementById('progressContainer');
+            const progressTitle = document.getElementById('progressTitle');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            progressContainer.style.display = 'block';
+            progressTitle.textContent = `${drone.nome} - ${request.id}`;
+            progressFill.style.width = '0%';
+            progressText.textContent = '🚀 Decolando...';
+            
+            // Calcular tempo baseado na distância com variação realística
+            const baseDistance = parseFloat(request.distancia);
+            const droneSpeed = 45 + Math.random() * 15; // 45-60 km/h velocidade variável
+            const realTimeMinutes = (baseDistance / droneSpeed) * 60; // Tempo real em minutos
+            const simulationDuration = Math.max(8000, realTimeMinutes * 200); // Mínimo 8s, máximo realístico
+            
+            // Adicionar fatores que afetam o tempo
+            let timeMultiplier = 1;
+            
+            // Condições climáticas simuladas
+            const weatherCondition = Math.random();
+            if (weatherCondition < 0.1) {
+                timeMultiplier *= 1.8;
+                addLog(`🌧️ Condições climáticas adversas - tempo estimado aumentado`, 'warning');
+            } else if (weatherCondition < 0.2) {
+                timeMultiplier *= 1.3;
+                addLog(`💨 Vento forte detectado - ajustando rota`, 'info');
+            }
+            
+            // Tráfego aéreo
+            const airTraffic = Math.random();
+            if (airTraffic < 0.15) {
+                timeMultiplier *= 1.4;
+                addLog(`✈️ Tráfego aéreo intenso - aguardando liberação`, 'warning');
+            }
+            
+            // Prioridade da entrega afeta velocidade
+            switch(request.prioridade) {
+                case 'alta':
+                    timeMultiplier *= 0.8; // 20% mais rápido
+                    addLog(`⚡ Missão prioritária - velocidade aumentada`, 'info');
+                    break;
+                case 'baixa':
+                    timeMultiplier *= 1.2; // 20% mais lento
+                    break;
+            }
+            
+            const finalDuration = simulationDuration * timeMultiplier;
+            const interval = finalDuration / 100;
+            
+            // Log da estimativa
+            const estimatedMinutes = Math.ceil(finalDuration / 60000);
+            addLog(`🕒 Tempo estimado: ${estimatedMinutes} min (${baseDistance}km a ${droneSpeed.toFixed(0)}km/h)`, 'info');
+            
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 1;
+                progressFill.style.width = progress + '%';
+                
+                // Fases da missão com mais detalhes
+                if (progress < 5) {
+                    progressText.textContent = '🚀 Decolando da base...';
+                } else if (progress < 15) {
+                    progressText.textContent = '📡 Estabelecendo comunicação...';
+                } else if (progress < 25) {
+                    progressText.textContent = '🗺️ Calculando rota otimizada...';
+                } else if (progress < 45) {
+                    progressText.textContent = '✈️ Voando em velocidade de cruzeiro...';
+                } else if (progress < 65) {
+                    progressText.textContent = `🎯 Percorridos ${Math.floor(baseDistance * (progress/100))}km de ${baseDistance}km...`;
+                } else if (progress < 80) {
+                    progressText.textContent = '📍 Aproximando-se do destino...';
+                } else if (progress < 90) {
+                    progressText.textContent = '🛬 Iniciando procedimento de pouso...';
+                } else if (progress < 95) {
+                    progressText.textContent = '📦 Realizando entrega segura...';
+                } else {
+                    progressText.textContent = '🔄 Retornando à base...';
+                }
+                
+                // Adicionar logs de progresso em marcos específicos
+                if (progress === 25) {
+                    addLog(`🛰️ ${drone.nome} - 25% da rota concluída`, 'info');
+                } else if (progress === 50) {
+                    addLog(`🎯 ${drone.nome} - meio caminho percorrido`, 'info');
+                } else if (progress === 75) {
+                    addLog(`📍 ${drone.nome} - aproximando-se do destino`, 'info');
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    completeMission(drone, request, baseDistance);
+                    
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        missionInProgress = false;
+                    }, 2000);
+                }
+            }, interval);
+        }
+
+        /**
+         * COMPLETAR MISSÃO
+         */
+        function completeMission(drone, request, distance) {
+            // Calcular consumo de bateria baseado na distância real e condições
+            const baseConsumption = distance * 3.5; // 3.5% por km base
+            const randomVariation = Math.random() * 10; // Variação aleatória
+            const batteryUsed = Math.min(45, baseConsumption + randomVariation);
+            
+            drone.bateria = Math.max(10, drone.bateria - batteryUsed);
+            
+            // Determinar próximo status do drone
+            if (drone.bateria < 25) {
+                drone.status = 'carregando';
+                drone.disponivel = false;
+                drone.localizacao = 'Estação de Recarga';
+                addLog(`🔋 ${drone.nome} bateria baixa (${Math.floor(drone.bateria)}%) - recarga automática`, 'warning');
+            } else if (drone.bateria < 40 && Math.random() < 0.3) {
+                drone.status = 'carregando';
+                drone.disponivel = false;
+                drone.localizacao = 'Recarga Preventiva';
+                addLog(`🔋 ${drone.nome} recarga preventiva iniciada`, 'info');
+            } else {
+                drone.status = 'disponivel';
+                drone.disponivel = true;
+                drone.localizacao = 'Base Alpha - Standby';
+                addLog(`✅ ${drone.nome} disponível para nova missão`, 'success');
+            }
+            
+            // Atualizar último status
+            const missionTime = Math.floor(Date.now() / 1000 / 60) % 1440; // minutos desde meia-noite
+            const hours = Math.floor(missionTime / 60);
+            const minutes = missionTime % 60;
+            drone.ultimaMissao = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} - Entrega Concluída`;
+            
+            // Atualizar gráfico de entregas
+            if (deliveryChart) {
+                deliveryChart.data.datasets[0].data[0]++; // Concluídas
+                if (deliveryChart.data.datasets[0].data[2] > 0) {
+                    deliveryChart.data.datasets[0].data[2]--; // Pendentes
+                }
+                
+                // Chance de falha (muito baixa)
+                if (Math.random() < 0.02) {
+                    deliveryChart.data.datasets[0].data[3]++; // Canceladas
+                    addLog(`⚠️ Entrega ${request.id} teve complicações menores`, 'warning');
+                }
+                
+                deliveryChart.update('none');
+            }
+            
+            // Atualizar interface
+            renderDronesTable();
+            
+            // Logs finais detalhados
+            const successMessages = [
+                `📦 Entrega ${request.id} realizada com sucesso`,
+                `🎯 ${request.cliente} - pacote entregue`,
+                `⭐ Missão concluída - consumo: ${batteryUsed.toFixed(1)}% bateria`,
+                `📊 Total de entregas hoje aumentou para ${deliveryChart.data.datasets[0].data[0]}`
+            ];
+            
+            successMessages.forEach((msg, index) => {
+                setTimeout(() => addLog(msg, 'success'), index * 500);
+            });
+        }
+
+        /**
+         * OPÇÕES DO DRONE
+         */
+        function showDroneOptions(droneId) {
+            const drone = drones.find(d => d.id === droneId);
+            
+            if (!drone.disponivel) {
+                addLog(`⚠️ ${drone.nome} indisponível`, 'warning');
+                return;
+            }
+            
+            const selectedRequest = requestQueue.find(r => r.selected) || requestQueue[0];
+            
+            if (selectedRequest) {
+                sendDrone(droneId, selectedRequest);
+            } else {
+                addLog('📋 Nenhuma solicitação na fila', 'warning');
+            }
+        }
+
+        /**
+         * ENVIAR DRONE GLOBAL
+         */
+        function handleSendDroneGlobal() {
+            const availableDrone = drones.find(d => d.disponivel);
+            
+            if (!availableDrone) {
+                addLog('❌ Nenhum drone disponível', 'error');
+                alert('⚠️ Nenhum drone disponível!');
+                return;
+            }
+            
+            if (requestQueue.length === 0) {
+                addLog('❌ Fila vazia', 'error');
+                alert('📋 Nenhuma solicitação!');
+                return;
+            }
+            
+            const priorityOrder = { 'alta': 3, 'media': 2, 'baixa': 1 };
+            const priorityRequest = requestQueue.reduce((prev, current) => {
+                return priorityOrder[prev.prioridade] > priorityOrder[current.prioridade] ? prev : current;
+            });
+            
+            sendDrone(availableDrone.id, priorityRequest);
+        }
+
+        /**
+         * SISTEMA DE LOGS
+         */
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            
+            const typeIcons = {
+                'success': '✅',
+                'error': '❌',
+                'warning': '⚠️',
+                'info': 'ℹ️'
+            };
+            
+            const typeColors = {
+                'success': '#10b981',
+                'error': '#ef4444',
+                'warning': '#f59e0b',
+                'info': '#3b82f6'
+            };
+            
+            logEntry.innerHTML = `
+                <span class="log-timestamp">[${timestamp}]</span>
+                <span style="color: ${typeColors[type]}; margin: 0 0.3rem;">${typeIcons[type]}</span>
+                <span style="color: ${type === 'error' ? '#fca5a5' : 'var(--branco)'};">${message}</span>
+            `;
+            
+            logContainer.insertBefore(logEntry, logContainer.firstChild);
+            
+            const entries = logContainer.querySelectorAll('.log-entry');
+            if (entries.length > 50) {
+                logContainer.removeChild(entries[entries.length - 1]);
+            }
+        }
+
+        /**
+         * FUNÇÕES AUXILIARES
+         */
+        function getStatusText(status) {
+            const statusMap = {
+                'disponivel': 'Disponível',
+                'voando': 'Em Missão',
+                'carregando': 'Carregando',
+                'manutencao': 'Manutenção'
+            };
+            return statusMap[status] || status;
+        }
+
+        function getBatteryClass(level) {
+            if (level >= 70) return 'high';
+            if (level >= 30) return 'medium';
+            return 'low';
+        }
+
+        /**
+         * TOGGLE SIDEBAR MOBILE
+         */
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        /**
+         * LOGOUT
+         */
+        function logout() {
+            if (confirm('🚪 Confirmar logout?')) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('userName');
+                window.location.href = 'login.html';
+            }
+        }
+
+        /**
+         * EVENT LISTENERS
+         */
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'd') {
+                e.preventDefault();
+                handleSendDroneGlobal();
+            }
+        });
+
+        // Monitorar visibilidade
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                addLog('⏸️ Sistema pausado', 'info');
+            } else {
+                addLog('▶️ Sistema reativado', 'info');
+                renderDronesTable();
+                renderQueue();
+            }
+        });
+    </script>
+</body>
+</html>
