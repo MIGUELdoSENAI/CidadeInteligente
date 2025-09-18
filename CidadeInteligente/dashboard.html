@@ -7,149 +7,125 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         /* ==========================================
-           DASHBOARD SMARTCITY - DESIGN PROFISSIONAL
+           DASHBOARD SMARTCITY - DESIGN UNIFICADO
            Cores: Verde predominante com Azul
            ========================================== */
 
-        /* === RESET E CONFIGURAÇÕES GLOBAIS === */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* === PALETA DE CORES - VERDE PREDOMINANTE === */
         :root {
-            /* Tons de Verde Predominantes */
-            --verde-primario: #059669;       /* Verde escuro profissional */
-            --verde-secundario: #10b981;     /* Verde médio */
-            --verde-accent: #34d399;         /* Verde vibrante */
-            --verde-light: #6ee7b7;          /* Verde claro */
-            --verde-ultra-light: #d1fae5;    /* Verde muito claro */
-            --verde-neon: #00ff88;           /* Verde neon para destaques */
-            --verde-dark: #064e3b;           /* Verde muito escuro */
+            /* Verde predominante */
+            --verde-primario: #059669;
+            --verde-secundario: #10b981;
+            --verde-accent: #34d399;
+            --verde-light: #6ee7b7;
+            --verde-dark: #064e3b;
+            --verde-neon: #00ff88;
 
-            /* Tons de Azul Complementares */
-            --azul-primario: #0f172a;        /* Azul escuro profundo */
-            --azul-secundario: #1e293b;      /* Azul médio escuro */
-            --azul-medio: #334155;           /* Azul médio */
-            --azul-claro: #475569;           /* Azul claro */
-            --azul-accent: #3b82f6;          /* Azul vibrante */
-            --azul-light: #60a5fa;           /* Azul suave */
-            --azul-ultra-light: #dbeafe;     /* Azul muito claro */
-            --azul-dark: #0c1220;            /* Azul muito escuro */
+            /* Azul complementar */
+            --azul-primario: #0f172a;
+            --azul-secundario: #1e293b;
+            --azul-accent: #3b82f6;
+            --azul-light: #60a5fa;
+            --azul-dark: #0c1220;
 
-            /* Tons Neutros */
-            --branco: #f8fafc;               /* Branco mais suave */
-            --branco-off: #f1f5f9;           /* Off-white */
-            --cinza-light: #e2e8f0;          /* Cinza claro */
-            --cinza-medio: #94a3b8;          /* Cinza médio */
-            --cinza-dark: #64748b;           /* Cinza escuro */
+            /* Neutros */
+            --branco: #f8fafc;
+            --cinza-light: #e2e8f0;
+            --cinza-medio: #94a3b8;
+            --cinza-dark: #64748b;
 
-            /* Gradientes Modernos */
+            /* Gradientes */
             --gradiente-verde: linear-gradient(135deg, var(--verde-dark) 0%, var(--verde-secundario) 100%);
             --gradiente-azul: linear-gradient(135deg, var(--azul-primario) 0%, var(--azul-accent) 100%);
             --gradiente-mixed: linear-gradient(135deg, var(--verde-secundario) 0%, var(--azul-accent) 100%);
             --gradiente-hero: linear-gradient(135deg, var(--verde-dark) 0%, var(--verde-primario) 50%, var(--azul-dark) 100%);
             --gradiente-card: linear-gradient(135deg, rgba(6, 78, 59, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
 
-            /* Sombras Coloridas */
-            --sombra-verde: 0 10px 25px rgba(16, 185, 129, 0.2);
-            --sombra-azul: 0 10px 25px rgba(59, 130, 246, 0.2);
-            --sombra-mixed: 0 15px 35px rgba(16, 185, 129, 0.15), 0 5px 15px rgba(59, 130, 246, 0.15);
-            --sombra-forte: 0 20px 40px rgba(6, 78, 59, 0.3);
+            /* Sombras */
+            --sombra-verde: 0 8px 25px rgba(16, 185, 129, 0.15);
+            --sombra-azul: 0 8px 25px rgba(59, 130, 246, 0.15);
+            --sombra-mixed: 0 10px 30px rgba(16, 185, 129, 0.1), 0 4px 15px rgba(59, 130, 246, 0.1);
+            --sombra-forte: 0 15px 35px rgba(6, 78, 59, 0.2);
 
-            /* Transições Suaves */
+            /* Transições */
             --transicao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --transicao-lenta: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
             /* Bordas */
+            --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 16px;
             --radius-xl: 20px;
         }
 
-        /* === TIPOGRAFIA MODERNA === */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background: var(--gradiente-hero);
             color: var(--branco);
             line-height: 1.6;
             min-height: 100vh;
+            font-size: 14px;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* === TOPBAR MODERNO === */
+        /* === TOPBAR === */
         .topbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 70px;
+            height: 60px;
             background: var(--gradiente-verde);
             z-index: 1001;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 2rem;
+            padding: 0 1.5rem;
             box-shadow: var(--sombra-verde);
             border-bottom: 2px solid var(--verde-accent);
         }
 
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
         .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
+            font-size: 1.4rem;
+            font-weight: 700;
             color: var(--branco);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
         .system-status {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.8rem;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: var(--verde-neon);
             border-radius: 50%;
             animation: pulse 2s infinite;
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-info {
-            color: var(--branco);
-            font-weight: 600;
-            opacity: 0.9;
         }
 
         .logout-topbar {
             background: rgba(239, 68, 68, 0.2);
             color: #fca5a5;
             border: 1px solid #ef4444;
-            padding: 0.8rem 1.5rem;
-            border-radius: var(--radius-md);
+            padding: 0.6rem 1rem;
+            border-radius: var(--radius-sm);
             cursor: pointer;
             font-weight: 600;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             transition: var(--transicao);
@@ -157,16 +133,16 @@
 
         .logout-topbar:hover {
             background: rgba(239, 68, 68, 0.3);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
 
-        /* === SIDEBAR MODERNA === */
+        /* === SIDEBAR === */
         .sidebar {
             position: fixed;
             left: 0;
-            top: 70px;
-            width: 280px;
-            height: calc(100vh - 70px);
+            top: 60px;
+            width: 250px;
+            height: calc(100vh - 60px);
             background: var(--gradiente-azul);
             z-index: 1000;
             transition: var(--transicao);
@@ -174,30 +150,21 @@
             border-right: 2px solid var(--verde-accent);
         }
 
-        .sidebar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 3px;
-            height: 100%;
-            background: var(--gradiente-verde);
-        }
-
         .sidebar-nav {
-            padding: 2rem 1rem;
+            padding: 1.5rem 0.8rem;
         }
 
         .nav-item {
             display: flex;
             align-items: center;
-            padding: 1rem 1.5rem;
+            padding: 0.8rem 1rem;
             color: var(--branco);
             text-decoration: none;
             transition: var(--transicao);
-            border-radius: var(--radius-md);
-            margin-bottom: 0.5rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.3rem;
             font-weight: 500;
+            font-size: 0.9rem;
             position: relative;
             overflow: hidden;
         }
@@ -220,35 +187,33 @@
         }
 
         .nav-item:hover {
-            transform: translateX(8px);
-            box-shadow: var(--sombra-verde);
+            transform: translateX(5px);
         }
 
         .nav-item.active {
             background: rgba(16, 185, 129, 0.2);
-            border-left: 4px solid var(--verde-accent);
+            border-left: 3px solid var(--verde-accent);
             color: var(--verde-accent);
-            box-shadow: var(--sombra-verde);
         }
 
         .nav-item i {
-            margin-right: 1rem;
-            font-size: 1.2rem;
+            margin-right: 0.8rem;
+            font-size: 1rem;
         }
 
         /* === MAIN CONTENT === */
         .main-content {
-            margin-left: 280px;
-            margin-top: 70px;
-            padding: 2rem;
-            min-height: calc(100vh - 70px);
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 1.5rem;
+            min-height: calc(100vh - 60px);
         }
 
         .header {
             background: var(--gradiente-card);
-            padding: 2rem;
-            border-radius: var(--radius-xl);
-            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 1.5rem;
             border: 1px solid rgba(52, 211, 153, 0.2);
             box-shadow: var(--sombra-mixed);
             backdrop-filter: blur(20px);
@@ -256,35 +221,33 @@
         }
 
         .header h1 {
-            font-size: 3rem;
-            font-weight: 800;
+            font-size: 2rem;
+            font-weight: 700;
             background: var(--gradiente-mixed);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .header p {
             color: var(--branco);
             opacity: 0.9;
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
+            font-size: 1rem;
         }
 
         /* === OVERVIEW CARDS === */
         .overview-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .overview-card {
             background: var(--gradiente-card);
             border-radius: var(--radius-lg);
-            padding: 2.5rem;
+            padding: 2rem;
             border: 1px solid rgba(52, 211, 153, 0.2);
             box-shadow: var(--sombra-mixed);
             transition: var(--transicao);
@@ -300,23 +263,23 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
+            height: 3px;
             background: var(--gradiente-mixed);
         }
 
         .overview-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-5px);
             box-shadow: var(--sombra-forte);
         }
 
         .card-icon {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
             display: block;
         }
 
         .card-title {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--verde-accent);
             margin-bottom: 0.5rem;
@@ -325,7 +288,7 @@
         }
 
         .card-value {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 800;
             color: var(--branco);
             margin-bottom: 0.5rem;
@@ -334,16 +297,16 @@
         .card-subtitle {
             color: var(--branco);
             opacity: 0.8;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .card-trend {
             position: absolute;
             top: 1rem;
-            right: 1.5rem;
-            padding: 0.3rem 0.8rem;
-            border-radius: var(--radius-md);
-            font-size: 0.8rem;
+            right: 1rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
             font-weight: 600;
         }
 
@@ -359,18 +322,53 @@
             border: 1px solid #f59e0b;
         }
 
+        .trend-critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+        }
+
+        /* === SYSTEM METRICS === */
+        .system-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-item {
+            background: rgba(6, 78, 59, 0.3);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--verde-accent);
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--verde-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--branco);
+            opacity: 0.9;
+            font-size: 0.8rem;
+        }
+
         /* === DASHBOARD GRID === */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
         .card {
             background: var(--gradiente-card);
             border-radius: var(--radius-lg);
-            padding: 2rem;
+            padding: 1.5rem;
             border: 1px solid rgba(59, 130, 246, 0.2);
             box-shadow: var(--sombra-mixed);
             transition: var(--transicao);
@@ -390,14 +388,14 @@
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             box-shadow: var(--sombra-forte);
         }
 
         .card h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
             background: var(--gradiente-mixed);
             background-clip: text;
             -webkit-background-clip: text;
@@ -406,31 +404,31 @@
 
         /* === CHART CONTAINER === */
         .chart-container {
-            height: 350px;
+            height: 300px;
             position: relative;
         }
 
         /* === LOG CONTAINER === */
         .log-container {
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
             background: var(--azul-primario);
             border: 1px solid var(--azul-accent);
-            border-radius: var(--radius-md);
-            padding: 1.5rem;
+            border-radius: var(--radius-sm);
+            padding: 1rem;
             font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
         }
 
         .log-entry {
-            margin-bottom: 0.8rem;
-            padding: 0.5rem 0;
+            margin-bottom: 0.5rem;
+            padding: 0.3rem 0;
             border-bottom: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .log-timestamp {
             color: var(--azul-light);
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             opacity: 0.8;
         }
 
@@ -438,23 +436,23 @@
         .action-buttons {
             display: flex;
             gap: 1rem;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             flex-wrap: wrap;
         }
 
         .action-btn {
-            padding: 1rem 2rem;
+            padding: 0.8rem 1.5rem;
             border: none;
             border-radius: var(--radius-md);
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             transition: var(--transicao);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 0.5rem;
         }
 
         .btn-primary {
@@ -464,8 +462,8 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
         }
 
         .btn-secondary {
@@ -475,37 +473,8 @@
         }
 
         .btn-secondary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
-        }
-
-        /* === SYSTEM METRICS === */
-        .system-metrics {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .metric-item {
-            background: rgba(6, 78, 59, 0.3);
-            padding: 1.5rem;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--verde-accent);
-            text-align: center;
-        }
-
-        .metric-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--verde-accent);
-            margin-bottom: 0.5rem;
-        }
-
-        .metric-label {
-            color: var(--branco);
-            opacity: 0.9;
-            font-size: 0.9rem;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
         }
 
         /* === RESPONSIVIDADE === */
@@ -527,8 +496,8 @@
             .main-content {
                 margin-left: 0;
             }
-
-            .topbar-left .system-status {
+            
+            .system-status {
                 display: none;
             }
         }
@@ -536,51 +505,44 @@
         @media (max-width: 768px) {
             .main-content {
                 padding: 1rem;
+                margin-top: 60px;
             }
             
             .header {
-                padding: 1.5rem;
+                padding: 1rem;
             }
             
             .header h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
+            }
+            
+            .card {
+                padding: 1rem;
             }
             
             .overview-grid {
                 grid-template-columns: 1fr;
             }
 
-            .card {
-                padding: 1.5rem;
-            }
-
             .action-buttons {
                 flex-direction: column;
-            }
-
-            .topbar {
-                padding: 0 1rem;
-            }
-
-            .user-info {
-                display: none;
             }
         }
 
         /* === ANIMAÇÕES === */
         @keyframes pulse {
             0%, 100% { 
-                box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4);
+                box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.3);
             }
             50% { 
-                box-shadow: 0 0 0 10px rgba(0, 255, 136, 0);
+                box-shadow: 0 0 0 8px rgba(0, 255, 136, 0);
             }
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -589,12 +551,12 @@
         }
 
         .animate-slide-in {
-            animation: slideIn 0.6s ease-out;
+            animation: slideIn 0.4s ease-out;
         }
 
         /* === SCROLL CUSTOMIZADO === */
         ::-webkit-scrollbar {
-            width: 10px;
+            width: 8px;
         }
 
         ::-webkit-scrollbar-track {
@@ -603,40 +565,52 @@
 
         ::-webkit-scrollbar-thumb {
             background: var(--gradiente-verde);
-            border-radius: 5px;
+            border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
             background: var(--verde-accent);
+        }
+
+        /* === MENU MOBILE === */
+        .menu-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--branco);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 1024px) {
+            .menu-toggle {
+                display: block;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Topbar -->
     <header class="topbar">
-        <div class="topbar-left">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
             <div class="logo">🌟 SmartCity Manager</div>
             <div class="system-status">
                 <span class="status-dot"></span>
-                <span>Sistema Online</span>
+                <span>Online</span>
             </div>
         </div>
-        <div class="topbar-right">
-            <span class="user-info">Administrador Geral</span>
-            <button class="logout-topbar" onclick="logout()">
-                🚪 Logout
-            </button>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <span style="color: var(--branco); opacity: 0.9; font-size: 0.8rem;">Admin</span>
+            <button class="logout-topbar" onclick="logout()">Sair</button>
         </div>
     </header>
 
-    <!-- Sidebar Navigation -->
+    <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-nav">
             <a href="dashboard.html" class="nav-item active">
-                <i>📊</i> Visão Geral
-            </a>
-            <a href="drones.html" class="nav-item">
-                <i>🚁</i> Drones
+                <i>📊</i> Dashboard
             </a>
             <a href="bueiros.html" class="nav-item">
                 <i>🕳️</i> Bueiros
@@ -652,19 +626,11 @@
         <!-- Header -->
         <header class="header">
             <h1>🌟 Centro de Comando SmartCity</h1>
-            <p>Monitore e controle todos os sistemas da cidade inteligente em um painel centralizado e intuitivo</p>
+            <p>Monitore e controle todos os sistemas da cidade inteligente em um painel centralizado</p>
         </header>
 
         <!-- Overview Cards -->
         <section class="overview-grid">
-            <div class="overview-card" onclick="navigateTo('drones.html')">
-                <span class="card-trend trend-up">+12%</span>
-                <span class="card-icon">🚁</span>
-                <div class="card-title">Entregas Hoje</div>
-                <div class="card-value" id="deliveriesCount">127</div>
-                <div class="card-subtitle">6 drones ativos | 98% eficiência</div>
-            </div>
-
             <div class="overview-card" onclick="navigateTo('bueiros.html')">
                 <span class="card-trend trend-warning">Atenção</span>
                 <span class="card-icon">🕳️</span>
@@ -680,25 +646,33 @@
                 <div class="card-value" id="energyGenerated">2,840</div>
                 <div class="card-subtitle">kWh hoje | 94% capacidade utilizada</div>
             </div>
+
+            <div class="overview-card">
+                <span class="card-trend trend-up">+5%</span>
+                <span class="card-icon">🌡️</span>
+                <div class="card-title">Sensores Ativos</div>
+                <div class="card-value" id="activeSensors">1,847</div>
+                <div class="card-subtitle">Temperatura, umidade e qualidade do ar</div>
+            </div>
         </section>
 
         <!-- System Metrics -->
         <section class="system-metrics">
             <div class="metric-item">
-                <div class="metric-value" id="activeDevices">1,847</div>
-                <div class="metric-label">Dispositivos Ativos</div>
+                <div class="metric-value" id="systemUptime">99.8%</div>
+                <div class="metric-label">Uptime do Sistema</div>
             </div>
             <div class="metric-item">
                 <div class="metric-value" id="dataProcessed">847</div>
                 <div class="metric-label">GB Processados</div>
             </div>
             <div class="metric-item">
-                <div class="metric-value" id="systemUptime">99.8%</div>
-                <div class="metric-label">Uptime do Sistema</div>
-            </div>
-            <div class="metric-item">
                 <div class="metric-value" id="responseTime">142</div>
                 <div class="metric-label">ms Tempo Resposta</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value" id="alerts">3</div>
+                <div class="metric-label">Alertas Ativos</div>
             </div>
         </section>
 
@@ -724,10 +698,10 @@
         <!-- Action Buttons -->
         <div class="action-buttons">
             <button class="action-btn btn-primary" onclick="handleSync()">
-                <span>🔄</span> Sincronizar Todos os Sistemas
+                <span>🔄</span> Sincronizar Sistemas
             </button>
             <button class="action-btn btn-secondary" onclick="openQueue()">
-                <span>📋</span> Abrir Fila de Solicitações
+                <span>📋</span> Fila de Solicitações
             </button>
             <button class="action-btn btn-secondary" onclick="generateReport()">
                 <span>📊</span> Gerar Relatório
@@ -736,46 +710,47 @@
     </main>
 
     <script>
-        /**
-         * DASHBOARD SMARTCITY MANAGER
-         * Sistema centralizado para monitoramento da cidade inteligente
-         */
-
         // === VARIÁVEIS GLOBAIS ===
         let systemChart;
-        let realTimeInterval;
         let systemMetrics = {
-            deliveries: 127,
             criticalDrains: 8,
             energyGenerated: 2840,
-            activeDevices: 1847,
-            dataProcessed: 847,
+            activeSensors: 1847,
             uptime: 99.8,
-            responseTime: 142
+            dataProcessed: 847,
+            responseTime: 142,
+            alerts: 3
         };
+
+        /**
+         * FUNÇÃO DE AUTENTICAÇÃO
+         */
+        function checkAuthentication() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userRole', 'admin');
+                localStorage.setItem('userName', 'Admin');
+            }
+        }
 
         /**
          * INICIALIZAÇÃO DO DASHBOARD
          */
         document.addEventListener('DOMContentLoaded', function() {
-            // Verificar autenticação
             checkAuthentication();
-            
-            // Inicializar dashboard
             initDashboard();
-            
-            // Inicializar gráfico
             initializeChart();
             
-            // Iniciar atualizações em tempo real
-            startRealTimeUpdates();
+            setTimeout(() => {
+                startRealTimeUpdates();
+            }, 100);
             
-            // Log de inicialização
-            addLog('🚀 Dashboard SmartCity inicializado com sucesso', 'success');
+            addLog('🚀 Dashboard SmartCity inicializado', 'success');
             addLog('📊 Conectando com sistemas da cidade...', 'info');
-            addLog('🌐 Todos os sistemas online e operacionais', 'success');
+            addLog('🌐 Todos os sistemas online', 'success');
             
-            // Animações de entrada
+            // Animações
             document.querySelectorAll('.overview-card, .card').forEach((element, index) => {
                 setTimeout(() => {
                     element.classList.add('animate-slide-in');
@@ -784,45 +759,35 @@
         });
 
         /**
-         * VERIFICAR AUTENTICAÇÃO
-         */
-        /**
          * INICIALIZAR DASHBOARD
          */
         function initDashboard() {
-            // Atualizar cards principais
             updateOverviewCards();
-            
-            // Atualizar métricas do sistema
             updateSystemMetrics();
-            
-            // Carregar logs iniciais
             loadInitialLogs();
-            
-            addLog('✅ Interface do dashboard carregada', 'success');
         }
 
         /**
          * ATUALIZAR CARDS PRINCIPAIS
          */
         function updateOverviewCards() {
-            document.getElementById('deliveriesCount').textContent = systemMetrics.deliveries;
             document.getElementById('criticalDrains').textContent = systemMetrics.criticalDrains + '%';
             document.getElementById('energyGenerated').textContent = systemMetrics.energyGenerated.toLocaleString();
+            document.getElementById('activeSensors').textContent = systemMetrics.activeSensors.toLocaleString();
         }
 
         /**
          * ATUALIZAR MÉTRICAS DO SISTEMA
          */
         function updateSystemMetrics() {
-            document.getElementById('activeDevices').textContent = systemMetrics.activeDevices.toLocaleString();
-            document.getElementById('dataProcessed').textContent = systemMetrics.dataProcessed;
             document.getElementById('systemUptime').textContent = systemMetrics.uptime + '%';
+            document.getElementById('dataProcessed').textContent = systemMetrics.dataProcessed;
             document.getElementById('responseTime').textContent = systemMetrics.responseTime;
+            document.getElementById('alerts').textContent = systemMetrics.alerts;
         }
 
         /**
-         * INICIALIZAR GRÁFICO DO SISTEMA
+         * INICIALIZAR GRÁFICO
          */
         function initializeChart() {
             const ctx = document.getElementById('systemChart').getContext('2d');
@@ -833,16 +798,7 @@
                     labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
                     datasets: [
                         {
-                            label: 'Performance Drones',
-                            data: [85, 87, 92, 95, 97, 94, 96],
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            borderWidth: 3,
-                            fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Status Bueiros',
+                            label: 'Bueiros',
                             data: [78, 82, 85, 88, 91, 89, 92],
                             borderColor: '#3b82f6',
                             backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -851,10 +807,19 @@
                             tension: 0.4
                         },
                         {
-                            label: 'Geração Energia',
+                            label: 'Energia',
                             data: [65, 70, 85, 95, 92, 88, 91],
                             borderColor: '#f59e0b',
                             backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Sensores',
+                            data: [85, 87, 92, 95, 97, 94, 96],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
                             borderWidth: 3,
                             fill: true,
                             tension: 0.4
@@ -869,11 +834,8 @@
                             position: 'top',
                             labels: {
                                 color: '#f8fafc',
-                                font: {
-                                    size: 12,
-                                    weight: '600'
-                                },
-                                padding: 20
+                                font: { size: 12, weight: '600' },
+                                padding: 15
                             }
                         },
                         tooltip: {
@@ -888,33 +850,16 @@
                         y: {
                             beginAtZero: true,
                             max: 100,
-                            grid: {
-                                color: 'rgba(52, 211, 153, 0.1)'
-                            },
-                            ticks: {
-                                color: '#94a3b8',
-                                font: {
-                                    size: 11
-                                }
-                            }
+                            grid: { color: 'rgba(52, 211, 153, 0.1)' },
+                            ticks: { color: '#94a3b8', font: { size: 11 } }
                         },
                         x: {
-                            grid: {
-                                color: 'rgba(52, 211, 153, 0.1)'
-                            },
-                            ticks: {
-                                color: '#94a3b8',
-                                font: {
-                                    size: 11
-                                }
-                            }
+                            grid: { color: 'rgba(52, 211, 153, 0.1)' },
+                            ticks: { color: '#94a3b8', font: { size: 11 } }
                         }
                     },
                     elements: {
-                        point: {
-                            radius: 5,
-                            hoverRadius: 8
-                        }
+                        point: { radius: 4, hoverRadius: 6 }
                     }
                 }
             });
@@ -925,13 +870,13 @@
          */
         function loadInitialLogs() {
             const initialLogs = [
-                { message: '🔋 Sistema de energia solar operando em 94% da capacidade', type: 'success' },
-                { message: '🚁 6 drones ativos realizando entregas programadas', type: 'info' },
-                { message: '🕳️ Verificação automática de 1.240 bueiros concluída', type: 'info' },
-                { message: '⚡ Pico de consumo energético registrado às 18:30', type: 'warning' },
-                { message: '📊 Backup dos dados do sistema realizado com sucesso', type: 'success' },
-                { message: '🌡️ Sensores de temperatura reportam condições normais', type: 'info' },
-                { message: '🔄 Sincronização com servidores centrais ativa', type: 'success' }
+                { message: '🔋 Sistema energia operando 94% capacidade', type: 'success' },
+                { message: '🕳️ Verificação 1.240 bueiros concluída', type: 'info' },
+                { message: '⚡ Pico consumo registrado às 18:30', type: 'warning' },
+                { message: '📊 Backup dados realizado com sucesso', type: 'success' },
+                { message: '🌡️ Sensores temperatura normais', type: 'info' },
+                { message: '🔄 Sincronização servidores ativa', type: 'success' },
+                { message: '🚨 3 bueiros necessitam atenção setor norte', type: 'warning' }
             ];
 
             initialLogs.forEach(log => {
@@ -943,51 +888,38 @@
          * INICIAR ATUALIZAÇÕES EM TEMPO REAL
          */
         function startRealTimeUpdates() {
-            // Atualizar métricas a cada 10 segundos
             setInterval(simulateOverviewData, 10000);
-            
-            // Adicionar logs aleatórios a cada 15 segundos
             setInterval(addRandomLog, 15000);
-            
-            // Atualizar gráfico a cada 30 segundos
             setInterval(updateChartData, 30000);
             
-            addLog('🔄 Monitoramento em tempo real ativo', 'success');
+            addLog('🔄 Monitoramento tempo real ativo', 'success');
         }
 
         /**
          * SIMULAR DADOS DO OVERVIEW
          */
         function simulateOverviewData() {
-            // Entregas
-            const deliveryChange = Math.floor(Math.random() * 3) - 1;
-            systemMetrics.deliveries = Math.max(0, systemMetrics.deliveries + deliveryChange);
-            
-            // Bueiros críticos
             const drainChange = (Math.random() - 0.5) * 2;
             systemMetrics.criticalDrains = Math.max(0, Math.min(15, systemMetrics.criticalDrains + drainChange));
             
-            // Energia gerada
             const energyChange = Math.floor(Math.random() * 100) - 50;
             systemMetrics.energyGenerated = Math.max(2000, systemMetrics.energyGenerated + energyChange);
             
-            // Dispositivos ativos
-            const deviceChange = Math.floor(Math.random() * 10) - 5;
-            systemMetrics.activeDevices = Math.max(1800, systemMetrics.activeDevices + deviceChange);
+            const sensorChange = Math.floor(Math.random() * 10) - 5;
+            systemMetrics.activeSensors = Math.max(1800, systemMetrics.activeSensors + sensorChange);
             
-            // Dados processados
             const dataChange = Math.floor(Math.random() * 20) - 10;
             systemMetrics.dataProcessed = Math.max(800, systemMetrics.dataProcessed + dataChange);
             
-            // Tempo de resposta
             const responseChange = Math.floor(Math.random() * 20) - 10;
             systemMetrics.responseTime = Math.max(100, Math.min(200, systemMetrics.responseTime + responseChange));
             
-            // Uptime (pequenas flutuações)
             const uptimeChange = (Math.random() - 0.5) * 0.2;
             systemMetrics.uptime = Math.max(98.0, Math.min(100.0, systemMetrics.uptime + uptimeChange));
             
-            // Atualizar interface
+            const alertChange = Math.random() < 0.3 ? (Math.random() < 0.5 ? 1 : -1) : 0;
+            systemMetrics.alerts = Math.max(0, Math.min(10, systemMetrics.alerts + alertChange));
+            
             updateOverviewCards();
             updateSystemMetrics();
         }
@@ -997,16 +929,16 @@
          */
         function addRandomLog() {
             const randomLogs = [
-                { message: '📡 Conectividade de rede otimizada automaticamente', type: 'info' },
-                { message: '🔧 Manutenção preventiva agendada para drone DRN-003', type: 'warning' },
-                { message: '⚡ Transferência de energia excedente para rede urbana', type: 'success' },
-                { message: '🚨 Alerta de bueiro obstruído no setor 7 - drone despachado', type: 'warning' },
-                { message: '📦 Entrega prioritária concluída em 4.2km - tempo recorde', type: 'success' },
-                { message: '🌐 Atualização de firmware aplicada em 47 dispositivos', type: 'info' },
-                { message: '💾 Backup incremental dos dados críticos concluído', type: 'success' },
-                { message: '🔋 Bateria do drone DRN-005 carregada a 100%', type: 'success' },
-                { message: '📊 Relatório de performance gerado automaticamente', type: 'info' },
-                { message: '🌡️ Variação térmica detectada no painel solar setor B', type: 'warning' }
+                { message: '📡 Conectividade rede otimizada', type: 'info' },
+                { message: '🔧 Manutenção preventiva setor 3', type: 'warning' },
+                { message: '⚡ Transferência energia para rede urbana', type: 'success' },
+                { message: '🚨 Bueiro obstruído setor 7 - equipe despachada', type: 'warning' },
+                { message: '🌐 Firmware atualizado 47 dispositivos', type: 'info' },
+                { message: '💾 Backup incremental concluído', type: 'success' },
+                { message: '🔋 Capacidade energética otimizada', type: 'success' },
+                { message: '📊 Relatório performance gerado', type: 'info' },
+                { message: '🌡️ Variação térmica painel solar B', type: 'warning' },
+                { message: '🕳️ Limpeza automática bueiros ativada', type: 'info' }
             ];
             
             const randomLog = randomLogs[Math.floor(Math.random() * randomLogs.length)];
@@ -1017,17 +949,16 @@
          * ATUALIZAR DADOS DO GRÁFICO
          */
         function updateChartData() {
-            if (systemChart) {
+            if (systemChart && systemChart.data && systemChart.data.datasets) {
                 const datasets = systemChart.data.datasets;
                 
-                // Remover primeiro ponto e adicionar novo
                 datasets.forEach(dataset => {
                     dataset.data.shift();
                     dataset.data.push(Math.floor(Math.random() * 20) + 80);
                 });
                 
                 systemChart.update('none');
-                addLog('📈 Dados de performance atualizados', 'info');
+                addLog('📈 Performance atualizada', 'info');
             }
         }
 
@@ -1035,25 +966,14 @@
          * SINCRONIZAR SISTEMAS
          */
         function handleSync() {
-            addLog('🔄 Iniciando sincronização geral dos sistemas...', 'info');
+            addLog('🔄 Iniciando sincronização geral...', 'info');
             
-            // Simular processo de sincronização
-            setTimeout(() => {
-                addLog('🚁 Sincronização com sistema de drones - OK', 'success');
-            }, 1000);
-            
-            setTimeout(() => {
-                addLog('🕳️ Sincronização com sensores de bueiros - OK', 'success');
-            }, 2000);
+            setTimeout(() => addLog('🕳️ Sincronização bueiros - OK', 'success'), 1000);
+            setTimeout(() => addLog('⚡ Sincronização energia - OK', 'success'), 2000);
+            setTimeout(() => addLog('🌡️ Sincronização sensores - OK', 'success'), 3000);
             
             setTimeout(() => {
-                addLog('⚡ Sincronização com rede de energia - OK', 'success');
-            }, 3000);
-            
-            setTimeout(() => {
-                addLog('✅ Sincronização geral concluída com sucesso', 'success');
-                
-                // Atualizar métricas após sincronização
+                addLog('✅ Sincronização concluída', 'success');
                 systemMetrics.uptime = 99.9;
                 systemMetrics.responseTime = Math.max(100, systemMetrics.responseTime - 20);
                 updateSystemMetrics();
@@ -1064,17 +984,22 @@
          * ABRIR FILA DE SOLICITAÇÕES
          */
         function openQueue() {
-            addLog('📋 Abrindo central de solicitações...', 'info');
+            addLog('📋 Abrindo central solicitações...', 'info');
             
-            // Simular abertura da fila
             setTimeout(() => {
-                alert('📋 Central de Solicitações\n\n' +
-                      '• 5 solicitações de alta prioridade\n' +
-                      '• 12 solicitações de média prioridade\n' +
-                      '• 8 solicitações de baixa prioridade\n\n' +
-                      'Redirecionando para o sistema de drones...');
+                const requestCount = {
+                    bueiros: Math.floor(Math.random() * 15) + 8,
+                    energia: Math.floor(Math.random() * 12) + 5,
+                    sensores: Math.floor(Math.random() * 8) + 3
+                };
                 
-                addLog('➡️ Usuário redirecionado para sistema de drones', 'info');
+                alert(`📋 Central de Solicitações\n\n` +
+                      `• ${requestCount.bueiros} manutenções de bueiros\n` +
+                      `• ${requestCount.energia} ajustes no sistema energético\n` +
+                      `• ${requestCount.sensores} calibrações de sensores\n\n` +
+                      `Total: ${requestCount.bueiros + requestCount.energia + requestCount.sensores} solicitações pendentes`);
+                
+                addLog(`📊 ${requestCount.bueiros + requestCount.energia + requestCount.sensores} solicitações na fila`, 'info');
             }, 1000);
         }
 
@@ -1082,60 +1007,88 @@
          * GERAR RELATÓRIO
          */
         function generateReport() {
-            addLog('📊 Gerando relatório detalhado do sistema...', 'info');
+            addLog('📊 Gerando relatório detalhado...', 'info');
             
             setTimeout(() => {
+                const timestamp = new Date().toLocaleString('pt-BR');
                 const report = `
-🌟 RELATÓRIO SMARTCITY - ${new Date().toLocaleDateString()}
+🌟 RELATÓRIO SMARTCITY - ${timestamp}
 ══════════════════════════════════════════════════
 
 📈 MÉTRICAS GERAIS:
-• Entregas realizadas hoje: ${systemMetrics.deliveries}
 • Bueiros em estado crítico: ${systemMetrics.criticalDrains.toFixed(1)}%
 • Energia gerada hoje: ${systemMetrics.energyGenerated.toLocaleString()} kWh
-• Dispositivos ativos: ${systemMetrics.activeDevices.toLocaleString()}
+• Sensores ativos: ${systemMetrics.activeSensors.toLocaleString()}
 • Uptime do sistema: ${systemMetrics.uptime.toFixed(1)}%
+• Tempo resposta médio: ${systemMetrics.responseTime}ms
+• Alertas ativos: ${systemMetrics.alerts}
 
-🚁 SISTEMA DE DRONES:
-• 6 drones operacionais
-• 98% de eficiência nas entregas
-• Tempo médio de entrega: 12.4 minutos
-
-🕳️ MONITORAMENTO DE BUEIROS:
+🕳️ SISTEMA DE BUEIROS:
 • 1.240 bueiros monitorados
-• 47 necessitam atenção
+• ${Math.floor(systemMetrics.criticalDrains * 12.4)} necessitam atenção
 • 0 obstruções críticas
+• 98.2% sistema funcionando
+• Limpeza automática: Ativa
 
-⚡ GERAÇÃO DE ENERGIA:
-• 94% da capacidade utilizada
-• Excedente transferido para rede urbana
-• Economia estimada: R$ 4.730,00
+⚡ GERAÇÃO ENERGIA:
+• ${(systemMetrics.energyGenerated/3000*100).toFixed(1)}% capacidade utilizada
+• Excedente: ${Math.max(0, systemMetrics.energyGenerated-2400)} kWh
+• Economia estimada: R$ ${(systemMetrics.energyGenerated * 0.65).toFixed(2)}
+• Eficiência painéis: 94.3%
+• Baterias: 87% capacidade
+
+🌡️ REDE DE SENSORES:
+• ${systemMetrics.activeSensors} sensores operacionais
+• Temperatura média: 24.2°C
+• Umidade relativa: 68%
+• Qualidade do ar: Boa
+• Cobertura da rede: 95.7%
+
+🔧 MANUTENÇÕES:
+• 0 bueiros bloqueados
+• 2 painéis solares em inspeção
+• 1 sensor temperatura calibração
+• Próxima manutenção: ${new Date(Date.now() + 7*24*60*60*1000).toLocaleDateString('pt-BR')}
 
 ══════════════════════════════════════════════════
+Relatório gerado automaticamente pelo SmartCity Manager
                 `;
                 
                 console.log(report);
-                alert('📊 Relatório gerado com sucesso!\nVerifique o console do navegador para visualizar.');
-                addLog('✅ Relatório detalhado gerado e exibido', 'success');
+                
+                // Criar e baixar arquivo
+                const blob = new Blob([report], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `relatorio-smartcity-${new Date().toISOString().split('T')[0]}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                alert('📊 Relatório gerado!\nArquivo baixado automaticamente.\nVerifique também o console para visualização.');
+                addLog('✅ Relatório gerado e baixado', 'success');
             }, 2000);
         }
 
         /**
-         * NAVEGAÇÃO ENTRE PÁGINAS
+         * NAVEGAÇÃO
          */
         function navigateTo(page) {
-            addLog(`🔗 Navegando para ${page}...`, 'info');
+            addLog(`🔗 Navegando para ${page.replace('.html', '')}...`, 'info');
             setTimeout(() => {
                 window.location.href = page;
             }, 500);
         }
 
         /**
-         * SISTEMA DE LOGS AVANÇADO
+         * SISTEMA DE LOGS
          */
         function addLog(message, type = 'info') {
             const logContainer = document.getElementById('logContainer');
-            const timestamp = new Date().toLocaleTimeString();
+            const timestamp = new Date().toLocaleTimeString('pt-BR');
             
             const logEntry = document.createElement('div');
             logEntry.className = 'log-entry';
@@ -1172,17 +1125,14 @@
         }
 
         /**
-         * FUNÇÃO DE LOGOUT
+         * LOGOUT
          */
         function logout() {
-            if (confirm('🚪 Confirmar logout do sistema SmartCity?')) {
-                addLog('👋 Encerrando sessão do usuário...', 'info');
-                
-                // Limpar dados de autenticação
+            if (confirm('🚪 Confirmar logout?')) {
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('userRole');
                 localStorage.removeItem('userName');
-                
+                addLog('👋 Encerrando sessão...', 'info');
                 setTimeout(() => {
                     window.location.href = 'login.html';
                 }, 1000);
@@ -1190,57 +1140,51 @@
         }
 
         /**
-         * EVENT LISTENERS GLOBAIS
+         * TOGGLE SIDEBAR MOBILE
+         */
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        /**
+         * EVENT LISTENERS
          */
         document.addEventListener('keydown', function(e) {
-            // Ctrl + S para sincronizar
             if (e.ctrlKey && e.key === 's') {
                 e.preventDefault();
                 handleSync();
             }
-            
-            // Ctrl + Q para fila
             if (e.ctrlKey && e.key === 'q') {
                 e.preventDefault();
                 openQueue();
             }
-            
-            // Ctrl + R para relatório
             if (e.ctrlKey && e.key === 'r') {
                 e.preventDefault();
                 generateReport();
             }
         });
 
-        // Monitorar visibilidade da página
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
-                addLog('⏸️ Dashboard pausado - Página inativa', 'info');
+                addLog('⏸️ Dashboard pausado', 'info');
             } else {
-                addLog('▶️ Dashboard reativado - Atualizando dados...', 'info');
+                addLog('▶️ Dashboard reativado', 'info');
                 simulateOverviewData();
             }
         });
 
-        // Tratamento de erros
         window.addEventListener('error', function(e) {
-            addLog(`💥 Erro no sistema: ${e.message}`, 'error');
+            addLog(`💥 Erro: ${e.message}`, 'error');
         });
 
-        // Conectividade
         window.addEventListener('online', function() {
-            addLog('🌐 Conexão restaurada - Todos os sistemas online', 'success');
+            addLog('🌐 Conexão restaurada', 'success');
         });
 
         window.addEventListener('offline', function() {
-            addLog('📡 Conexão perdida - Modo offline ativado', 'warning');
+            addLog('📡 Conexão perdida - modo offline', 'warning');
         });
-
-        // Responsividade do sidebar
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('active');
-        }
     </script>
 </body>
 </html>
