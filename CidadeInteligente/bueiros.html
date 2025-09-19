@@ -1082,9 +1082,8 @@ function logout() {
             <a href="bueiros.html" class="nav-item">
                 <i>🕳️</i> Bueiros
             </a>
-            <a href="energia.html" class="nav-item">
-                <i>⚡</i> Energia
-            </a>
+            
+            
         </div>
     </nav>
 
@@ -1108,8 +1107,8 @@ function logout() {
                     <select class="filter-select" id="statusFilter">
                         <option value="">🔄 Todos os Status</option>
                         <option value="normal">✅ Normal</option>
-                        <option value="warning">⚠️ Alerta</option>
-                        <option value="critical">🚨 Crítico</option>
+                        <option value="warning">⚠️ Warning</option>
+                        <option value="critical">🚨 Critical</option>
                     </select>
                 </div>
                 <!-- BOTÃO RELATÓRIO -->
@@ -1374,20 +1373,20 @@ function logout() {
         // ==========================================
         // FUNÇÕES DE UTILIDADE
         // ==========================================
-        function getStatus(capacity) {
-            if (capacity >= 80) return 'crítico';
-            if (capacity >= 50) return 'alerta';
+            function getStatus(capacity) {
+            if (capacity >= 80) return 'critical';
+            if (capacity >= 50) return 'warning';
             return 'normal';
         }
 
         function getStatusClass(status) {
             switch(status) {
-                case 'crítico': return 'status-critical';
-                case 'alerta': return 'status-warning';
+                case 'critical': return 'status-critical';
+                case 'warning': return 'status-warning';
                 default: return 'status-normal';
             }
         }
-
+        
         function getProgressClass(capacity) {
             if (capacity >= 80) return 'progress-critical';
             if (capacity >= 50) return 'progress-warning';

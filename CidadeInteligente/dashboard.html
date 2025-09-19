@@ -947,9 +947,6 @@ function logout() {
             <a href="bueiros.html" class="nav-item">
                 <i>🕳️</i> Bueiros
             </a>
-            <a href="energia.html" class="nav-item">
-                <i>⚡</i> Energia
-            </a>
         </div>
     </nav>
 
@@ -971,13 +968,14 @@ function logout() {
                 <div class="card-subtitle">1,240 monitorados | 47 necessitam atenção</div>
             </div>
 
-            <div class="overview-card" onclick="navigateTo('energia.html')">
-                <span class="card-trend trend-up">+8%</span>
-                <span class="card-icon">⚡</span>
-                <div class="card-title">Energia Gerada</div>
-                <div class="card-value" id="energyGenerated">2,840</div>
-                <div class="card-subtitle">kWh hoje | 94% capacidade utilizada</div>
-            </div>
+            <div class="overview-card" onclick="navigateTo('impacto.html')">
+    <span class="card-trend trend-up">+12%</span>
+    <span class="card-icon">🌱</span>
+    <div class="card-title">Impacto Positivo</div>
+    <div class="card-value" id="positiveImpact">78.5%</div>
+    <div class="card-subtitle">Redução de CO₂ e resíduos desviados</div>
+</div>
+
 
             <div class="overview-card">
                 <span class="card-trend trend-up">+5%</span>
@@ -1164,24 +1162,24 @@ function logout() {
                             fill: true,
                             tension: 0.4
                         },
-                        {
-                            label: 'Energia',
-                            data: [65, 70, 85, 95, 92, 88, 91],
-                            borderColor: '#f59e0b',
-                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                            borderWidth: 3,
-                            fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Sensores',
-                            data: [85, 87, 92, 95, 97, 94, 96],
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            borderWidth: 3,
-                            fill: true,
-                            tension: 0.4
-                        }
+{
+    label: 'Impacto Positivo (%)',
+    data: [65, 70, 85, 95, 92, 88, 91],
+    borderColor: '#f59e0b',
+    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+    borderWidth: 3,
+    fill: true,
+    tension: 0.4
+},
+{
+    label: 'Sensores',
+    data: [85, 87, 92, 95, 97, 94, 96],
+    borderColor: '#10b981',
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    borderWidth: 3,
+    fill: true,
+    tension: 0.4
+}
                     ]
                 },
                 options: {
@@ -1227,20 +1225,26 @@ function logout() {
          * CARREGAR LOGS INICIAIS
          */
         function loadInitialLogs() {
-            const initialLogs = [
-                { message: '🔋 Sistema energia operando 94% capacidade', type: 'success' },
-                { message: '🕳️ Verificação 1.240 bueiros concluída', type: 'info' },
-                { message: '⚡ Pico consumo registrado às 18:30', type: 'warning' },
-                { message: '📊 Backup dados realizado com sucesso', type: 'success' },
-                { message: '🌡️ Sensores temperatura normais', type: 'info' },
-                { message: '🔄 Sincronização servidores ativa', type: 'success' },
-                { message: '🚨 3 bueiros necessitam atenção setor norte', type: 'warning' }
-            ];
+    const initialLogs = [
+        { message: '💚 Impacto positivo médio: 94%', type: 'success' },
+        { message: '🕳️ Verificação 1.240 bueiros concluída', type: 'info' },
+        { message: '📈 Pico de impacto positivo registrado às 18:30', type: 'warning' },
+        { message: '📊 Backup de dados realizado com sucesso', type: 'success' },
+        { message: '🌡️ Sensores de temperatura normais', type: 'info' },
+        { message: '🔄 Sincronização do sistema ativa', type: 'success' },
+        { message: '🚨 3 bueiros necessitam atenção no setor norte', type: 'warning' }
+    ];
+
+    initialLogs.forEach(log => {
+        addLog(log.message, log.type);
+    });
+}
+
 
             initialLogs.forEach(log => {
                 addLog(log.message, log.type);
             });
-        }
+        
 
         /**
          * INICIAR ATUALIZAÇÕES EM TEMPO REAL
@@ -1287,17 +1291,17 @@ function logout() {
          */
         function addRandomLog() {
             const randomLogs = [
-                { message: '📡 Conectividade rede otimizada', type: 'info' },
-                { message: '🔧 Manutenção preventiva setor 3', type: 'warning' },
-                { message: '⚡ Transferência energia para rede urbana', type: 'success' },
-                { message: '🚨 Bueiro obstruído setor 7 - equipe despachada', type: 'warning' },
-                { message: '🌐 Firmware atualizado 47 dispositivos', type: 'info' },
-                { message: '💾 Backup incremental concluído', type: 'success' },
-                { message: '🔋 Capacidade energética otimizada', type: 'success' },
-                { message: '📊 Relatório performance gerado', type: 'info' },
-                { message: '🌡️ Variação térmica painel solar B', type: 'warning' },
-                { message: '🕳️ Limpeza automática bueiros ativada', type: 'info' }
-            ];
+    { message: '📡 Conectividade rede otimizada', type: 'info' },
+    { message: '🔧 Manutenção preventiva setor 3', type: 'warning' },
+    { message: '🌱 Impacto positivo (%) na operação urbana', type: 'success' },
+    { message: '🚨 Bueiro obstruído setor 7 - equipe despachada', type: 'warning' },
+    { message: '🌐 Firmware atualizado 47 dispositivos', type: 'info' },
+    { message: '💾 Backup incremental concluído', type: 'success' },
+    { message: '🔋 Otimização do impacto positivo (%)', type: 'success' },
+    { message: '📊 Relatório performance gerado', type: 'info' },
+    { message: '🌡️ Variação térmica painel solar B', type: 'warning' },
+    { message: '🕳️ Limpeza automática bueiros ativada', type: 'info' }
+];
             
             const randomLog = randomLogs[Math.floor(Math.random() * randomLogs.length)];
             addLog(randomLog.message, randomLog.type);
@@ -1326,9 +1330,10 @@ function logout() {
         function handleSync() {
             addLog('🔄 Iniciando sincronização geral...', 'info');
             
-            setTimeout(() => addLog('🕳️ Sincronização bueiros - OK', 'success'), 1000);
-            setTimeout(() => addLog('⚡ Sincronização energia - OK', 'success'), 2000);
-            setTimeout(() => addLog('🌡️ Sincronização sensores - OK', 'success'), 3000);
+           setTimeout(() => addLog('🕳️ Sincronização bueiros - OK', 'success'), 1000);
+setTimeout(() => addLog('⚡ Sincronização impacto positivo - OK', 'success'), 2000);
+setTimeout(() => addLog('🌡️ Sincronização sensores - OK', 'success'), 3000);
+
             
             setTimeout(() => {
                 addLog('✅ Sincronização concluída', 'success');
@@ -1345,12 +1350,13 @@ function logout() {
             addLog('📋 Abrindo central solicitações...', 'info');
             
             const requestCount = {
-                bueiros: Math.floor(Math.random() * 15) + 8,
-                energia: Math.floor(Math.random() * 12) + 5,
-                sensores: Math.floor(Math.random() * 8) + 3,
-                manutencao: Math.floor(Math.random() * 6) + 2,
-                calibracao: Math.floor(Math.random() * 4) + 1
-            };
+    bueiros: Math.floor(Math.random() * 15) + 8,
+    positiveImpact: Math.floor(Math.random() * 12) + 5, // antes era energia
+    sensores: Math.floor(Math.random() * 8) + 3,
+    manutencao: Math.floor(Math.random() * 6) + 2,
+    calibracao: Math.floor(Math.random() * 4) + 1
+};
+
 
             const total = Object.values(requestCount).reduce((sum, count) => sum + count, 0);
 
@@ -1361,9 +1367,10 @@ function logout() {
                         <div class="info-value">${requestCount.bueiros} pendentes</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">⚡ Ajustes Energia</div>
-                        <div class="info-value">${requestCount.energia} pendentes</div>
-                    </div>
+    <div class="info-label">🌱 Impacto Positivo</div>
+    <div class="info-value">${requestCount.positiveImpact}%</div>
+</div>
+
                     <div class="info-item">
                         <div class="info-label">🌡️ Calibração Sensores</div>
                         <div class="info-value">${requestCount.sensores} pendentes</div>
@@ -1416,9 +1423,12 @@ function logout() {
                         <div class="info-value">${systemMetrics.criticalDrains.toFixed(2)}%</div>
                     </div>
                     <div class="info-item">
-                        <div class="info-label">⚡ Energia Gerada</div>
-                        <div class="info-value">${systemMetrics.energyGenerated.toLocaleString()} kWh</div>
-                    </div>
+    <div class="info-label">🌱 Impacto Positivo</div>
+    <div class="info-value">
+        ${systemMetrics.positiveImpact.toFixed(1)}%
+    </div>
+</div>
+
                     <div class="info-item">
                         <div class="info-label">🌡️ Sensores Ativos</div>
                         <div class="info-value">${systemMetrics.activeSensors.toLocaleString()}</div>
@@ -1449,15 +1459,16 @@ function logout() {
                 </div>
 
                 <div style="margin: 1.5rem 0;">
-                    <h4 style="color: var(--verde-accent); margin-bottom: 1rem;">⚡ Geração de Energia:</h4>
-                    <div style="background: rgba(6, 78, 59, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid var(--verde-accent);">
-                        <p>• Capacidade utilizada: <strong>${efficiency}%</strong></p>
-                        <p>• Excedente gerado: <strong>${Math.max(0, systemMetrics.energyGenerated-2400).toLocaleString()} kWh</strong></p>
-                        <p>• Economia estimada: <strong>R$ ${savings}</strong></p>
-                        <p>• Eficiência dos painéis: <strong>94.30%</strong></p>
-                        <p>• Capacidade das baterias: <strong>87.00%</strong></p>
-                    </div>
-                </div>
+    <h4 style="color: var(--verde-accent); margin-bottom: 1rem;">🌱 Impacto Positivo Ambiental:</h4>
+    <div style="background: rgba(6, 78, 59, 0.3); padding: 1rem; border-radius: 8px; border: 1px solid var(--verde-accent);">
+        <p>• Impacto total: <strong>${systemMetrics.positiveImpact.toFixed(1)}%</strong></p>
+        <p>• Resíduos desviados de aterros: <strong>${wasteDiverted.toLocaleString()} kg</strong></p>
+        <p>• Redução de CO₂: <strong>${co2Reduced.toLocaleString()} kg</strong></p>
+        <p>• Economia estimada: <strong>R$ ${savings}</strong></p>
+        <p>• Eficiência geral do sistema: <strong>${efficiency}%</strong></p>
+    </div>
+</div>
+
 
                 <div style="margin: 1.5rem 0;">
                     <h4 style="color: var(--verde-accent); margin-bottom: 1rem;">🌡️ Rede de Sensores:</h4>
