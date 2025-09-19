@@ -1113,203 +1113,9 @@ function logout() {
                     </select>
                 </div>
                 <!-- BOTÃO RELATÓRIO -->
-<button class="btn btn-primary" onclick="showReportPopup()">
+<button class="btn btn-primary" onclick="generateTXTReport()">
     📄 Relatório
 </button>
-
-<!-- POPUP RELATÓRIO MODERNO ANIMADO -->
-<div id="reportPopup" class="popup-overlay">
-    <div class="popup">
-        <button class="popup-close" onclick="closeReportPopup()">✕</button>
-        <h3>📋 Relatório de Bueiros</h3>
-        <div id="reportContent" class="report-content"></div>
-        <div class="popup-buttons">
-            <button class="btn btn-cancel" onclick="closeReportPopup()">Fechar</button>
-            <button class="btn btn-export" onclick="generateTXTReport()">Gerar TXT</button>
-        </div>
-    </div>
-</div>
-
-<style>
-/* Overlay do popup */
-.popup-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(17,24,39,0.85);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000; /* Altíssimo para garantir que fique acima de tudo */
-}
-
-/* Ativo */
-.popup-overlay.active { display: flex; }
-
-/* Popup central */
-.popup {
-    background: #1f2937;
-    border: 2px solid #10b981;
-    padding: 2rem;
-    border-radius: 1rem;
-    text-align: center;
-    width: 500px;
-    max-width: 90%;
-    color: #f8fafc;
-    box-shadow: 0 0 30px rgba(16, 185, 129, 0.7);
-    position: relative;
-    animation: popupIn 0.3s ease forwards;
-}
-
-/* Botão de fechar */
-.popup-close {
-    position: absolute;
-    top: 10px; right: 10px;
-    background: none; border: none;
-    font-size: 1.2rem;
-    color: #f8fafc;
-    cursor: pointer;
-}
-.popup-close:hover { color: #34d399; }
-
-/* Animação de entrada */
-@keyframes popupIn {
-    0% { transform: scale(0.8); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* Animação de saída */
-@keyframes popupOut {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(0.8); opacity: 0; }
-}
-
-/* Conteúdo do relatório */
-.report-content {
-    max-height: 400px;
-    overflow-y: auto;
-    margin-top: 1rem;
-    text-align: left;
-}
-
-/* Botões */
-.popup-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 1.5rem;
-}
-
-.btn {
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
-}
-
-.btn-cancel { background: #374151; color: #f8fafc; }
-.btn-cancel:hover { background: #4b5563; }
-
-.btn-export {
-    background: linear-gradient(135deg, #34d399, #059669);
-    color: #f8fafc;
-    text-shadow: 0 0 3px rgba(0,0,0,0.5);
-}
-.btn-export:hover {
-    background: linear-gradient(135deg, #059669, #10b981);
-    box-shadow: 0 0 8px #10b981, 0 0 15px #34d399;
-}
-
-/* Barras de progresso */
-.bueiro-item {
-    margin-bottom: 1rem;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 0.5rem;
-}
-.bueiro-label { font-weight: bold; margin-bottom: 0.3rem; display: block; }
-
-.progress-bar {
-    height: 14px;
-    border-radius: 7px;
-    background: #374151;
-    overflow: hidden;
-    margin-top: 3px;
-}
-.progress-fill {
-    height: 100%;
-    width: 0;
-    border-radius: 7px;
-    transition: width 0.8s ease, background 0.5s ease;
-}
-
-/* Cores segundo status */
-.progress-normal { background: #10b981; }
-.progress-warning { background: #facc15; }
-.progress-critical { background: #ef4444; }
-</style>
-
-<script>
-function showReportPopup() {
-    const popup = document.getElementById('reportPopup');
-    const reportContent = document.getElementById('reportContent');
-    
-    if (!bueiros || bueiros.length === 0) {
-        reportContent.innerHTML = "<p style='color:#9ca3af;'>Nenhum bueiro cadastrado</p>";
-    } else {
-        reportContent.innerHTML = bueiros.map(b => `
-            <div class="bueiro-item" id="bueiro-${b.id}">
-                <span class="bueiro-label">ID: ${b.id} | Local: ${b.location} | Odor: ${b.odor} | Última manutenção: ${b.lastMaintenance}</span>
-                <div class="progress-bar">
-                    <div class="progress-fill ${getProgressClass(b.capacity)}" style="width: ${b.capacity}%;"></div>
-                </div>
-            </div>
-        `).join('');
-    }
-    
-    popup.classList.add('active');
-    popup.querySelector('.popup').style.animation = 'popupIn 0.3s ease forwards';
-}
-
-function closeReportPopup() {
-    const popup = document.getElementById('reportPopup');
-    const inner = popup.querySelector('.popup');
-    
-    inner.style.animation = 'popupOut 0.3s ease forwards';
-    setTimeout(() => popup.classList.remove('active'), 300);
-}
-
-function updateReportPopup() {
-    bueiros.forEach(b => {
-        const fill = document.querySelector(`#bueiro-${b.id} .progress-fill`);
-        if (fill) {
-            fill.style.width = b.capacity + "%";
-            fill.className = `progress-fill ${getProgressClass(b.capacity)}`;
-        }
-    });
-}
-
-function generateTXTReport() {
-    const txt = bueiros.map(b => 
-        `ID: ${b.id}\nLocal: ${b.location}\nCapacidade: ${b.capacity.toFixed(2)}%\nOdor: ${b.odor}\nÚltima Manutenção: ${b.lastMaintenance}\nStatus: ${getStatus(b.capacity)}\n\n`
-    ).join('');
-    const blob = new Blob([txt], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `relatorio_bueiros_${new Date().toISOString().split('T')[0]}.txt`;
-    a.click();
-    window.URL.revokeObjectURL(url);
-    alert("✅ Relatório TXT gerado!");
-}
-
-/* Atualiza barras em tempo real enquanto o popup estiver aberto */
-setInterval(() => {
-    if (document.getElementById('reportPopup').classList.contains('active')) {
-        updateReportPopup();
-    }
-}, 2000);
-</script>
 
             </div>
         </div>
@@ -2024,46 +1830,25 @@ setInterval(() => {
             if (logs.length > 100) logs = logs.slice(0, 100);
         }
 
-        function generateReports() {
-            const criticalBueiros = bueiros.filter(b => b.critical);
-            const averageCapacity = bueiros.reduce((sum, b) => sum + b.capacity, 0) / bueiros.length;
+        function generateTXTReport() {
+            // Mostrar notificação de download
+            showNotification("📄 Relatório está sendo baixado...");
             
-            const report = {
-                timestamp: new Date(),
-                totalBueiros: bueiros.length,
-                criticalBueiros: criticalBueiros.length,
-                averageCapacity: formatNumber(averageCapacity),
-                details: criticalBueiros.map(b => ({
-                    id: b.id,
-                    location: b.location,
-                    capacity: formatNumber(b.capacity),
-                    lastMaintenance: b.lastMaintenance
-                }))
-            };
+            // Gerar o conteúdo do relatório
+            const txt = bueiros.map(b => 
+                `ID: ${b.id}\nLocal: ${b.location}\nCapacidade: ${b.capacity.toFixed(2)}%\nOdor: ${b.odor}\nÚltima Manutenção: ${b.lastMaintenance}\nStatus: ${getStatus(b.capacity)}\n\n`
+            ).join('');
             
-            console.log('Relatório gerado:', report);
-            alert(`📊 Relatório Gerado!\n\n📋 Total de bueiros: ${report.totalBueiros}\n🚨 Bueiros críticos: ${report.criticalBueiros}\n📈 Capacidade média: ${report.averageCapacity}%`);
-            
-            addLog('Relatório de bueiros críticos gerado');
-        }
-
-        function exportData() {
-            const csvData = bueiros.map(b => 
-                `${b.id},${b.location},${formatNumber(b.capacity)},${b.odor},${b.lastMaintenance},${getStatus(b.capacity)}`
-            ).join('\n');
-            
-            const header = 'ID,Localização,Capacidade,Odor,Última Manutenção,Status\n';
-            const csv = header + csvData;
-            
-            const blob = new Blob([csv], { type: 'text/csv' });
+            // Criar o arquivo e iniciar o download
+            const blob = new Blob([txt], { type: 'text/plain' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `bueiros_${new Date().toISOString().split('T')[0]}.csv`;
+            a.download = `relatorio_bueiros_${new Date().toISOString().split('T')[0]}.txt`;
             a.click();
             window.URL.revokeObjectURL(url);
             
-            addLog('Dados exportados em CSV');
+            addLog("Relatório TXT gerado e baixado");
         }
 
         // ==========================================
