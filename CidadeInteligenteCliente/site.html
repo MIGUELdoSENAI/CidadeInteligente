@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bueiro Inteligente - Cidades Inteligentes, Futuro Sustentável</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta de Cores (Padrão: Modo Escuro) */
+            --bg-gradient-start: #2e4a3d;
+            --bg-gradient-end: #1a2a22;
+            --bg-section: #1a2a22;
+            --bg-card: linear-gradient(145deg, rgba(46, 74, 61, 0.7), rgba(46, 74, 61, 0.4));
+            --bg-card-pending: rgba(40, 60, 50, 0.5);
+            --bg-header: rgba(30, 50, 40, 0.8);
+            --bg-form: rgba(30, 50, 40, 0.8);
+            --bg-input: rgba(26, 42, 34, 0.8);
+            --bg-input-focus: #1a2a22;
+            --bg-footer: #1a2a22;
+            --bg-progress-bar: rgba(46, 204, 113, 0.1);
+            
+            --text-primary: #f0f4f1;
+            --text-secondary: #a9b4ad;
+            --text-on-accent: #ffffff;
+            --text-on-disabled: #cdd4d0; /* CORRIGIDO: Cor clara para texto em botões desabilitados */
+
+            --accent-primary: #2ECC71;
+            --accent-hover: #58D68D;
+            --accent-secondary-text: #2ECC71; /* Cor de texto em botões secundários */
+            
+            --border-color: rgba(46, 204, 113, 0.2);
+            --border-color-hover: rgba(46, 204, 113, 0.5);
+            --border-input: rgba(46, 204, 113, 0.3);
+            --border-input-focus: #2ECC71;
+            
+            --shadow-color: rgba(0,0,0,0.2);
+            --shadow-color-hover: rgba(0,0,0,0.3);
+            --shadow-accent: rgba(46, 204, 113, 0.3);
+            --shadow-accent-hover: rgba(46, 204, 113, 0.25);
+
+            --warning: #FF9800;
+            --danger: #F44336;
+        }
+        
+        body.light-mode {
+            /* Paleta de Cores (Modo Claro) */
+            --bg-gradient-start: #f0f4f1;
+            --bg-gradient-end: #e8eeeb;
+            --bg-section: #ffffff;
+            --bg-card: linear-gradient(145deg, #ffffff, #f9f9f9);
+            --bg-card-pending: rgba(240, 240, 240, 0.8);
+            --bg-header: rgba(255, 255, 255, 0.8);
+            --bg-form: #ffffff;
+            --bg-input: #f0f4f1;
+            --bg-input-focus: #ffffff;
+            --bg-footer: #1a2a22; /* Manter rodapé escuro por contraste */
+            --bg-progress-bar: #e0e6e3;
+            
+            --text-primary: #1a2a22;
+            --text-secondary: #5a6e78;
+            --text-on-accent: #ffffff;
+
+            --accent-primary: #27ae60;
+            --accent-hover: #2ECC71;
+            --accent-secondary-text: #27ae60;
+            
+            --border-color: rgba(0, 0, 0, 0.1);
+            --border-color-hover: rgba(39, 174, 96, 0.5);
+            --border-input: #cdd4d0;
+            --border-input-focus: #27ae60;
+            
+            --shadow-color: rgba(0,0,0,0.05);
+            --shadow-color-hover: rgba(0,0,0,0.1);
+            --shadow-accent: rgba(39, 174, 96, 0.2);
+            --shadow-accent-hover: rgba(39, 174, 96, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        header {
+            background: var(--bg-header);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px var(--shadow-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        nav { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 2rem; font-weight: 700; color: var(--accent-primary); text-shadow: 2px 2px 4px var(--shadow-color); cursor: pointer; transition: color 0.3s ease; }
+        .logo:hover { color: var(--accent-hover); }
+        .nav-buttons { display: flex; gap: 1rem; align-items: center; }
+        
+        .theme-toggle-btn {
+            background: none;
+            border: 1px solid transparent;
+            color: var(--accent-primary);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle-btn:hover {
+            color: var(--accent-hover);
+            background-color: rgba(46, 204, 113, 0.1);
+            border-color: var(--border-color);
+        }
+        .theme-toggle-btn .moon-icon { display: none; }
+        .light-mode .theme-toggle-btn .sun-icon { display: none; }
+        .light-mode .theme-toggle-btn .moon-icon { display: block; }
+
+        .btn { padding: 0.8rem 1.8rem; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; text-decoration: none; display: inline-block; white-space: nowrap; }
+        .btn-primary { 
+            background: var(--accent-primary); 
+            color: var(--text-on-accent);
+            box-shadow: 0 4px 20px var(--shadow-accent); 
+            border: 1px solid var(--accent-primary); 
+        }
+        .btn-secondary { background: transparent; color: var(--accent-secondary-text); border: 2px solid var(--accent-primary); }
+        
+        /* CORRIGIDO: Estilo do botão desabilitado com cor de fonte legível */
+        .btn:disabled { 
+            cursor: not-allowed; 
+            opacity: 0.65; 
+            background: #5a6e78; 
+            color: var(--text-on-disabled); 
+            box-shadow: none; 
+            border-color: #5a6e78; 
+            transform: none; 
+        }
+        .btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 25px var(--shadow-accent-hover); filter: brightness(1.1); }
+
+        .main-content { padding-top: 120px; }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.6s ease-out; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1, h2, h3 { font-weight: 600; color: var(--text-primary); }
+        .hero { padding: 4rem 0; text-align: center; }
+        .hero h1 { font-size: 3.8rem; font-weight: 700; margin-bottom: 1.5rem; text-shadow: 0 4px 15px var(--shadow-color); color: var(--accent-primary); letter-spacing: -1px; }
+        .hero p { font-size: 1.2rem; margin-bottom: 2.5rem; color: var(--text-secondary); max-width: 700px; margin-left: auto; margin-right: auto; }
+        
+        .promo-section { padding: 5rem 0; text-align: center; transition: background-color 0.3s ease; }
+        .promo-section h2 { font-size: 2.8rem; color: var(--accent-primary); margin-bottom: 1.5rem; }
+        .promo-section > p { font-size: 1.1rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 3rem auto; line-height: 1.7; }
+        
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .feature-card { background: var(--bg-card); border-radius: 24px; padding: 2.5rem 2rem; text-align: center; border: 1px solid var(--border-color); transition: all 0.4s ease; box-shadow: 0 10px 30px var(--shadow-color); }
+        .feature-card:hover { transform: translateY(-10px); border-color: var(--border-color-hover); box-shadow: 0 20px 40px var(--shadow-color-hover); }
+        .feature-icon { margin-bottom: 1.5rem; color: var(--accent-primary); }
+        .feature-card h3 { margin-bottom: 1rem; font-size: 1.5rem; font-weight: 600; color: var(--text-primary); }
+        .feature-card p { color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem; }
+
+        .form-container { background: var(--bg-form); backdrop-filter: blur(12px); border-radius: 24px; padding: 3rem; max-width: 500px; margin: 2rem auto; box-shadow: 0 10px 40px var(--shadow-color-hover); border: 1px solid var(--border-color); transition: background-color 0.3s ease; }
+        .form-container h2 { color: var(--accent-primary); text-align: center; margin-bottom: 1.5rem; }
+        .form-container a { color: var(--accent-primary); font-weight: 600; text-decoration: none; transition: color 0.3s ease; }
+        .form-container a:hover { color: var(--accent-hover); }
+        .form-group label { font-weight: 400; font-size: 0.9rem; color: var(--text-secondary); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group input, .form-group textarea { width: 100%; padding: 1rem; border: 1px solid var(--border-input); border-radius: 12px; background: var(--bg-input); color: var(--text-primary); font-family: 'Poppins', sans-serif; font-size: 1rem; transition: all 0.3s ease; }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--border-input-focus); background: var(--bg-input-focus); box-shadow: 0 0 0 4px var(--shadow-accent); }
+
+        .bueiros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .dashboard-card { background: var(--bg-card); border-radius: 24px; padding: 2rem; box-shadow: 0 10px 30px var(--shadow-color); border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between; transition: background-color 0.3s ease, border-color 0.3s ease; }
+        
+        .dashboard-card .card-location {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-card.pending { background: var(--bg-card-pending); border-style: dashed; border-color: var(--border-color-hover); }
+        .pending-content { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; min-height: 220px; }
+        .pending-icon { color: var(--accent-primary); margin-bottom: 1rem; }
+        .pending-content h4 { color: var(--text-primary); font-weight: 600; margin-bottom: 0.5rem; }
+        .pending-content p { color: var(--text-secondary); font-size: 0.9rem; }
+
+        .status-badge { padding: 0.4rem 1rem; font-weight: 600; border-radius: 50px; }
+        .status-normal { background: rgba(76, 175, 80, 0.2); color: #4CAF50; border: 1px solid #4CAF50; }
+        .status-warning { background: rgba(255, 152, 0, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+        .status-critical { background: rgba(244, 67, 54, 0.2); color: var(--danger); border: 1px solid var(--danger); }
+        
+        .progress-bar { height: 20px; background: var(--bg-progress-bar); border-radius: 10px; margin: 1rem 0; overflow: hidden; border: 1px solid var(--border-color); }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #4CAF50, var(--warning), var(--danger)); border-radius: 9px; transition: width 0.5s ease; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+
+        .notification { font-family: 'Poppins', sans-serif; background: var(--accent-primary); color: white; padding: 1rem 1.5rem; border-radius: 12px; box-shadow: 0 10px 25px var(--shadow-color-hover); transform: translateX(120%); z-index: 1001; position: fixed; top: 100px; right: 20px; transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .notification.show { transform: translateX(0); }
+        .notification.error { background: var(--danger); color: white;}
+        .notification.warning { background: var(--warning); color: white;}
+        
+        .user-info, .user-nav { display: flex; align-items: center; gap: 1rem; }
+        .avatar { width: 45px; height: 45px; background: var(--accent-primary); color: white; border: 2px solid var(--accent-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+        .promo-section.dark-bg { background: var(--bg-section); }
+        
+        .site-footer { background: var(--bg-footer); padding: 3rem 0; margin-top: 4rem; border-top: 1px solid var(--border-color); text-align: center; transition: background-color 0.3s ease, border-color 0.3s ease; }
+        .footer-content p { color: var(--text-secondary); margin-bottom: 1.5rem; }
+        .light-mode .site-footer p, .light-mode .site-footer .copyright, .light-mode .social-links a { color: #a9b4ad; }
+        .light-mode .social-links a:hover { color: var(--accent-primary); }
+        
+        .social-links a { color: var(--text-secondary); margin: 0 1rem; transition: color 0.3s ease; display: inline-block; }
+        .social-links a:hover { color: var(--accent-primary); transform: scale(1.1); }
+        .copyright { margin-top: 2rem; font-size: 0.9rem; color: var(--text-secondary); }
+
+        .contact-details { list-style: none; margin-top: 2rem; text-align: left; }
+        .contact-details li { display: flex; align-items: center; margin-bottom: 1.5rem; font-size: 1rem; color: var(--text-secondary); }
+        .contact-details svg { color: var(--accent-primary); margin-right: 1rem; width: 24px; }
+
+        @media (max-width: 768px) {
+            .logo { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="logo" onclick="showPage(currentUser ? 'bueiros' : 'home')">Bueiro Inteligente</div>
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Alternar tema">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+            </div>
+            <div id="nav-content">
+                <div class="nav-buttons" id="nav-buttons">
+                    <button class="btn btn-secondary" onclick="showPage('contato')">Contato</button>
+                    <button class="btn btn-secondary" onclick="showPage('register')">Cadastre-se</button>
+                    <button class="btn btn-primary" onclick="showPage('login')">Entrar</button>
+                </div>
+                <div class="user-info" id="user-info" style="display: none;">
+                    <div class="user-nav"><button class="btn btn-secondary" onclick="showPage('bueiros')">Monitoramento</button><button class="btn btn-primary" onclick="showPage('solicitar')">Solicitar Novo</button></div>
+                    <span id="user-name">Usuário</span>
+                    <div class="avatar" id="user-avatar">U</div>
+                    <button class="btn btn-secondary" onclick="logout()">Sair</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main-content">
+       <div id="home" class="page active">
+            <div class="hero container"><h1>Cidades Inteligentes, Futuro Sustentável</h1><p>Monitoramento de saneamento em tempo real e a transformação de resíduos orgânicos em energia limpa para um amanhã mais verde.</p><button class="btn btn-primary" onclick="showPage('login')" style="font-size: 1.1rem; padding: 1rem 2rem;">Acessar Plataforma</button></div>
+            <div class="promo-section"><div class="container"><h2>Nossos Bueiros Inteligentes: O Fim das Enchentes</h2><p>Com sensores de alta precisão, nosso sistema monitora 24/7 o nível de resíduos e o fluxo de água, permitindo que a prefeitura atue de forma preditiva, evitando alagamentos e otimizando os custos com limpeza urbana.</p><div class="features-grid"><div class="feature-card"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div><h3>Prevenção Ativa</h3><p>Alertas automáticos são enviados para as equipes de limpeza antes que o bueiro atinja o nível crítico.</p></div><div class="feature-card"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19.5 22 15l-4.5-4.5"></path><path d="M6.5 4.5 2 9l4.5 4.5"></path><path d="m2 15 4.5 4.5"></path><path d="m17.5 4.5 4.5 4.5"></path></svg></div><h3>Gestão Otimizada</h3><p>Reduza custos operacionais com coletas de lixo baseadas em dados reais, não em cronogramas fixos.</p></div><div class="feature-card"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 12.3c.3-.9.4-1.8.4-2.8A10 10 0 1 0 5.1 18"></path><path d="M10.6 13.7c.3-.9.4-1.8.4-2.8a4 4 0 1 0-3 3.6"></path><path d="m2 13 2.1 2.1c.1.1.3.2.4.2h3.1"></path><path d="M19 13.2a9 9 0 0 0-7.4-4.7"></path><path d="M22 13a9 9 0 0 0-14.2-3.2"></path></svg></div><h3>Cidade Resiliente</h3><p>Mantenha a cidade fluindo, mesmo nos dias de chuva intensa, garantindo a segurança da população.</p></div></div></div></div>
+            <div class="promo-section dark-bg"><div class="container"><h2>Nossa Usina de Biogás: Lixo que Vira Energia</h2><p>Vamos além do saneamento. O resíduo orgânico coletado de forma eficiente é processado em nossa usina de biogás, transformando o que era um problema ambiental em uma fonte de energia renovável para a cidade.</p><div class="features-grid"><div class="feature-card"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v1.5"></path><path d="M18.4 6.6l-1-1"></path><path d="M21 12.5h-1.5"></path><path d="M18.4 18.4l-1-1"></path><path d="M12 19.5V21"></path><path d="M5.6 18.4l1-1"></path><path d="M3 12.5H1.5"></path><path d="M5.6 6.6l1-1"></path><path d="M16 8a4 4 0 0 0-8 0c0 2 2 3 2 4v2h4v-2c0-1 2-2 2-4Z"></path><path d="M12 18.5A2.5 2.5 0 0 1 9.5 16h5A2.5 2.5 0 0 1 12 18.5Z"></path></svg></div><h3>Energia Renovável</h3><p>Gere eletricidade e biometano a partir de resíduos, diminuindo a pegada de carbono do município.</p></div><div class="feature-card"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0L12 2.69z"></path></svg></div><h3>Economia Circular</h3><p>Feche o ciclo da sustentabilidade, onde o lixo não vai para aterros, mas é reintegrado como um recurso valioso.</p></div><div class="feature-card"><div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-3.3 0-6-2.7-6-6v-2c0-3.3 2.7-6 6-6s6 2.7 6 6v2c0 3.3-2.7 6-6 6z"></path><path d="M12 8V2"></path><path d="m15 5-3 3-3-3"></path></svg></div><h3>Sustentabilidade na Prática</h3><p>Posicione sua cidade como um modelo de inovação e responsabilidade ambiental para o mundo.</p></div></div></div></div>
+            <footer class="site-footer"><div class="container footer-content"><p>Bueiro Inteligente - Transformando cidades, um bueiro de cada vez.</p><div class="social-links"><a href="#" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a><a href="#" aria-label="Twitter"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg></a></div><p class="copyright" id="copyright-year"></p></div></footer>
+        </div>
+
+        <div id="login" class="page container"><div class="form-container"><h2>Acesso à Plataforma</h2><form onsubmit="return handleLogin(event)"><div class="form-group"><label for="loginEmail">Email:</label><input type="email" id="loginEmail" required></div><div class="form-group"><label for="loginPassword">Senha:</label><input type="password" id="loginPassword" required></div><button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem">Entrar</button><p style="text-align:center;margin-top:1.5rem">Não tem uma conta? <a href="#" onclick="showPage('register')">Cadastre-se</a></p></form></div></div>
+        <div id="register" class="page container"><div class="form-container"><h2>Crie sua Conta</h2><form onsubmit="return handleRegister(event)"><div class="form-group"><label for="registerName">Nome Completo:</label><input type="text" id="registerName" required></div><div class="form-group"><label for="registerEmail">Email:</label><input type="email" id="registerEmail" required></div><div class="form-group"><label for="registerPassword">Senha (mín. 6 caracteres):</label><input type="password" id="registerPassword" required></div><div class="form-group"><label for="registerConfirmPassword">Confirmar Senha:</label><input type="password" id="registerConfirmPassword" required></div><button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem">Cadastrar</button><p style="text-align:center;margin-top:1.5rem">Já tem uma conta? <a href="#" onclick="showPage('login')">Entrar</a></p></form></div></div>
+        
+        <div id="contato" class="page container">
+            <div class="form-container" style="max-width: 800px;">
+                <h2>Entre em Contato Conosco</h2>
+                <p style="text-align:center; margin-bottom: 2rem; color: var(--text-secondary);">Estamos aqui para responder suas perguntas. Preencha o formulário ou utilize um dos canais abaixo.</p>
+                <form action="https://formspree.io/f/mqadrqkl" method="POST">
+                    <div class="form-group"><label for="contactName">Seu Nome:</label><input type="text" id="contactName" name="name" required></div>
+                    <div class="form-group"><label for="contactEmail">Seu Email:</label><input type="email" id="contactEmail" name="email" required></div>
+                    <div class="form-group"><label for="contactMessage">Sua Mensagem:</label><textarea id="contactMessage" name="message" required></textarea></div>
+                    <button type="submit" class="btn btn-primary" style="width:100%">Enviar Mensagem</button>
+                </form>
+                <ul class="contact-details">
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> contato@bueirointeligente.com.br</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> +55 (11) 4433-2211</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Av. Inovação, 123 - Bairro Jardim, Santo André - SP, Brasil</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="bueiros" class="page container"><h2 style="color: var(--accent-primary); text-align: center; margin-bottom: 2rem; font-size: 2.5rem;">Monitoramento em Tempo Real</h2><div class="bueiros-grid" id="bueiros-grid-content"></div></div>
+        <div id="solicitar" class="page container"><div class="form-container"><h2>Solicitar Bueiro Inteligente</h2><p style="text-align:center;margin-bottom:2rem;color:var(--text-secondary)">Preencha o endereço onde você acredita ser necessária a instalação de um novo sensor.</p><form onsubmit="return handleRequestSewer(event)"><div class="form-group"><label for="requestAddress">Endereço Completo:</label><input type="text" id="requestAddress" placeholder="Ex: Av. Industrial, 1580, Santo André" required></div><button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem">Enviar Solicitação</button></form></div></div>
+    </main>
+
+    <div id="notification" class="notification"><span id="notification-text"></span></div>
+
+    <script>
+        const themeToggleButton = document.getElementById('theme-toggle');
+
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+        }
+
+        function toggleTheme() {
+            const isLight = document.body.classList.contains('light-mode');
+            if (isLight) {
+                localStorage.removeItem('theme');
+                applyTheme('dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+                applyTheme('light');
+            }
+        }
+        
+        applyTheme(localStorage.getItem('theme'));
+        themeToggleButton.addEventListener('click', toggleTheme);
+        
+        let currentUser = null, sensorData = [], updateInterval = null;
+        const users = [{email:"admin@smartsewer.com",password:"admin123",name:"Admin",role:"admin"},{email:"miguelmaciel1235@gmail.com",password:"12345678",name:"Miguel",role:"admin"}];
+        const sensorsDatabase = [{id:1,location:"Rua das Flores, 123",wasteLevel:45,cleanupRequested:!1},{id:2,location:"Av. Central, 456",wasteLevel:78,cleanupRequested:!1},{id:3,location:"Praça da Liberdade, 789",wasteLevel:23,cleanupRequested:!1}];
+        
+        function showPage(e){document.querySelectorAll(".page").forEach(e=>{e.classList.remove("active")}),document.getElementById(e).classList.add("active"),window.scrollTo(0,0)}
+        function updateUserInterface(){const e=document.getElementById("nav-buttons"),t=document.getElementById("user-info");currentUser?(e.style.display="none",t.style.display="flex",document.getElementById("user-name").textContent=currentUser.name,document.getElementById("user-avatar").textContent=currentUser.name.charAt(0).toUpperCase()):(e.style.display="flex",t.style.display="none")}
+        function showNotification(e,t="success"){const n=document.getElementById("notification"),o=document.getElementById("notification-text");o.textContent=e,n.className="notification show","success"!==t&&n.classList.add(t),setTimeout(()=>{n.classList.remove("show")},4e3)}
+        
+        function handleRegister(e){
+            e.preventDefault();
+            const t=document.getElementById("registerName").value.trim(),n=document.getElementById("registerEmail").value.trim(),o=document.getElementById("registerPassword").value,a=document.getElementById("registerConfirmPassword").value;
+            if(!t||!n||!o||!a)return showNotification("Por favor, preencha todos os campos.","error");
+            if(o!==a)return showNotification("As senhas não coincidem.","error");
+            if(o.length<6)return showNotification("A senha deve ter no mínimo 6 caracteres.","error");
+            if(users.find(e=>e.email===n))return showNotification("Este email já está cadastrado.","error");
+            users.push({email:n,password:o,name:t,role:"user"}),showNotification("Cadastro realizado com sucesso! Faça o login para continuar."),e.target.reset(),showPage("login")
+        }
+        
+        function handleLogin(e){
+            e.preventDefault();
+            const t=document.getElementById("loginEmail").value,n=document.getElementById("loginPassword").value,o=users.find(e=>e.email===t&&e.password===n);
+            o?(currentUser=o,updateUserInterface(),startRealTimeUpdates(),loadSensorData(),showPage("bueiros"),showNotification(`Bem-vindo, ${currentUser.name}!`)):showNotification("Email ou senha incorretos!","error")
+        }
+
+        function logout(){currentUser=null,clearInterval(updateInterval),updateUserInterface(),showPage("home"),showNotification("Logout realizado com sucesso!")}
+        function loadSensorData(){0===sensorData.length&&(sensorData=JSON.parse(JSON.stringify(sensorsDatabase))),renderBueirosPage()}
+        
+        function renderBueirosPage(){
+            const e=document.getElementById("bueiros-grid-content");
+            e.innerHTML=sensorData.map(e=>{
+                if("pending"===e.status)return`<div class="dashboard-card pending"><div class="pending-content"><div class="pending-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><h4>Aguardando Instalação</h4><p>${e.location}</p></div></div>`;
+                const{text:t,className:n}=getStatusInfo(e.wasteLevel),o=e.wasteLevel>50,a=e.cleanupRequested?"Coleta Agendada":"Solicitar Coleta";
+                return`<div class="dashboard-card"><div><h3>Sensor ${e.id} - ${getStatusEmoji(e.wasteLevel)}</h3><p class="card-location">${e.location}</p><p><strong>Nível de Resíduos:</strong></p><div class="progress-bar"><div class="progress-fill" style="width: ${e.wasteLevel}%;">${e.wasteLevel}%</div></div><div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;"><span>Status:</span><span class="status-badge ${n}">${t}</span></div></div><div style="margin-top: 1.5rem; text-align: center;"><button class="btn ${e.cleanupRequested?"btn-secondary":"btn-primary"}" onclick="requestCleanup(${e.id})" ${!o||e.cleanupRequested?"disabled":""}>${a}</button></div></div>`
+            }).join("")
+        }
+        
+        function handleRequestSewer(e){
+            e.preventDefault();
+            const t=document.getElementById("requestAddress"),n=t.value.trim();
+            n?(sensorData.push({id:sensorData.length>0?Math.max(...sensorData.map(e=>e.id))+1:1,location:n,status:"pending",wasteLevel:0,cleanupRequested:!1}),showNotification("Solicitação enviada! O novo bueiro aparecerá no painel."),t.value="",showPage("bueiros"),renderBueirosPage()):showNotification("Por favor, preencha o endereço para a solicitação.","error")
+        }
+
+        function requestCleanup(e){const t=sensorData.find(t=>t.id===e);t&&(t.cleanupRequested=!0,showNotification(`Coleta solicitada para o bueiro em ${t.location}.`),renderBueirosPage())}
+        
+        function startRealTimeUpdates(){
+            updateInterval&&clearInterval(updateInterval),updateInterval=setInterval(()=>{
+                let e=!1;
+                sensorData.forEach(t=>{
+                    if("pending"===t.status)return;
+                    if(t.cleanupRequested&&t.wasteLevel>50)t.wasteLevel-=Math.floor(10*Math.random())+10,t.wasteLevel<20&&(t.wasteLevel=Math.floor(15*Math.random())+5,t.cleanupRequested=!1,showNotification(`Limpeza do bueiro em ${t.location} foi concluída!`,"success")),e=!0;
+                    else{let n=Math.floor(5*Math.random())-2;t.wasteLevel+n>=0&&t.wasteLevel+n<=100&&(t.wasteLevel+=n,e=!0)}
+                }),e&&renderBueirosPage()
+            },3e3)
+        }
+        
+        function getStatusInfo(e){return e<=50?{text:"Normal",className:"status-normal"}:e<=80?{text:"Atenção",className:"status-warning"}:{text:"Crítico",className:"status-critical"}}
+        function getStatusEmoji(e){return e<=50?"✅":e<=80?"⚠️":"🚨"}
+
+        document.addEventListener("DOMContentLoaded",()=>{document.getElementById("copyright-year").textContent=`© ${new Date().getFullYear()} Bueiro Inteligente. Todos os direitos reservados.`});
+    </script>
+</body>
+</html>
